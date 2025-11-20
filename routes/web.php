@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\EntradaController;
+use App\Http\Controllers\SalidaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,7 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('productos', ProductoController::class);
     Route::resource('entradas', EntradaController::class);
-    Route::resource('categorias', CategoriaController::class)->middleware('auth');
+    Route::resource('categorias', CategoriaController::class);
+    Route::resource('salidas', SalidaController::class);
 });
 
 require __DIR__.'/auth.php';

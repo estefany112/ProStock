@@ -15,7 +15,7 @@
                     <a href="{{ route('categorias.index') }}" class="bg-orange-100 text-orange-700 p-6 rounded-lg text-center font-semibold shadow hover:scale-105 transition">Categorías</a>
                     <a href="{{ route('productos.index') }}" class="bg-green-100 text-green-700 p-6 rounded-lg text-center font-semibold shadow hover:scale-105 transition">Productos</a>
                     <a href="{{ route('entradas.index') }}" class="bg-blue-100 text-blue-700 p-6 rounded-lg text-center font-semibold shadow hover:scale-105 transition">Entradas</a>
-                    <a href="#" class="bg-red-100 text-red-700 p-6 rounded-lg text-center font-semibold shadow hover:scale-105 transition">Salidas</a>
+                    <a href="{{ route('salidas.index') }}" class="bg-red-100 text-red-700 p-6 rounded-lg text-center font-semibold shadow hover:scale-105 transition">Salidas</a>
                 </div>
             </div>
         </div>
