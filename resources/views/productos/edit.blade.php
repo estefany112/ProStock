@@ -21,6 +21,18 @@
                         <input type="text" name="descripcion" id="descripcion" class="mt-1 block w-full" value="{{ $producto->descripcion }}" required>
                     </div>
 
+                    <label class="block mt-3">Categoría</label>
+                    <select name="categoria_id" class="border rounded p-2 w-full">
+                        <option value="">Sin categoría</option>
+                        @foreach($categorias as $categoria)
+                            <option value="{{ $categoria->id }}"
+                                @if($categoria->id == $producto->categoria_id) selected @endif
+                            >
+                                {{ $categoria->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+
                     <div>
                         <label for="precio_unitario" class="block">Precio Unitario</label>
                         <input type="number" name="precio_unitario" id="precio_unitario" class="mt-1 block w-full" value="{{ $producto->precio_unitario }}" required step="0.01">
@@ -28,7 +40,7 @@
 
                     <div>
                         <label for="stock_actual" class="block">Stock Actual</label>
-                        <input type="number" name="stock_actual" id="stock_actual" class="mt-1 block w-full" value="{{ $producto->stock_actual }}" required>
+                        <input type="number" name="stock_actual" id="stock_actual" class="border rounded p-2 w-full bg-gray-100 cursor-not-allowed" value="{{ $producto->stock_actual }}" disabled>
                     </div>
 
                     <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg">Actualizar Producto</button>

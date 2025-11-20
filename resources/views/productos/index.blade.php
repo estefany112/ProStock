@@ -23,6 +23,7 @@
                     <tr>
                         <th class="p-2">Código</th>
                         <th>Descripción</th>
+                        <th>Categoría</th>
                         <th>Precio</th>
                         <th>Stock</th>
                         <th>Acciones</th>
@@ -33,6 +34,7 @@
                     <tr class="text-center border-t">
                         <td>{{ $producto->codigo }}</td>
                         <td>{{ $producto->descripcion }}</td>
+                        <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
                         <td>Q{{ number_format($producto->precio_unitario, 2) }}</td>
                         <td>{{ $producto->stock_actual }}</td>
                         <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -21,7 +22,8 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view('productos.create');
+        $categorias = Categoria::all();
+        return view('productos.create', compact('categorias'));
     }
 
     /**
@@ -34,6 +36,7 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'precio_unitario' => 'required|numeric|min:0',
             'stock_actual' => 'required|numeric|min:0',
+            'categoria_id' => 'nullable|exists:categorias,id',
         ]);
 
         Producto::create($request->all());
@@ -54,8 +57,9 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-         $producto = Producto::findOrFail($id);
-        return view('productos.edit', compact('producto'));
+        $producto = Producto::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('productos.edit', compact('producto', 'categorias'));
     }
 
     /**
@@ -77,4 +81,5 @@ class ProductoController extends Controller
 
         return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente.');
     }
+    
 }

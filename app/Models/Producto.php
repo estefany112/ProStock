@@ -15,5 +15,12 @@ class Producto extends Model
         'precio_unitario',
         'precio_venta',
         'stock_actual',
+        'categoria_id',
     ];
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
 }

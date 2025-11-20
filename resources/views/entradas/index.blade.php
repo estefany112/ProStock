@@ -33,7 +33,12 @@
                 <tbody>
                     @foreach ($entradas as $entrada)
                     <tr class="text-center border-t">
-                        <td>{{ $entrada->producto->descripcion }}</td> <!-- Nombre del producto -->
+                        <td>
+                            {{ $entrada->producto->descripcion }}<br>
+                            <span class="text-gray-500 text-sm">
+                                {{ $entrada->producto->categoria->nombre ?? 'Sin categoría' }}
+                            </span>
+                        </td>
                         <td>{{ $entrada->cantidad }}</td>
                         <td>{{ $entrada->motivo }}</td>
                         <td>{{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}</td>

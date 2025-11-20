@@ -20,6 +20,14 @@
                         <input type="text" name="descripcion" id="descripcion" class="mt-1 block w-full" required>
                     </div>
 
+                    <label class="block mt-3">Categoría</label>
+                    <select name="categoria_id" class="border rounded p-2 w-full">
+                        <option value="">Sin categoría</option>
+                        @foreach($categorias as $categoria)
+                            <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                        @endforeach
+                    </select>
+
                     <div>
                         <label for="precio_unitario" class="block">Precio Unitario</label>
                         <input type="number" name="precio_unitario" id="precio_unitario" class="mt-1 block w-full" required step="0.01">
