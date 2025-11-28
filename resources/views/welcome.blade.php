@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>ProStack</title>
+  <title>ProStock</title>
 
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
