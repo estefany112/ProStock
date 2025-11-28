@@ -33,7 +33,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
       <a href="/" class="logo d-flex align-items-center">
-        <h1 class="sitename">ProStack</h1>
+        <h1 class="sitename">ProStock</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -53,7 +53,7 @@
       <div class="container text-center" data-aos="fade-up" data-aos-delay="100">
         <div class="row justify-content-center">
           <div class="col-lg-8">
-            <h2>Bienvenido a ProStack</h2>
+            <h2>Bienvenido a ProStock</h2>
             <p>
               La plataforma moderna para gestionar inventarios, productos,
               entradas, salidas y control empresarial de forma precisa y rápida.
