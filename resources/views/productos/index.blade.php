@@ -21,7 +21,7 @@
             <table class="w-full mt-4 border">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="p-2">Id</th>
+                        <th class="p-2">Item</th>
                         <th class="p-2">Código</th>
                         <th>Nombre del artículo</th>
                         <th>Categoría</th>
