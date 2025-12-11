@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Fila;
+use App\Models\Columna;
+use App\Models\Nivel;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -23,7 +26,10 @@ class ProductoController extends Controller
     public function create()
     {
         $categorias = Categoria::all();
-        return view('productos.create', compact('categorias'));
+        $filas = Fila::orderBy('nombre')->get();
+        $columnas = Columna::orderBy('numero')->get();
+        $niveles = Nivel::orderBy('numero')->get();
+        return view('productos.create', compact('categorias','filas','columnas','niveles'));
     }
 
     /**
@@ -37,12 +43,45 @@ class ProductoController extends Controller
             'precio_unitario' => 'required|numeric|min:0',
             'stock_actual' => 'required|numeric|min:0',
             'categoria_id' => 'nullable|exists:categorias,id',
+            'ubicacion' => 'nullable|string|max:50',
+            'unidad_medida' => 'nullable|string|max:50',
+            'marca' => 'nullable|string|max:100',
+            'fila_id'=>'nullable|exists:filas,id',
+            'columna_id'=>'nullable|exists:columnas,id',
+            'nivel_id'=>'nullable|exists:niveles,id',
         ]);
 
-        Producto::create($request->all());
+        if ($request->fila_id && $request->columna_id && $request->nivel_id) {
+        $fila = Fila::find($request->fila_id);
+        $columna = Columna::find($request->columna_id);
+        $nivel = Nivel::find($request->nivel_id);
+
+        // Formato: Ejemplo (A-1-1)
+        $ubicacion = $fila->nombre . '-' . $columna->numero . '-' . $nivel->numero;
+
+    } else {
+
+        // SIN UBICACIÓN
+        $ubicacion = null;
+    }
+        // Guardar producto
+        Producto::create([
+            'codigo'         => $request->codigo,
+            'descripcion'    => $request->descripcion,
+            'precio_unitario'=> $request->precio_unitario,
+            'stock_actual'   => $request->stock_actual,
+            'categoria_id'   => $request->categoria_id,
+            'unidad_medida'  => $request->unidad_medida,
+            'marca'          => $request->marca,
+            'fila_id'        => $request->fila_id ?: null,
+            'columna_id'     => $request->columna_id ?: null,
+            'nivel_id'       => $request->nivel_id ?: null,
+            'ubicacion'      => $ubicacion,
+        ]);
+
         return redirect()->route('productos.index')->with('success', 'Producto creado correctamente.');
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -59,7 +98,10 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
         $categorias = Categoria::all();
-        return view('productos.edit', compact('producto', 'categorias'));
+        $filas = Fila::orderBy('nombre')->get();
+        $columnas = Columna::orderBy('numero')->get();
+        $niveles = Nivel::orderBy('numero')->get();
+        return view('productos.edit', compact('producto','categorias','filas','columnas','niveles'));
     }
 
     /**
@@ -67,7 +109,31 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        $producto->update($request->all());
+        $request->validate([
+            'codigo' => 'required',
+            'descripcion' => 'required',
+            'precio_unitario' => 'required|numeric|min:0',
+            'stock_actual' => 'required|numeric|min:0',
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'unidad_medida' => 'nullable|string|max:50',
+            'marca' => 'nullable|string|max:100',
+            'fila_id' => 'required|exists:filas,id',
+            'columna_id' => 'required|exists:columnas,id',
+            'nivel_id' => 'required|exists:niveles,id',
+        ]);
+
+        // Recalcular ubicación
+        $fila = Fila::find($request->fila_id);
+        $columna = Columna::find($request->columna_id);
+        $nivel = Nivel::find($request->nivel_id);
+
+        $ubicacion = $fila->nombre . '-' . $columna->numero . '-' . $nivel->numero;
+
+        $data = $request->all();
+        $data['ubicacion'] = $ubicacion;
+
+        $producto->update($data);
+
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente.');
     }
 

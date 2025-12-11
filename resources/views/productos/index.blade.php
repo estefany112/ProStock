@@ -21,22 +21,36 @@
             <table class="w-full mt-4 border">
                 <thead class="bg-gray-100">
                     <tr>
+                        <th class="p-2">Id</th>
                         <th class="p-2">Código</th>
-                        <th>Descripción</th>
+                        <th>Nombre del artículo</th>
                         <th>Categoría</th>
-                        <th>Precio</th>
+                        <th>Marca</th>
+                        <th>Unidad de medida</th>
                         <th>Stock</th>
+                        <th>Precio unitario</th>
+                        <th>Ubicación (FCN)</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($productos as $producto)
                     <tr class="text-center border-t">
+                        <td>{{ $producto->id }}</td>
                         <td>{{ $producto->codigo }}</td>
                         <td>{{ $producto->descripcion }}</td>
                         <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
-                        <td>Q{{ number_format($producto->precio_unitario, 2) }}</td>
+                        <td>{{ $producto->marca }}</td>
+                        <td>{{ $producto->unidad_medida }}</td>
                         <td>{{ $producto->stock_actual }}</td>
+                        <td>Q{{ number_format($producto->precio_unitario, 2) }}</td>
+                        <td>
+                            @if($producto->ubicacion)
+                                {{ $producto->ubicacion }}
+                            @else
+                                <span class="text-gray-500 italic">Sin ubicación</span>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('productos.edit', $producto->id) }}" class="text-blue-600">Editar</a>
                             <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="inline" onsubmit="return confirmDelete(event)">
