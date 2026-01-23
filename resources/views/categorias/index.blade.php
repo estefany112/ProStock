@@ -72,16 +72,18 @@
                                         Editar
                                     </a>
 
-                                    <form action="{{ route('categorias.destroy', $categoria->id) }}"
-                                          method="POST"
-                                          class="inline"
-                                          onsubmit="return confirm('¿Deseas eliminar esta categoría?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="text-red-600 hover:underline">
-                                            Eliminar
-                                        </button>
-                                    </form>
+                                <button onclick="confirmDelete({{ $categoria->id }})"
+                                    class="text-red-600 hover:text-red-800">
+                                    Eliminar
+                                </button>
+
+                                <form id="delete-form-{{ $categoria->id }}"
+                                    action="{{ route('categorias.destroy', $categoria->id) }}"
+                                    method="POST" class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+   
                                 </td>
                             </tr>
                         @empty
@@ -97,5 +99,25 @@
 
         </div>
     </div>
+
+    <script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Confirmar eliminación',
+        text: '¿Está seguro de que desea eliminar esta categoría? Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626', 
+        cancelButtonColor: '#6b7280',  
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`delete-form-${id}`).submit();
+        }
+    });
+}
+</script>
 
 </x-app-layout>
