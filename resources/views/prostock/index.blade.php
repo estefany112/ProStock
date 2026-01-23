@@ -7,7 +7,7 @@
 </h1>
 
 <p class="mb-6 text-gray-400">
-    Sistema empresarial de control de inventario para PROSERVE
+    Sistema empresarial de control de inventario para {{ config('app.name') }}
 </p>
 
 <div class="max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
