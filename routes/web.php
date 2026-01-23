@@ -9,6 +9,7 @@ use App\Http\Controllers\SalidaController;
 use App\Http\Controllers\FilaController;
 use App\Http\Controllers\ColumnaController;
 use App\Http\Controllers\NivelController;
+use App\Http\Controllers\DashboardController;
 
 // Página principal
 Route::get('/', function () {
@@ -16,9 +17,9 @@ Route::get('/', function () {
 });
 
 // Dashboard (solo usuarios autenticados y verificados)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
@@ -36,6 +37,19 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('filas', FilaController::class);
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
+
+    Route::get('/prostock', function () {
+        return view('prostock.index');
+    })->name('prostock.index');
+
+    Route::get('/test', function () {
+    return view('dashboard.index', [
+        'totalCategorias' => 0,
+        'totalProductos'  => 0,
+        'stockTotal'      => 0,
+        'stockBajo'       => 0,
+    ]);
+});
 
 });
 
