@@ -1,4 +1,4 @@
-<aside class="w-64 bg-slate-900 text-white flex flex-col justify-between" style="background-color: #0f172a">
+<aside class="w-64 bg-slate-900 text-white flex flex-col justify-between">
 
     <!-- LOGO -->
     <div>
