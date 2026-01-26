@@ -1,37 +1,64 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white-800 leading-tight">
-            {{ __('Entradas - Proserve') }}
-        </h2>
-    </x-slot>
+    <div class="py-8 max-w-6xl mx-auto">
 
-    <div class="py-6 max-w-7xl mx-auto">
-        <div class="bg-white p-6 rounded shadow">
-            <!-- Botón para crear nueva entrada -->
-            <a href="{{ route('entradas.create') }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 mb-4">+ Nueva Entrada</a>
-            
+        <div class="bg-white p-6 rounded-xl shadow-sm border">
+
+           {{-- HEADER DE LA VISTA --}}
+            <div class="mb-6">
+
+                {{-- FILA SUPERIOR: TÍTULO + INVENTARIO --}}
+                <div class="flex items-center justify-between">
+
+                    <h1 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        📁 Entradas
+                    </h1>
+
+                    {{-- INVENTARIO (alineado al título) --}}
+                    <a href="{{ route('prostock.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition whitespace-nowrap">
+                        📦 Menú Inventario
+                    </a>
+
+                </div>
+
+                {{-- DESCRIPCIÓN --}}
+                <p class="text-sm text-gray-500 mt-1">
+                    Gestión de entradas de productos – PROSERVE
+                </p>
+              
+                {{-- ACCIÓN PRINCIPAL --}}
+                <div class="mt-4">
+                    <a href="{{ route('entradas.create') }}"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-green-700 transition">
+                        ➕ Nueva entrada
+                    </a>
+                </div>
+
+            </div>
+
             <!-- Mostrar mensaje de éxito si existe -->
             @if(session('success'))
-                <div class="bg-green-100 text-green-700 p-4 rounded mb-6 mt-4">
+                <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
                     {{ session('success') }}
                 </div>
             @endif
 
             <!-- Tabla de entradas -->
+            <div class="overflow-x-auto text-center">
             <table class="w-full mt-4 border">
-                <thead class="bg-gray-100">
+                <thead class="bg-gray-50">
                     <tr>
                         <th class="p-2">Producto</th>
                         <th>Cantidad</th>
                         <th>Motivo</th>
                         <th>Fecha de Entrada</th>
-                        {{--
                         <th>Acciones</th>
-                        --}}
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($entradas as $entrada)
+                    @forelse ($entradas as $entrada)
                     <tr class="text-center border-t">
                         <td>
                             {{ $entrada->producto->descripcion }}<br>
@@ -41,8 +68,7 @@
                         </td>
                         <td>{{ $entrada->cantidad }}</td>
                         <td>{{ $entrada->motivo }}</td>
-                        <td>{{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}</td>
-                        {{-- 
+                        <td>{{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}</td> 
                         <td>
                             <a href="{{ route('entradas.edit', $entrada->id) }}" class="text-blue-600">Editar</a>
                             <form action="{{ route('entradas.destroy', $entrada->id) }}" method="POST" class="inline" onsubmit="return confirmDelete(event)">
@@ -51,11 +77,34 @@
                                 <button type="submit" class="text-red-600 ml-2">Eliminar</button>
                             </form>
                         </td>
-                        --}}
                     </tr>
-                    @endforeach
+
+                        @empty
+                            <tr>
+                                <td colspan="5" class="p-6 text-center text-gray-500">
+                                    No hay entradas registradas aún.
+                                </td>
+                            </tr>
+                        @endforelse
                 </tbody>
             </table>
+            </div>
+                <div class="mt-6 flex justify-center">
+                    {{ $entradas->links() }}
+                </div>
+                <div class="mt-6 flex justify-between">
+                   <a href="{{ route('productos.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        <- Anterior
+                    </a>
+
+                    <a href="{{ route('salidas.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        -> Siguiente
+                    </a>
+                </div>
         </div>
     </div>
 

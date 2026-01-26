@@ -13,7 +13,7 @@ class EntradaController extends Controller
      */
     public function index()
     {
-        $entradas = Entrada::with('producto')->get();  // Obtener las entradas con los productos relacionados
+       $entradas = Entrada::with('producto')->orderBy('id', 'asc')->paginate(10);  // Obtener las entradas con los productos relacionados
         return view('entradas.index', compact('entradas'));
     }
 

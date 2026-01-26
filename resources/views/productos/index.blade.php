@@ -123,7 +123,6 @@
                             hover:bg-blue-700 transition">
                         -> Siguiente
                     </a>
-
                 </div>
     </div>
 
