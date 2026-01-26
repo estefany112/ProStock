@@ -47,7 +47,7 @@
 
                 <div>
                     <label class="block font-medium">Stock Actual</label>
-                    <input type="number" name="stock_actual" value="{{ $producto->stock_actual }}" class="w-full border rounded-lg px-3 py-2" required>
+                    <input type="number" name="stock_actual" value="{{ $producto->stock_actual }}" readonly class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
                 <div>
