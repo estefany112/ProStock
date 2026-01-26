@@ -95,6 +95,16 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="mt-6 flex justify-center">
+                    {{ $categorias->links() }}
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <a href="{{ route('productos.index') }}"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        -> Siguiente
+                    </a>
+                </div>
             </div>
         </div>
         
