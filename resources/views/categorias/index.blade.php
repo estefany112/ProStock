@@ -27,7 +27,7 @@
                 <p class="text-sm text-gray-500 mt-1">
                     Gestión de categorías de productos – PROSERVE
                 </p>
-
+              
                 {{-- ACCIÓN PRINCIPAL --}}
                 <div class="mt-4">
                     <a href="{{ route('categorias.create') }}"
@@ -39,19 +39,21 @@
 
             </div>
 
+            <!-- Mostrar mensaje de éxito si existe -->
             @if(session('success'))
                 <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
+            <!-- Tabla de categorias -->
+            <div class="overflow-x-auto text-center">
+                <table class="w-full mt-4 border">
                     <thead class="bg-gray-50">
-                        <tr>
-                            <th class="p-3 text-left text-sm font-semibold text-gray-600 border-b">ID</th>
-                            <th class="p-3 text-left text-sm font-semibold text-gray-600 border-b">Nombre</th>
-                            <th class="p-3 text-center text-sm font-semibold text-gray-600 border-b">Acciones</th>
+                        <tr class="border-t">
+                            <th class="p-3 text-left text-sm font-semibold text-gray-600 border-b text-center">ID</th>
+                            <th class="p-3 text-left text-sm font-semibold text-gray-600 border-b text-center">Nombre</th>
+                            <th class="p-3 text-left text-sm font-semibold text-gray-600 border-b text-center">Acciones</th>
                         </tr>
                     </thead>
 
@@ -68,7 +70,7 @@
 
                                 <td class="p-3 border-b text-center space-x-3">
                                     <a href="{{ route('categorias.edit', $categoria->id) }}"
-                                       class="text-blue-600 hover:underline">
+                                    class="text-blue-600 hover:underline">
                                         Editar
                                     </a>
 
@@ -95,12 +97,13 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
                 <div class="mt-6 flex justify-center">
                     {{ $categorias->links() }}
                 </div>
                 <div class="mt-6 flex justify-end">
                     <a href="{{ route('productos.index') }}"
-                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
                             hover:bg-blue-700 transition">
                         -> Siguiente
                     </a>
@@ -111,23 +114,23 @@
     </div>
 
     <script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: 'Confirmar eliminación',
-        text: '¿Está seguro de que desea eliminar esta categoría? Esta acción no se puede deshacer.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc2626', 
-        cancelButtonColor: '#6b7280',  
-        confirmButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById(`delete-form-${id}`).submit();
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Confirmar eliminación',
+                text: '¿Está seguro de que desea eliminar esta categoría? Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626', 
+                cancelButtonColor: '#6b7280',  
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${id}`).submit();
+                }
+            });
         }
-    });
-}
 </script>
 
 </x-app-layout>
