@@ -1,50 +1,63 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar Producto - Proserve S.A.') }}
+            Editar Producto – Proserve S.A.
         </h2>
     </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto">
-        <div class="bg-white p-6 rounded shadow">
-            <form action="{{ route('productos.update', $producto->id) }}" method="POST">
+    <div class="py-10 max-w-5xl mx-auto">
+        <div class="bg-white p-8 rounded-xl shadow-md">
+
+            <form action="{{ route('productos.update', $producto) }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')
-                <div class="space-y-4">
-                    <div>
-                        <label for="codigo" class="block">Código</label>
-                        <input type="text" name="codigo" id="codigo" class="mt-1 block w-full" value="{{ $producto->codigo }}" required>
-                    </div>
 
-                    <div>
-                        <label for="descripcion" class="block">Descripción</label>
-                        <input type="text" name="descripcion" id="descripcion" class="mt-1 block w-full" value="{{ $producto->descripcion }}" required>
-                    </div>
+                <div>
+                    <label class="block font-medium">Código</label>
+                    <input type="text" name="codigo" value="{{ $producto->codigo }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
 
-                    <label class="block mt-3">Categoría</label>
-                    <select name="categoria_id" class="border rounded p-2 w-full">
+                <div>
+                    <label class="block font-medium">Nombre del artículo</label>
+                    <input type="text" name="descripcion" value="{{ $producto->descripcion }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block font-medium">Categoría</label>
+                    <select name="categoria_id" class="w-full border rounded-lg px-3 py-2">
                         <option value="">Sin categoría</option>
                         @foreach($categorias as $categoria)
                             <option value="{{ $categoria->id }}"
-                                @if($categoria->id == $producto->categoria_id) selected @endif
-                            >
+                                @selected($producto->categoria_id == $categoria->id)>
                                 {{ $categoria->nombre }}
                             </option>
                         @endforeach
                     </select>
-
-                    <div>
-                        <label for="precio_unitario" class="block">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="mt-1 block w-full" value="{{ $producto->precio_unitario }}" required step="0.01">
-                    </div>
-
-                    <div>
-                        <label for="stock_actual" class="block">Stock Actual</label>
-                        <input type="number" name="stock_actual" id="stock_actual" class="border rounded p-2 w-full bg-gray-100 cursor-not-allowed" value="{{ $producto->stock_actual }}" disabled>
-                    </div>
-
-                    <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg">Actualizar Producto</button>
                 </div>
+
+                <div>
+                    <label class="block font-medium">Marca</label>
+                    <input type="text" name="marca" value="{{ $producto->marca }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block font-medium">Unidad de medida</label>
+                    <input type="text" name="unidad_medida" value="{{ $producto->unidad_medida }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block font-medium">Stock Actual</label>
+                    <input type="number" name="stock_actual" value="{{ $producto->stock_actual }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block font-medium">Precio Unitario</label>
+                    <input type="number" step="0.01" name="precio_unitario" value="{{ $producto->precio_unitario }}" class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <button class="w-full bg-blue-600 text-white py-3 rounded-lg">
+                    Actualizar Producto
+                </button>
             </form>
         </div>
     </div>
