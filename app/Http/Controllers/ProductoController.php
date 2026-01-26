@@ -108,34 +108,51 @@ class ProductoController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Producto $producto)
-    {
-        $request->validate([
-            'codigo' => 'required',
-            'descripcion' => 'required',
-            'precio_unitario' => 'required|numeric|min:0',
-            'stock_actual' => 'required|numeric|min:0',
-            'categoria_id' => 'nullable|exists:categorias,id',
-            'unidad_medida' => 'nullable|string|max:50',
-            'marca' => 'nullable|string|max:100',
-            'fila_id' => 'required|exists:filas,id',
-            'columna_id' => 'required|exists:columnas,id',
-            'nivel_id' => 'required|exists:niveles,id',
-        ]);
+{
+    $request->validate([
+        'codigo' => 'required|string',
+        'descripcion' => 'required|string',
+        'precio_unitario' => 'required|numeric|min:0',
+        'stock_actual' => 'required|numeric|min:0',
+        'categoria_id' => 'nullable|exists:categorias,id',
+        'unidad_medida' => 'nullable|string|max:50',
+        'marca' => 'nullable|string|max:100',
+        'fila_id' => 'nullable|exists:filas,id',
+        'columna_id' => 'nullable|exists:columnas,id',
+        'nivel_id' => 'nullable|exists:niveles,id',
+    ]);
 
-        // Recalcular ubicación
-        $fila = Fila::find($request->fila_id);
-        $columna = Columna::find($request->columna_id);
-        $nivel = Nivel::find($request->nivel_id);
+    // Obtener relaciones
+    $fila = Fila::find($request->fila_id);
+    $columna = Columna::find($request->columna_id);
+    $nivel = Nivel::find($request->nivel_id);
 
+    // Calcular ubicación
+    $ubicacion = null;
+    if ($fila && $columna && $nivel) {
         $ubicacion = $fila->nombre . '-' . $columna->numero . '-' . $nivel->numero;
-
-        $data = $request->all();
-        $data['ubicacion'] = $ubicacion;
-
-        $producto->update($data);
-
-        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente.');
     }
+
+    // Actualizar producto
+    $producto->update([
+        'codigo' => $request->codigo,
+        'descripcion' => $request->descripcion,
+        'precio_unitario' => $request->precio_unitario,
+        'stock_actual' => $request->stock_actual,
+        'categoria_id' => $request->categoria_id,
+        'unidad_medida' => $request->unidad_medida,
+        'marca' => $request->marca,
+        'fila_id' => $request->fila_id,
+        'columna_id' => $request->columna_id,
+        'nivel_id' => $request->nivel_id,
+        'ubicacion' => $ubicacion,
+    ]);
+
+    return redirect()
+        ->route('productos.index')
+        ->with('success', 'Producto actualizado correctamente.');
+}
+
 
     /**
      * Remove the specified resource from storage.

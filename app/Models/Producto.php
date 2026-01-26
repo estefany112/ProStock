@@ -13,15 +13,14 @@ class Producto extends Model
         'codigo',
         'descripcion',
         'precio_unitario',
-        'precio_venta',
+        'stock_actual',
         'categoria_id',
+        'unidad_medida',
+        'marca',
         'fila_id',
         'columna_id',
         'nivel_id',
-        'stock_actual',
-        'ubicacion',        
-        'unidad_medida',    
-        'marca',      
+        'ubicacion',      
     ];
 
     public function categoria()
