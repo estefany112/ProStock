@@ -13,7 +13,7 @@ class SalidaController extends Controller
      */
     public function index()
     {
-        $salidas = Salida::with('producto')->latest()->get();
+        $salidas = Salida::with('producto')->latest()->paginate(10);
         return view('salidas.index', compact('salidas'));
     }
 

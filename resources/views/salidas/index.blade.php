@@ -1,20 +1,46 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Salidas de Inventario
-        </h2>
-    </x-slot>
+<div class="py-8 max-w-6xl mx-auto">
 
-    <div class="py-6 max-w-6xl mx-auto">
-        <div class="bg-white p-6 rounded shadow">
+        <div class="bg-white p-6 rounded-xl shadow-sm border">
 
-            <a href="{{ route('salidas.create') }}"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                + Nueva salida
-            </a>
+           {{-- HEADER DE LA VISTA --}}
+            <div class="mb-6">
 
+                {{-- FILA SUPERIOR: TÍTULO + INVENTARIO --}}
+                <div class="flex items-center justify-between">
+
+                    <h1 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                        📁 Salidas
+                    </h1>
+
+                    {{-- INVENTARIO (alineado al título) --}}
+                    <a href="{{ route('prostock.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition whitespace-nowrap">
+                        📦 Menú Inventario
+                    </a>
+
+                </div>
+
+                {{-- DESCRIPCIÓN --}}
+                <p class="text-sm text-gray-500 mt-1">
+                    Gestión de salidas de productos – PROSERVE
+                </p>
+              
+                {{-- ACCIÓN PRINCIPAL --}}
+                <div class="mt-4">
+                    <a href="{{ route('salidas.create') }}"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-green-700 transition">
+                        ➕ Nueva salida
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Mostrar mensaje de éxito si existe -->
             @if(session('success'))
-                <div class="bg-green-100 text-green-700 p-4 rounded mt-4 mb-4">
+                <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
                     {{ session('success') }}
                 </div>
             @endif
@@ -25,6 +51,7 @@
                 </div>
             @endif
 
+            <div>
             <table class="w-full mt-4 border text-center">
                 <thead class="bg-gray-100">
                     <tr>
@@ -72,7 +99,23 @@
                     @endif
                 </tbody>
             </table>
+            </div>
+            <div class="mt-6 flex justify-center">
+                    {{ $salidas->links() }}
+                </div>
+                <div class="mt-6 flex justify-between">
+                   <a href="{{ route('entradas.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        <- Anterior
+                    </a>
 
+                    <a href="{{ route('prostock.index') }}"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        -> Siguiente
+                    </a>
+                </div>
         </div>
     </div>
 </x-app-layout>
