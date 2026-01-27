@@ -27,16 +27,7 @@
 
     <div class="flex-1 flex flex-col">
 
-        <header class="bg-slate-800 text-white px-6 py-3 flex items-center justify-between">
-
-            <!-- ☰ SOLO EN MÓVIL -->
-           <button
-                @click="openSidebar = true"
-                class="lg:hidden p-2 text-white text-2xl">
-                ☰
-           </button>
-
-            <span>{{ Auth::user()->name }}</span>
+        <header class="">
 
         </header>
 
