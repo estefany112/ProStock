@@ -73,7 +73,7 @@
                 <tbody>
                     @foreach ($productos as $producto)
                     <tr class="text-center border-t">
-                        <td>{{ $producto->id }}</td>
+                        <td>{{ $productos->firstItem() + $loop->index }}</td>
                         <td>{{ $producto->codigo }}</td>
                         <td>{{ $producto->descripcion }}</td>
                         <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
