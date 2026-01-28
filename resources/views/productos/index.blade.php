@@ -93,7 +93,9 @@
                             <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="inline" onsubmit="return confirmDelete(event)">
                                 @csrf
                                 @method('DELETE')
+                                @if(auth()->user()->hasPermission('delete_products'))
                                 <button type="submit" class="text-red-600 ml-2">Eliminar</button>
+                                @endif
                             </form>
                             <a href="{{ route('productos.show', $producto->id) }}" class="text-blue-600">Ver</a>
                         </td>

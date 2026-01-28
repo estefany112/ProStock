@@ -21,6 +21,12 @@
                 📦 <span>Inventario - ProStock</span>
             </a>
 
+            <a href="{{ route('admin.users') }}"
+               class="flex items-center gap-3 px-3 py-2 rounded-lg
+               {{ request()->routeIs('admin.users') ? 'bg-blue-600' : 'hover:bg-gray-700' }}">
+                👥 <span> Gestión de Usuarios</span>
+            </a>
+
         </nav>
     </div>
 
@@ -32,7 +38,7 @@
             </div>
 
             <div>
-                <p class="text-sm font-semibold">{{ auth()->user()->name }}</p>
+                <p class="text-sm font-semibold">{{ auth()->user()->name }}(rol)</p>
                 <a href="{{ route('profile.edit') }}"
                    class="text-xs text-gray-400 hover:underline">
                     Editar perfil

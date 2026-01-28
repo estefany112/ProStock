@@ -10,6 +10,7 @@ use App\Http\Controllers\FilaController;
 use App\Http\Controllers\ColumnaController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 
 // Página principal
 Route::get('/', function () {
@@ -37,6 +38,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('filas', FilaController::class);
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
+
+    Route::get('/admin/users', [UserController::class, 'index'])
+        ->name('admin.users');
+
+    Route::post('/admin/users/{user}/roles', [UserController::class, 'updateRole'])
+        ->name('admin.users.roles');
 
     Route::get('/prostock', function () {
         return view('prostock.index');
