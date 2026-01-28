@@ -12,9 +12,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('roles')->paginate(10);
-        $roles = Role::all();
-
-        return view('admin.users.index', compact('users', 'roles'));
+        $roles = Role::orderBy('label')->get();
+        return view('admin.users.index', compact('users','roles'));
     }
 
     public function updateRole(Request $request, User $user)

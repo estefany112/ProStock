@@ -30,11 +30,13 @@
               
                 {{-- ACCIÓN PRINCIPAL --}}
                 <div class="mt-4">
-                    <a href="{{ route('productos.create') }}"
-                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
-                            hover:bg-green-700 transition">
-                        ➕ Nuevo producto
-                    </a>
+                    @if(auth()->user()->hasPermission('create_products'))
+                        <a href="{{ route('productos.create') }}"
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                                hover:bg-green-700 transition">
+                            ➕ Nuevo producto
+                        </a>
+                    @endif
                 </div>
 
             </div>
@@ -65,7 +67,9 @@
                         <th>Marca</th>
                         <th>Unidad de medida</th>
                         <th>Stock</th>
+                    @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']))
                         <th>Precio unitario</th>
+                    @endif
                         <th>Ubicación (FCN)</th>
                         <th>Acciones</th>
                     </tr>
@@ -80,7 +84,23 @@
                         <td>{{ $producto->marca }}</td>
                         <td>{{ $producto->unidad_medida }}</td>
                         <td>{{ $producto->stock_actual }}</td>
-                        <td>Q{{ number_format($producto->precio_unitario, 2) }}</td>
+                        @php
+                            $puedeVerPrecio = auth()->user()->hasRole('admin')
+                                || auth()->user()->hasRole('compras')
+                                || auth()->user()->hasRole('auditor')
+                                || auth()->user()->hasRole('supervisor');
+                        @endphp
+
+                        @if($puedeVerPrecio)
+                            <td class="text-center">
+                                @if($producto->precio_unitario > 0)
+                                    Q {{ number_format($producto->precio_unitario, 2) }}
+                                @else
+                                    <span class="text-gray-500 italic">Sin precio</span>
+                                @endif
+                            </td>
+                        @endif
+ 
                         <td>
                             @if($producto->ubicacion)
                                 {{ $producto->ubicacion }}
@@ -89,16 +109,18 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('productos.edit', $producto->id) }}" class="text-blue-600">Editar</a>
-                            <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="inline" onsubmit="return confirmDelete(event)">
-                                @csrf
-                                @method('DELETE')
-                                @if(auth()->user()->hasPermission('delete_products'))
-                                <button type="submit" class="text-red-600 ml-2">Eliminar</button>
-                                @endif
-                            </form>
-                            <a href="{{ route('productos.show', $producto->id) }}" class="text-blue-600">Ver</a>
-                        </td>
+                            @if(auth()->user()->hasPermission('edit_products'))
+                                <a href="{{ route('productos.edit', $producto->id) }}" class="text-blue-600">Editar</a>
+                            @endif
+                                <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="inline" onsubmit="return confirmDelete(event)">
+                                    @csrf
+                                    @method('DELETE')
+                                    @if(auth()->user()->hasPermission('delete_products'))
+                                        <button type="submit" class="text-red-600 ml-2">Eliminar</button>
+                                    @endif
+                                </form>
+                                <a href="{{ route('productos.show', $producto->id) }}" class="text-blue-600">Ver</a>
+                            </td>
                     </tr>
                     @endforeach
 

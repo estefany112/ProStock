@@ -59,11 +59,18 @@
                 </div>
 
                 <!-- Precio -->
+                @php
+                    $puedeEditarPrecio = auth()->user()->hasRole('admin')
+                        || auth()->user()->hasRole('compras');
+                @endphp
+
+                @if($puedeEditarPrecio)
                 <div>
                     <label class="block font-medium">Precio Unitario</label>
                     <input type="number" step="0.01" name="precio_unitario"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200" required>
+                        class="w-full border rounded-lg px-3 py-2">
                 </div>
+                @endif
 
                 <!-- UBICACIÓN -->
                 <div class="space-y-2">

@@ -50,9 +50,46 @@
                     <input type="number" name="stock_actual" value="{{ $producto->stock_actual }}" readonly class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
+                <!-- PRECIO UNITARIO -->
+                @php
+                    $puedeEditarPrecio = auth()->user()->hasAnyRole(['admin','compras']);
+                    $puedeVerPrecio = auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']);
+                @endphp
+
                 <div>
                     <label class="block font-medium">Precio Unitario</label>
-                    <input type="number" step="0.01" name="precio_unitario" value="{{ $producto->precio_unitario }}" class="w-full border rounded-lg px-3 py-2" required>
+
+                    @if($puedeEditarPrecio)
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="precio_unitario"
+                            value="{{ $producto->precio_unitario }}"
+                            class="w-full border rounded-lg px-3 py-2"
+                            required
+                        >
+                    @elseif($producto->precio_unitario == 0)
+                        <input
+                            type="text"
+                            class="w-full border rounded-lg px-3 py-2 bg-gray-100 italic"
+                            value="Sin precio"
+                            readonly
+                        >
+                    @elseif($puedeVerPrecio)
+                        <input
+                            type="text"
+                            class="w-full border rounded-lg px-3 py-2 bg-gray-100"
+                            value="Q {{ number_format($producto->precio_unitario,2) }}"
+                            readonly
+                        >
+                    @else
+                        <input
+                            type="text"
+                            class="w-full border rounded-lg px-3 py-2 bg-gray-100 italic"
+                            value="Sin precio"
+                            readonly
+                        >
+                    @endif
                 </div>
 
                 <!-- UBICACIÓN -->

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // create_products
+            $table->string('name')->unique(); // create_products
             $table->string('label'); // Crear productos
             $table->timestamps();
         });

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permission_role', function (Blueprint $table) {
-            $table->foreignId('permission_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
-            $table->primary(['permission_id','role_id']);
+        Schema::table('productos', function (Blueprint $table) {
+            $table->decimal('precio_unitario', 10, 2)->nullable()->change();
         });
-
     }
 
     /**
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permission_role');
+        Schema::table('productos', function (Blueprint $table) {
+            $table->decimal('precio_unitario', 10, 2)->nullable(false)->change();
+        });
     }
 };

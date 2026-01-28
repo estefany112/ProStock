@@ -50,4 +50,16 @@ class Producto extends Model
         return $this->belongsTo(Nivel::class); 
     }
 
+    public function getTienePrecioAttribute(): bool
+    {
+        return $this->precio_unitario !== null;
+    }
+
+    public function getPrecioFormateadoAttribute(): ?string
+    {
+        return $this->precio_unitario !== null
+            ? number_format($this->precio_unitario, 2)
+            : null;
+    }
+
 }

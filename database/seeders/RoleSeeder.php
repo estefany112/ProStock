@@ -11,34 +11,15 @@ class RoleSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-public function run()
-{
-    Role::insert([
-        [
-            'name' => 'admin',
-            'label' => 'Administrador',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-        [
-            'name' => 'almacen',
-            'label' => 'Almacén',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-        [
-            'name' => 'ventas',
-            'label' => 'Ventas',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-        [
-            'name' => 'supervisor',
-            'label' => 'Supervisor',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-    ]);
-}
-
+    public function run(): void
+    {
+        Role::insert([
+            ['name'=>'admin','label'=>'Administrador','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'almacen','label'=>'Encargado de Inventario','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'operativo','label'=>'Usuario Operativo','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'supervisor','label'=>'Supervisor','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'compras','label'=>'Compras','created_at'=>now(),'updated_at'=>now()],
+            ['name'=>'auditor','label'=>'Auditor / Contabilidad','created_at'=>now(),'updated_at'=>now()],
+        ]);
+    }
 }

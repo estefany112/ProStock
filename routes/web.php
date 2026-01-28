@@ -43,7 +43,17 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.users');
 
     Route::post('/admin/users/{user}/roles', [UserController::class, 'updateRole'])
-        ->name('admin.users.roles');
+        ->name('admin.users.roles')
+        ->middleware('permission:assign_roles');
+
+    Route::resource('productos', ProductoController::class)
+        ->middleware('permission:view_products');
+
+    Route::resource('entradas', EntradaController::class)
+        ->middleware('permission:view_entries');
+
+    Route::resource('salidas', SalidaController::class)
+        ->middleware('permission:view_exits');
 
     Route::get('/prostock', function () {
         return view('prostock.index');
