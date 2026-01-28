@@ -8,6 +8,7 @@ use App\Models\Fila;
 use App\Models\Columna;
 use App\Models\Nivel;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductoController extends Controller
 {
@@ -110,7 +111,10 @@ class ProductoController extends Controller
     public function update(Request $request, Producto $producto)
 {
     $request->validate([
-        'codigo' => 'required|string',
+        'codigo' => [
+            'required',
+            Rule::unique('productos', 'codigo')->ignore($producto->id),
+        ],
         'descripcion' => 'required|string',
         'precio_unitario' => 'required|numeric|min:0',
         'stock_actual' => 'required|numeric|min:0',
