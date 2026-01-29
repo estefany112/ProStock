@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Models\Role;
 
 class RoleSeeder extends Seeder
@@ -13,13 +13,43 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::insert([
-            ['name'=>'admin','label'=>'Administrador','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'almacen','label'=>'Encargado de Inventario','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'operativo','label'=>'Usuario Operativo','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'supervisor','label'=>'Supervisor','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'compras','label'=>'Compras','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'auditor','label'=>'Auditor / Contabilidad','created_at'=>now(),'updated_at'=>now()],
-        ]);
+        $roles = [
+            ['name' => 'admin',     'label' => 'Administrador'],
+            ['name' => 'asistente', 'label' => 'Asistente'],
+            ['name' => 'almacen',   'label' => 'Encargado de Inventario'],
+            ['name' => 'operativo', 'label' => 'Usuario Operativo'],
+            ['name' => 'supervisor','label' => 'Supervisor'],
+            ['name' => 'compras',   'label' => 'Compras'],
+            ['name' => 'auditor',   'label' => 'Auditor / Contabilidad'],
+        ];
+
+        // obtener nombres
+        $roleNames = collect($roles)->pluck('name')->toArray();
+
+        // limpiar relaciones (pivotes)
+        DB::table('role_user')
+            ->whereIn(
+                'role_id',
+                Role::whereIn('name', $roleNames)->pluck('id')
+            )
+            ->delete();
+
+        DB::table('permission_role')
+            ->whereIn(
+                'role_id',
+                Role::whereIn('name', $roleNames)->pluck('id')
+            )
+            ->delete();
+
+        // eliminar roles
+        Role::whereIn('name', $roleNames)->delete();
+
+        // recrear roles
+        foreach ($roles as $role) {
+            Role::create([
+                'name'  => $role['name'],
+                'label' => $role['label'],
+            ]);
+        }
     }
 }
