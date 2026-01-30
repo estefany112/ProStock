@@ -14,6 +14,12 @@
                         💵 CAJA CHICA
                     </h1>
 
+                    <a href="{{ route('caja.history') }}"
+                       class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                              hover:bg-blue-700 transition whitespace-nowrap">
+                        💵 Historial de Caja Chica
+                    </a>
+
                 </div>
 
                 {{-- DESCRIPCIÓN --}}

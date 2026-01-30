@@ -69,6 +69,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/caja/movement', [PettyCashController::class, 'storeMovement'])
         ->middleware('permission:caja.move');
+    
+    Route::get('/caja/historico', [PettyCashController::class, 'history'])
+    ->name('caja.history')
+    ->middleware('permission:caja.report');
         
     Route::get('/prostock', function () {
         return view('prostock.index');

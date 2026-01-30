@@ -100,4 +100,17 @@ class PettyCashController extends Controller
         return redirect()->route('caja.index')
             ->with('success', 'Caja semanal cerrada correctamente');
     }
+
+    public function history()
+    {
+        if (!auth()->user()->hasPermission('caja.report')) {
+            abort(403);
+        }
+
+        $cajas = PettyCash::where('is_open', false)
+            ->orderByDesc('period_start')
+            ->paginate(10);
+
+        return view('caja.history', compact('cajas'));
+    }
 }
