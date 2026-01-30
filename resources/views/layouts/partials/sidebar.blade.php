@@ -33,36 +33,52 @@
                         ProStock
                     </a>
 
-                    <a href="#"
-                       class="block px-3 py-1.5 rounded hover:bg-gray-700">
-                        Kardex
-                    </a>
                 </div>
             </div>
 
             <!-- Administración -->
             @if(auth()->user()->hasRole('admin'))
-                <div x-data="{ open: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
-                    <button @click="open = !open"
+                <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
+
+                    <button @click="openAdmin = !openAdmin"
                             class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                         <span class="flex items-center gap-3">
                             👥 <span>Administración</span>
                         </span>
-                        <span x-text="open ? '▾' : '▸'"></span>
+                        <span x-text="openAdmin ? '▾' : '▸'"></span>
                     </button>
 
-                    <div x-show="open" x-collapse class="ml-6 mt-1 space-y-1">
+                    <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
                         <a href="{{ route('admin.users') }}"
-                           class="block px-3 py-1.5 rounded hover:bg-gray-700
-                           {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
+                        class="block px-3 py-1.5 rounded hover:bg-gray-700
+                        {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
                             Usuarios
                         </a>
+                    </div>
 
-                        <a href="#"
-                           class="block px-3 py-1.5 rounded hover:bg-gray-700">
-                            Roles y permisos
+                </div>
+            @endif
+
+            <!-- Finanzas -->
+            @if(auth()->user()->hasAnyRole(['admin','auditor']))
+                <div x-data="{ openFinance: {{ request()->routeIs('caja.*') ? 'true' : 'false' }} }">
+
+                    <button @click="openFinance = !openFinance"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                        <span class="flex items-center gap-3">
+                            💵 <span>Finanzas</span>
+                        </span>
+                        <span x-text="openFinance ? '▾' : '▸'"></span>
+                    </button>
+
+                    <div x-show="openFinance" x-collapse class="ml-6 mt-1 space-y-1">
+                        <a href="{{ route('caja.index') }}"
+                        class="block px-3 py-1.5 rounded hover:bg-gray-700
+                        {{ request()->routeIs('caja.*') ? 'bg-blue-600' : '' }}">
+                            Caja Chica
                         </a>
                     </div>
+
                 </div>
             @endif
 
