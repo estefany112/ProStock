@@ -85,6 +85,11 @@ Route::middleware(['auth'])->group(function () {
         'stockTotal'      => 0,
         'stockBajo'       => 0,
     ]);
+
+});
+
+Route::get('/hora', function () {
+    return now()->format('d/m/Y H:i:s');
 });
 
 });

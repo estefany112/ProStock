@@ -94,12 +94,16 @@
                     </div>
 
                     <div class="border rounded-lg p-4">
+                        @if($cash)
                         <p class="text-sm text-gray-500">
                             Semana:
-                            {{ $cash->period_start->format('d/m/Y') }}
+                            {{ optional($cash->period_start)->format('d/m/Y') ?? '—' }}
                             –
-                            {{ $cash->period_end->format('d/m/Y') }}
+                            {{ optional($cash->period_end)->format('d/m/Y') ?? '—' }}
                         </p>
+                        @else
+                            <span class="text-red-500">No hay caja chica activa</span>
+                        @endif
                     </div>
 
                 </div>

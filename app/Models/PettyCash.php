@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PettyCash extends Model
 {
+     protected $table = 'petty_cashes';
      protected $casts = [
         'period_start' => 'date',
         'period_end'   => 'date',
@@ -28,4 +29,15 @@ class PettyCash extends Model
     {
         return $this->belongsTo(User::class, 'opened_by');
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($cash) {
+            if (!$cash->period_start || !$cash->period_end) {
+                $cash->period_start = now()->startOfWeek();
+                $cash->period_end   = now()->endOfWeek();
+            }
+        });
+    }
+    
 }
