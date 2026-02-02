@@ -12,6 +12,7 @@ class PettyCashMovement extends Model
         'amount',
         'concept',
         'voucher',
+        'responsible',
         'user_id'
     ];
 
