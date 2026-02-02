@@ -58,7 +58,10 @@ class PettyCashController extends Controller
         $request->validate([
             'type'    => 'required|in:income,expense',
             'amount'  => 'required|numeric|min:1',
-            'concept' => 'required|string|max:255'
+            'concept' => 'required|string|max:255',
+            'responsible' => $request->type === 'expense'
+                ? 'required|string|max:100'
+                : 'nullable',
         ]);
 
         $cash = PettyCash::where('is_open', true)->firstOrFail();
@@ -71,6 +74,7 @@ class PettyCashController extends Controller
             'type'    => $request->type,
             'amount'  => $request->amount,
             'concept' => $request->concept,
+            'responsible' => $request->responsible,
             'user_id' => auth()->id(),
         ]);
 

@@ -117,7 +117,7 @@
                         </h2>
 
                         <form action="{{ url('/caja/movement') }}" method="POST"
-                              class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                              class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             @csrf
 
                             <select name="type" required class="border rounded-lg px-3 py-2">
@@ -144,9 +144,16 @@
                                 class="border rounded-lg px-3 py-2 md:col-span-2"
                             >
 
+                            <input
+                                type="text"
+                                name="responsible"
+                                placeholder="Responsable (a quien se entrega el efectivo)"
+                                class="border rounded-lg px-3 py-2 md:col-span-2"
+                            />
+
                             <button
                                 class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
-                                       hover:bg-blue-700 transition md:col-span-4">
+                                       hover:bg-blue-700 transition md:col-span-5">
                                 Guardar movimiento
                             </button>
 
@@ -163,6 +170,7 @@
                                 <th class="p-2">Tipo</th>
                                 <th>Concepto</th>
                                 <th>Monto</th>
+                                <th>Responsable</th>
                                 <th>Usuario</th>
                             </tr>
                         </thead>
@@ -183,13 +191,18 @@
                                     <td>
                                         Q {{ number_format($mov->amount, 2) }}
                                     </td>
-                                    <td>{{ $mov->user->name }}</td>
+                                    <td>
+                                        {{ $mov->responsible ?? '—' }}
+                                    </td>
+                                    <td>
+                                        {{ $mov->user->name }}
+                                    </td>
                                 </tr>
                             @endforeach
 
                             @if($cash->movements()->count() === 0)
                                 <tr>
-                                    <td colspan="5" class="p-4 text-gray-600">
+                                    <td colspan="6" class="p-4 text-gray-600">
                                         No hay movimientos registrados.
                                     </td>
                                 </tr>
