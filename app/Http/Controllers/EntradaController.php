@@ -21,16 +21,16 @@ class EntradaController extends Controller
             'producto.nivel',
         ]);
 
-        // 🔍 BUSCADOR
+        // BUSCADOR
         if ($request->filled('search')) {
             $search = trim($request->search);
 
             $query->where(function ($q) use ($search) {
 
-                // 🔹 Motivo de la entrada
+                // Motivo de la entrada
                 $q->where('motivo', 'like', "%{$search}%")
 
-                // 🔹 Datos del producto
+                // Datos del producto
                 ->orWhereHas('producto', function ($p) use ($search) {
                     $p->where('descripcion', 'like', "%{$search}%")
                     ->orWhere('codigo', 'like', "%{$search}%")
@@ -38,12 +38,12 @@ class EntradaController extends Controller
                     ->orWhere('ubicacion', 'like', "%{$search}%");
                 })
 
-                // 🔹 Categoría
+                // Categoría
                 ->orWhereHas('producto.categoria', function ($c) use ($search) {
                     $c->where('nombre', 'like', "%{$search}%");
                 })
 
-                // 🔹 Ubicación relacional
+                // Ubicación relacional
                 ->orWhereHas('producto.fila', function ($f) use ($search) {
                     $f->where('nombre', 'like', "%{$search}%");
                 })

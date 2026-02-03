@@ -51,6 +51,11 @@
                 </div>
             @endif
 
+            <x-search-bar
+                action="{{ route('salidas.index') }}"
+                placeholder="Buscar por producto, motivo o ubicación..."
+            />
+
             <div>
             <table class="w-full mt-4 border text-center">
                 <thead class="bg-gray-100">
@@ -100,8 +105,8 @@
                 </tbody>
             </table>
             </div>
-            <div class="mt-6 flex justify-center">
-                    {{ $salidas->links() }}
+                <div class="mt-6 flex justify-center">
+                    {{ $salidas->appends(request()->query())->links() }}
                 </div>
                 <div class="mt-6 flex justify-between">
                    <a href="{{ route('entradas.index') }}"
