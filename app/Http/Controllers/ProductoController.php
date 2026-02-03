@@ -25,11 +25,30 @@ class ProductoController extends Controller
             $search = trim($request->search);
 
             $query->where(function ($q) use ($search) {
+
                 $q->where('descripcion', 'like', "%{$search}%")
                 ->orWhere('codigo', 'like', "%{$search}%")
                 ->orWhere('marca', 'like', "%{$search}%")
-                ->orWhereHas('categoria', function ($c) use ($search) {
+                ->orWhere('ubicacion', 'like', "%{$search}%");
+
+                // Categoría
+                $q->orWhereHas('categoria', function ($c) use ($search) {
                     $c->where('nombre', 'like', "%{$search}%");
+                });
+
+                // Fila
+                $q->orWhereHas('fila', function ($f) use ($search) {
+                    $f->where('nombre', 'like', "%{$search}%");
+                });
+
+                // Columna
+                $q->orWhereHas('columna', function ($c) use ($search) {
+                    $c->where('numero', 'like', "%{$search}%");
+                });
+
+                // Nivel
+                $q->orWhereHas('nivel', function ($n) use ($search) {
+                    $n->where('numero', 'like', "%{$search}%");
                 });
             });
         }
