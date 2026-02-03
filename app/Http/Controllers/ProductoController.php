@@ -17,10 +17,28 @@ class ProductoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::orderBy('id', 'asc')->paginate(10);
-        return view('productos.index', compact('productos')); 
+        $query = Producto::query();
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+
+            $query->where(function ($q) use ($search) {
+                $q->where('descripcion', 'like', "%{$search}%")
+                ->orWhere('codigo', 'like', "%{$search}%")
+                ->orWhere('marca', 'like', "%{$search}%")
+                ->orWhereHas('categoria', function ($c) use ($search) {
+                    $c->where('nombre', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $productos = $query
+            ->orderBy('descripcion')
+            ->paginate(10);
+
+        return view('productos.index', compact('productos'));
     }
 
     /**

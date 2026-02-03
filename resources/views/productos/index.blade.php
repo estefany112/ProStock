@@ -55,6 +55,12 @@
                 </div>
             @endif
 
+            <!-- Boton de búsqueda -->
+            <x-search-bar
+                action="{{ route('productos.index') }}"
+                placeholder="Buscar producto..."
+            />
+
             <!-- Tabla de productos -->
             <div class="overflow-x-auto text-center">
             <table class="w-full mt-4 border">
@@ -133,7 +139,7 @@
             </table>
         </div>
                 <div class="mt-6 flex justify-center">
-                    {{ $productos->links() }}
+                    {{ $productos->appends(request()->query())->links() }}
                 </div>
                 <div class="mt-6 flex justify-between">
                    <a href="{{ route('categorias.index') }}"
