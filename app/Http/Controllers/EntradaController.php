@@ -11,9 +11,55 @@ class EntradaController extends Controller
      /**
      * Mostrar el listado de todas las entradas.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $entradas = Entrada::with('producto')->orderBy('id', 'asc')->paginate(10);  // Obtener las entradas con los productos relacionados
+        $query = Entrada::with([
+            'producto',
+            'producto.categoria',
+            'producto.fila',
+            'producto.columna',
+            'producto.nivel',
+        ]);
+
+        // 🔍 BUSCADOR
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+
+            $query->where(function ($q) use ($search) {
+
+                // 🔹 Motivo de la entrada
+                $q->where('motivo', 'like', "%{$search}%")
+
+                // 🔹 Datos del producto
+                ->orWhereHas('producto', function ($p) use ($search) {
+                    $p->where('descripcion', 'like', "%{$search}%")
+                    ->orWhere('codigo', 'like', "%{$search}%")
+                    ->orWhere('marca', 'like', "%{$search}%")
+                    ->orWhere('ubicacion', 'like', "%{$search}%");
+                })
+
+                // 🔹 Categoría
+                ->orWhereHas('producto.categoria', function ($c) use ($search) {
+                    $c->where('nombre', 'like', "%{$search}%");
+                })
+
+                // 🔹 Ubicación relacional
+                ->orWhereHas('producto.fila', function ($f) use ($search) {
+                    $f->where('nombre', 'like', "%{$search}%");
+                })
+                ->orWhereHas('producto.columna', function ($c) use ($search) {
+                    $c->where('numero', 'like', "%{$search}%");
+                })
+                ->orWhereHas('producto.nivel', function ($n) use ($search) {
+                    $n->where('numero', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $entradas = $query
+            ->orderByDesc('id')
+            ->paginate(10);
+
         return view('entradas.index', compact('entradas'));
     }
 
