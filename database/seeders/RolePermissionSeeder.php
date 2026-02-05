@@ -21,9 +21,7 @@ class RolePermissionSeeder extends Seeder
         $compras = Role::where('name','compras')->first();
         $auditor = Role::where('name','auditor')->first();
 
-        $all = Permission::pluck('id');
-
-        $admin->permissions()->sync($all);
+        $admin->permissions()->sync(Permission::pluck('id'));
 
         $almacen->permissions()->sync(
             Permission::whereIn('name', [
