@@ -14,16 +14,20 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrador Inventario',
-            'email' => 'admin@proserve.com',
-            'password' => Hash::make('Admin123!'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@proserve.com'],
+            [
+                'name' => 'Administrador Inventario',
+                'password' => Hash::make('Admin123!'),
+            ]
+        );
 
-        User::create([
-            'name' => 'Asistente Inventario',
-            'email' => 'asistente@proserve.com',
-            'password' => Hash::make('Asistente123!'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'asistente@proserve.com'],
+            [
+                'name' => 'Asistente Inventario',
+                'password' => Hash::make('Asistente123!'),
+            ]
+        );
     }
 }
