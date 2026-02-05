@@ -13,30 +13,44 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::insert([
-            // Productos
-            ['name'=>'view_products','label'=>'Ver productos','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'create_products','label'=>'Crear productos','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'edit_products','label'=>'Editar productos','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'delete_products','label'=>'Eliminar productos','created_at'=>now(),'updated_at'=>now()],
+         $permissions = [
+        // Productos
+        ['name'=>'view_products','label'=>'Ver productos'],
+        ['name'=>'create_products','label'=>'Crear productos'],
+        ['name'=>'edit_products','label'=>'Editar productos'],
+        ['name'=>'delete_products','label'=>'Eliminar productos'],
 
-            // Entradas
-            ['name'=>'view_entries','label'=>'Ver entradas','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'create_entries','label'=>'Crear entradas','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'approve_entries','label'=>'Aprobar entradas','created_at'=>now(),'updated_at'=>now()],
+        // Entradas
+        ['name'=>'view_entries','label'=>'Ver entradas'],
+        ['name'=>'create_entries','label'=>'Crear entradas'],
+        ['name'=>'approve_entries','label'=>'Aprobar entradas'],
 
-            // Salidas
-            ['name'=>'view_exits','label'=>'Ver salidas','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'create_exits','label'=>'Crear salidas','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'approve_exits','label'=>'Aprobar salidas','created_at'=>now(),'updated_at'=>now()],
+        // Salidas
+        ['name'=>'view_exits','label'=>'Ver salidas'],
+        ['name'=>'create_exits','label'=>'Crear salidas'],
+        ['name'=>'approve_exits','label'=>'Aprobar salidas'],
 
-            // Usuarios / roles
-            ['name'=>'view_users','label'=>'Ver usuarios','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'assign_roles','label'=>'Asignar roles','created_at'=>now(),'updated_at'=>now()],
+        // Usuarios
+        ['name'=>'view_users','label'=>'Ver usuarios'],
+        ['name'=>'assign_roles','label'=>'Asignar roles'],
 
-            // Reportes
-            ['name'=>'view_reports','label'=>'Ver reportes','created_at'=>now(),'updated_at'=>now()],
-            ['name'=>'export_reports','label'=>'Exportar reportes','created_at'=>now(),'updated_at'=>now()],
-        ]);
+        // Reportes
+        ['name'=>'view_reports','label'=>'Ver reportes'],
+        ['name'=>'export_reports','label'=>'Exportar reportes'],
+
+        // 🔥 CAJA CHICA
+        ['name'=>'caja.view','label'=>'Ver caja chica'],
+        ['name'=>'caja.open','label'=>'Abrir caja chica'],
+        ['name'=>'caja.move','label'=>'Registrar movimientos'],
+        ['name'=>'caja.close','label'=>'Cerrar caja chica'],
+    ];
+
+    foreach ($permissions as $permission) {
+        Permission::updateOrCreate(
+            ['name' => $permission['name']],
+            ['label' => $permission['label']]
+        );
+    }
+    
     }
 }
