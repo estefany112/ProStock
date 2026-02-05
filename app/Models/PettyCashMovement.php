@@ -9,11 +9,13 @@ class PettyCashMovement extends Model
     protected $fillable = [
         'petty_cash_id',
         'type',
+        'movement_category',
         'amount',
         'concept',
         'voucher',
         'responsible',
-        'user_id'
+        'user_id',
+        'parent_id',
     ];
 
     public function pettyCash()

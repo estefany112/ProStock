@@ -14,7 +14,7 @@ class PettyCashController extends Controller
             abort(403);
         }
 
-        $cash = PettyCash::where('is_open', true)->first();
+         $cash = PettyCash::where('status', 'open')->first();
         return view('caja.index', compact('cash'));
     }
 
@@ -37,10 +37,10 @@ class PettyCashController extends Controller
         $end   = Carbon::now()->endOfWeek();
 
         PettyCash::create([
-            'initial_amount'  => $request->amount,
+            'initial_balance' => $request->amount,
             'current_balance' => $request->amount,
             'opened_by'       => auth()->id(),
-            'is_open'         => true,
+            'status'          => 'open',
             'period_start'    => $start,
             'period_end'      => $end,
         ]);
@@ -56,36 +56,31 @@ class PettyCashController extends Controller
         }
 
         $request->validate([
-            'type'    => 'required|in:income,expense',
-            'amount'  => 'required|numeric|min:1',
+            'movement_category' => 'required|in:income,expense,advance',
+            'amount' => 'required|numeric|min:1',
             'concept' => 'required|string|max:255',
-            'responsible' => $request->type === 'expense'
-                ? 'required|string|max:100'
+            'responsible' => $request->movement_category !== 'income'
+                ? 'required|string|max:255'
                 : 'nullable',
         ]);
 
-        $cash = PettyCash::where('is_open', true)->firstOrFail();
+        $cash = PettyCash::where('status', 'open')->firstOrFail();
 
-        if (!$cash->is_open) {
-            abort(403, 'La caja de esta semana ya está cerrada');
-        }
-
-        $cash->movements()->create([
-            'type'    => $request->type,
-            'amount'  => $request->amount,
+        // Crear movimiento
+        $movement = $cash->movements()->create([
+            'type' => $request->movement_category === 'income' ? 'income' : 'expense',
+            'movement_category' => $request->movement_category,
+            'amount' => $request->amount,
             'concept' => $request->concept,
             'responsible' => $request->responsible,
+            'status' => $request->movement_category === 'advance' ? 'pending' : null,
             'user_id' => auth()->id(),
         ]);
 
-        $cash->current_balance +=
-            $request->type === 'income'
-                ? $request->amount
-                : -$request->amount;
+        // Recalcular saldo SIEMPRE
+        $cash->recalculateBalance();
 
-        $cash->save();
-
-        return back();
+        return back()->with('success', 'Movimiento registrado correctamente');
     }
 
     public function close()
@@ -94,10 +89,10 @@ class PettyCashController extends Controller
             abort(403);
         }
 
-        $cash = PettyCash::where('is_open', true)->firstOrFail();
+        $cash = PettyCash::where('status', 'open')->firstOrFail();
 
         $cash->update([
-            'is_open'   => false,
+            'status'   => 'closed',
             'closed_at' => now(),
         ]);
 

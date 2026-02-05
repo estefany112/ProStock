@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class PettyCash extends Model
@@ -39,5 +40,20 @@ class PettyCash extends Model
             }
         });
     }
-    
+
+    public function recalculateBalance()
+    {
+        $movementsBalance = $this->movements()->sum(\DB::raw("
+            CASE
+                WHEN movement_category = 'income' THEN amount
+                WHEN movement_category = 'expense' THEN -amount
+                WHEN movement_category = 'advance' THEN -amount
+            END
+        "));
+
+        $this->update([
+            'current_balance' => $this->initial_balance + $movementsBalance
+        ]);
+    }
+
 }
