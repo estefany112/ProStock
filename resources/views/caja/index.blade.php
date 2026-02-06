@@ -120,11 +120,14 @@
                               class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             @csrf
 
-                            <select name="type" required class="border rounded-lg px-3 py-2">
+                            <select name="movement_category" required class="border rounded-lg px-3 py-2">
                                 <option value="">Tipo</option>
                                 <option value="income">Ingreso</option>
                                 <option value="expense">Egreso</option>
+                                <option value="advance">Anticipo</option>
                             </select>
+
+                            <input type="hidden" name="type" value="expense">
 
                             <input
                                 type="number"
@@ -181,10 +184,21 @@
                                         {{ $mov->created_at->format('d/m/Y H:i') }}
                                     </td>
                                     <td>
-                                        @if($mov->type === 'income')
-                                            <span class="text-green-600 font-semibold">Ingreso</span>
-                                        @else
-                                            <span class="text-red-600 font-semibold">Egreso</span>
+                                        @switch($mov->movement_category)
+                                            @case('income')
+                                                <span class="text-green-600 font-semibold">Ingreso</span>
+                                                @break
+                                            @case('expense')
+                                                <span class="text-red-600 font-semibold">Egreso</span>
+                                                @break
+                                            @case('advance')
+                                                <span class="text-blue-600 font-semibold">Anticipo</span>
+                                                @break
+                                        @endswitch
+                                        @if($mov->movement_category === 'advance')
+                                            <div class="text-xs text-gray-500">
+                                                {{ $mov->status === 'pending' ? 'Pendiente' : 'Liquidado' }}
+                                            </div>
                                         @endif
                                     </td>
                                     <td>{{ $mov->concept }}</td>
