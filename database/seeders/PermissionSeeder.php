@@ -38,11 +38,14 @@ class PermissionSeeder extends Seeder
         ['name'=>'view_reports','label'=>'Ver reportes'],
         ['name'=>'export_reports','label'=>'Exportar reportes'],
 
-        // 🔥 CAJA CHICA
+        // CAJA CHICA
         ['name'=>'caja.view','label'=>'Ver caja chica'],
         ['name'=>'caja.open','label'=>'Abrir caja chica'],
         ['name'=>'caja.move','label'=>'Registrar movimientos'],
         ['name'=>'caja.close','label'=>'Cerrar caja chica'],
+        ['name'=>'caja.history','label'=>'Ver histórico de caja chica'],
+
+
     ];
 
     foreach ($permissions as $permission) {

@@ -12,26 +12,27 @@ use App\Http\Controllers\NivelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PettyCashController;
+use App\Http\Controllers\EmployeeController;
 
-// Página principal
+// PÁGINA PRINCIPAL
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard (solo usuarios autenticados y verificados)
+// DASHBOARD - SOLO PARA PERSONA AUTENTICADAS
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Rutas protegidas
+// RUTAS PROTEGIDAS
 Route::middleware(['auth'])->group(function () {
 
-    // Perfil del usuario
+    // PERFIL DE USUARIO
     Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Módulos del sistema
+    // MÓDULOS DE SISTEMA
     Route::resource('productos', ProductoController::class);
     Route::resource('entradas', EntradaController::class);
     Route::resource('categorias', CategoriaController::class);
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
 
+    // MÓDULO DE ADMIN
     Route::get('/admin/users', [UserController::class, 'index'])
         ->name('admin.users');
 
@@ -47,15 +49,19 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.users.roles')
         ->middleware('permission:assign_roles');
 
+    // MÓDULO DE PRODUCTOS
     Route::resource('productos', ProductoController::class)
         ->middleware('permission:view_products');
 
+    // MÓDULO DE ENTRADAS
     Route::resource('entradas', EntradaController::class)
         ->middleware('permission:view_entries');
 
+    // MÓDULO DE SALIDAS
     Route::resource('salidas', SalidaController::class)
         ->middleware('permission:view_exits');
 
+    // MÓDULO DE CAJA CHICA
     Route::get('/caja', [PettyCashController::class, 'index'])
         ->name('caja.index')
         ->middleware('permission:caja.view');
@@ -70,9 +76,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/caja/movement', [PettyCashController::class, 'storeMovement'])
         ->middleware('permission:caja.move');
     
-    Route::get('/caja/historico', [PettyCashController::class, 'history'])
-    ->name('caja.history')
-    ->middleware('permission:caja.report');
+    Route::get('/caja/history', [PettyCashController::class, 'history'])
+        ->name('caja.history')
+        ->middleware('permission:caja.history');
+
+    // MÓDULO DE EMPLEADOS
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
+    Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
+    Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+    Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::patch('/employees/{employee}/toggle', [EmployeeController::class, 'toggle'])->name('employees.toggle');
         
     Route::get('/prostock', function () {
         return view('prostock.index');

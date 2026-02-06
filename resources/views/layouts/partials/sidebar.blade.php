@@ -32,26 +32,48 @@
                        {{ request()->routeIs('prostock.index') ? 'bg-blue-600' : '' }}">
                         ProStock
                     </a>
-
                 </div>
             </div>
 
+             <!-- Empleados -->
+            @if(auth()->user()->hasPermission('employee.view'))
+                <div x-data="{ openEmployees: {{ request()->routeIs('employees.*') ? 'true' : 'false' }} }">
+
+                    <button @click="openEmployees = !openEmployees"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                        <span class="flex items-center gap-3">
+                            👥 <span>Empleados</span>
+                        </span>
+                        <span x-text="openEmployees ? '▾' : '▸'"></span>
+                    </button>
+
+                    <div x-show="openEmployees" x-collapse class="ml-6 mt-1 space-y-1">
+                        <a href="{{ route('employees.index') }}"
+                        class="block px-3 py-1.5 rounded hover:bg-gray-700
+                        {{ request()->routeIs('employees.*') ? 'bg-blue-600' : '' }}">
+                            Listado
+                        </a>
+                    </div>
+
+                </div>
+            @endif
+
             <!-- Administración -->
-            @if(auth()->user()->hasRole('admin'))
+            @if(auth()->user()->hasAnyRole(['admin','rrhh']))
                 <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
 
                     <button @click="openAdmin = !openAdmin"
                             class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                         <span class="flex items-center gap-3">
-                            👥 <span>Administración</span>
+                            ⚙️ <span>Administración</span>
                         </span>
                         <span x-text="openAdmin ? '▾' : '▸'"></span>
                     </button>
 
                     <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
                         <a href="{{ route('admin.users') }}"
-                        class="block px-3 py-1.5 rounded hover:bg-gray-700
-                        {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
+                           class="block px-3 py-1.5 rounded hover:bg-gray-700
+                           {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
                             Usuarios
                         </a>
                     </div>
@@ -73,8 +95,8 @@
 
                     <div x-show="openFinance" x-collapse class="ml-6 mt-1 space-y-1">
                         <a href="{{ route('caja.index') }}"
-                        class="block px-3 py-1.5 rounded hover:bg-gray-700
-                        {{ request()->routeIs('caja.*') ? 'bg-blue-600' : '' }}">
+                           class="block px-3 py-1.5 rounded hover:bg-gray-700
+                           {{ request()->routeIs('caja.*') ? 'bg-blue-600' : '' }}">
                             Caja Chica
                         </a>
                     </div>
