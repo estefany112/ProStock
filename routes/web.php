@@ -78,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/caja/history', [PettyCashController::class, 'history'])
         ->name('caja.history')
-        ->middleware('permission:caja.history');
+        ->middleware('permission:caja.report');
 
     // MÓDULO DE EMPLEADOS
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
