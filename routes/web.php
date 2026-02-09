@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PlanillaController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () {
@@ -87,7 +88,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::patch('/employees/{employee}/toggle', [EmployeeController::class, 'toggle'])->name('employees.toggle');
-        
+    
+    // MÓDULO PLANILLAS
+    Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
+    Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
+
     Route::get('/prostock', function () {
         return view('prostock.index');
     })->name('prostock.index');

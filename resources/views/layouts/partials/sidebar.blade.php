@@ -37,26 +37,35 @@
 
              <!-- Empleados -->
             @if(auth()->user()->hasPermission('employee.view'))
-                <div x-data="{ openEmployees: {{ request()->routeIs('employees.*') ? 'true' : 'false' }} }">
+            <div x-data="{ openEmployees: {{ request()->routeIs('employees.*') ? 'true' : 'false' }} }">
 
-                    <button @click="openEmployees = !openEmployees"
-                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
-                        <span class="flex items-center gap-3">
-                            👥 <span>Empleados</span>
-                        </span>
-                        <span x-text="openEmployees ? '▾' : '▸'"></span>
-                    </button>
+                <button @click="openEmployees = !openEmployees"
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                    <span class="flex items-center gap-3">
+                        👥 <span>Recursos Humanos</span>
+                    </span>
+                    <span x-text="openEmployees ? '▾' : '▸'"></span>
+                </button>
 
-                    <div x-show="openEmployees" x-collapse class="ml-6 mt-1 space-y-1">
-                        <a href="{{ route('employees.index') }}"
-                        class="block px-3 py-1.5 rounded hover:bg-gray-700
-                        {{ request()->routeIs('employees.*') ? 'bg-blue-600' : '' }}">
-                            Listado
-                        </a>
-                    </div>
+                <div x-show="openEmployees" x-collapse class="ml-6 mt-1 space-y-1">
+
+                    {{-- Opción 1: Listado --}}
+                    <a href="{{ route('employees.index') }}"
+                    class="block px-3 py-1.5 rounded hover:bg-gray-700
+                    {{ request()->routeIs('employees.index') ? 'bg-blue-600' : '' }}">
+                        📋 Empleados
+                    </a>
+
+                    {{-- Opción 2: Crear --}}
+                    <a href="{{ route('planillas.index') }}"
+                    class="block px-3 py-1.5 rounded hover:bg-gray-700
+                    {{ request()->routeIs('employees.create') ? 'bg-blue-600' : '' }}">
+                        📋 Planillas
+                    </a>
 
                 </div>
-            @endif
+            </div>
+        @endif
 
             <!-- Administración -->
             @if(auth()->user()->hasAnyRole(['admin','rrhh']))
