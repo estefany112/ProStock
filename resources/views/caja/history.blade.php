@@ -44,7 +44,7 @@
                                 </td>
                                 <td>{{ $caja->period_start->format('d/m/Y') }}</td>
                                 <td>{{ $caja->period_end->format('d/m/Y') }}</td>
-                                <td>Q {{ number_format($caja->initial_amount, 2) }}</td>
+                                <td>Q {{ number_format($caja->initial_balance, 2) }}</td>
                                 <td>Q {{ number_format($caja->current_balance, 2) }}</td>
                                 <td>
                                     <span class="px-2 py-1 rounded text-sm bg-gray-200 text-gray-700">
