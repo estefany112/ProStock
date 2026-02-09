@@ -42,7 +42,7 @@
                 <button @click="openEmployees = !openEmployees"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                     <span class="flex items-center gap-3">
-                        👥 <span>Recursos Humanos</span>
+                        👥 <span>RRHH</span>
                     </span>
                     <span x-text="openEmployees ? '▾' : '▸'"></span>
                 </button>
@@ -53,14 +53,14 @@
                     <a href="{{ route('employees.index') }}"
                     class="block px-3 py-1.5 rounded hover:bg-gray-700
                     {{ request()->routeIs('employees.index') ? 'bg-blue-600' : '' }}">
-                        📋 Empleados
+                        Empleados
                     </a>
 
                     {{-- Opción 2: Crear --}}
                     <a href="{{ route('planillas.index') }}"
                     class="block px-3 py-1.5 rounded hover:bg-gray-700
                     {{ request()->routeIs('employees.create') ? 'bg-blue-600' : '' }}">
-                        📋 Planillas
+                        Planillas
                     </a>
 
                 </div>
