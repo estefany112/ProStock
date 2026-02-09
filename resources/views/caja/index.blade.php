@@ -81,7 +81,7 @@
                     <div class="border rounded-lg p-4">
                         <p class="text-sm text-gray-500">Monto inicial</p>
                         <p class="text-xl font-semibold">
-                            Q {{ number_format($cash->initial_amount, 2) }}
+                            Q {{ number_format($cash->initial_balance, 2) }}
                         </p>
                     </div>
 
