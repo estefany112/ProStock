@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="py-8 max-w-7xl mx-auto">
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
+<div class="py-10 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md">
 
         {{-- HEADER --}}
         <div class="mb-6">
@@ -17,7 +17,7 @@
         </div>
 
         {{-- FORMULARIO --}}
-        <form action="{{ route('categorias.store') }}" method="POST" class="max-w-md">
+        <form action="{{ route('categorias.store') }}" method="POST" class="max-w-2xl">
             @csrf
 
             <div class="mb-4">

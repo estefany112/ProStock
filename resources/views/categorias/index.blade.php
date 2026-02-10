@@ -2,9 +2,8 @@
 
 @section('content')
 
-<div class="py-8 max-w-7xl mx-auto">
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
+<div class="py-10 max-w-4xl mx-auto">
+    <div class="bg-white p-8 rounded-xl shadow-md">
 
         {{-- HEADER DE LA VISTA --}}
         <div class="mb-6">
