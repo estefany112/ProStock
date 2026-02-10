@@ -1,39 +1,74 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Registrar Salida
-        </h2>
-    </x-slot>
+@extends('layouts.principal')
 
-    <div class="py-6 max-w-md mx-auto">
-        <div class="bg-white p-6 rounded shadow">
+@section('content')
 
-            <form method="POST" action="{{ route('salidas.store') }}">
-                @csrf
+<div class="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
 
-                <label class="block">Producto</label>
-                <select name="producto_id" class="border rounded p-2 w-full mb-3" required>
+    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
+
+        {{-- HEADER --}}
+        <div class="mb-6">
+            <h1 class="text-2xl font-semibold flex items-center gap-2">
+                ➕ Registrar Salida
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Registrar salida de producto del inventario – PROSERVE
+            </p>
+        </div>
+
+        {{-- FORM --}}
+        <form method="POST" action="{{ route('salidas.store') }}" class="space-y-4">
+            @csrf
+
+            {{-- PRODUCTO --}}
+            <div>
+                <label class="block font-medium mb-1">Producto</label>
+                <select name="producto_id"
+                        class="w-full border rounded-lg p-2"
+                        required>
+                    <option value="">Seleccione un producto</option>
                     @foreach($productos as $p)
                         <option value="{{ $p->id }}">
                             {{ $p->descripcion }} (Stock: {{ $p->stock_actual }})
                         </option>
                     @endforeach
                 </select>
+            </div>
 
-                <label class="block">Cantidad</label>
-                <input type="number" min="1" name="cantidad" class="border rounded p-2 w-full mb-3" required>
+            {{-- CANTIDAD --}}
+            <div>
+                <label class="block font-medium mb-1">Cantidad</label>
+                <input type="number"
+                       min="1"
+                       name="cantidad"
+                       class="w-full border rounded-lg p-2"
+                       required>
+            </div>
 
-                <label class="block">Motivo</label>
-                <input type="text" name="motivo" class="border rounded p-2 w-full mb-3" required>
+            {{-- MOTIVO --}}
+            <div>
+                <label class="block font-medium mb-1">Motivo</label>
+                <input type="text"
+                       name="motivo"
+                       class="w-full border rounded-lg p-2"
+                       required>
+            </div>
 
-                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            {{-- BOTONES --}}
+            <div class="flex gap-3 pt-4">
+                <button class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition">
                     Registrar salida
                 </button>
 
-                <a href="{{ route('salidas.index') }}" class="text-gray-600 ml-2">Cancelar</a>
+                <a href="{{ route('salidas.index') }}"
+                   class="text-gray-600 hover:underline self-center">
+                    Cancelar
+                </a>
+            </div>
 
-            </form>
+        </form>
 
-        </div>
     </div>
-</x-app-layout>
+</div>
+
+@endsection

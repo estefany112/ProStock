@@ -1,39 +1,71 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold text-gray-900">
-            Editar Salida
-        </h2>
-    </x-slot>
+@extends('layouts.principal')
 
-    <div class="py-6 max-w-md mx-auto">
-        <div class="bg-white p-6 rounded shadow">
+@section('content')
 
-            <form method="POST" action="{{ route('salidas.update', $salida->id) }}">
-                @csrf
-                @method('PUT')
+<div class="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
 
-                <label class="block mb-2">Producto</label>
-                <input type="text" class="border rounded p-2 w-full bg-gray-100" 
-                       value="{{ $salida->producto->descripcion }}" disabled>
+    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
 
-                <label class="block mt-3">Cantidad</label>
-                <input type="number" min="1" name="cantidad"
-                       class="border rounded p-2 w-full"
-                       value="{{ $salida->cantidad }}" required>
+        {{-- HEADER --}}
+        <div class="mb-6">
+            <h1 class="text-2xl font-semibold flex items-center gap-2">
+                ✏️ Editar Salida
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Actualizar información de la salida de producto – PROSERVE
+            </p>
+        </div>
 
-                <label class="block mt-3">Motivo</label>
-                <input type="text" name="motivo"
-                       class="border rounded p-2 w-full"
-                       value="{{ $salida->motivo }}" required>
+        {{-- FORM --}}
+        <form method="POST" action="{{ route('salidas.update', $salida->id) }}" class="space-y-4">
+            @csrf
+            @method('PUT')
 
-                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+            {{-- PRODUCTO --}}
+            <div>
+                <label class="block font-medium mb-1">Producto</label>
+                <input type="text"
+                       class="w-full border rounded-lg p-2 bg-gray-100"
+                       value="{{ $salida->producto->descripcion }}"
+                       disabled>
+            </div>
+
+            {{-- CANTIDAD --}}
+            <div>
+                <label class="block font-medium mb-1">Cantidad</label>
+                <input type="number"
+                       min="1"
+                       name="cantidad"
+                       value="{{ $salida->cantidad }}"
+                       class="w-full border rounded-lg p-2"
+                       required>
+            </div>
+
+            {{-- MOTIVO --}}
+            <div>
+                <label class="block font-medium mb-1">Motivo</label>
+                <input type="text"
+                       name="motivo"
+                       value="{{ $salida->motivo }}"
+                       class="w-full border rounded-lg p-2"
+                       required>
+            </div>
+
+            {{-- BOTONES --}}
+            <div class="flex gap-3 pt-4">
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
                     Actualizar salida
                 </button>
 
-                <a href="{{ route('salidas.index') }}" class="text-gray-600 ml-2">Cancelar</a>
+                <a href="{{ route('salidas.index') }}"
+                   class="text-gray-600 hover:underline self-center">
+                    Cancelar
+                </a>
+            </div>
 
-            </form>
+        </form>
 
-        </div>
     </div>
-</x-app-layout>
+</div>
+
+@endsection
