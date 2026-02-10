@@ -8,12 +8,12 @@
 @endphp
 
 {{-- HEADER --}}
-<div class="max-w-7xl mx-auto mb-8">
+<div class="max-w-7xl mx-auto mb-6">
     <h1 class="text-2xl font-semibold text-white">
         {{ $saludo }}, {{ auth()->user()->name }}
     </h1>
 
-    <p class="text-sm text-slate-400 mt-1">
+    <p class="text-sm text-slate-400 mt-1 text-white">
         Plataforma empresarial para la gestión operativa de
         <span class="text-white font-medium">
             {{ config('app.name') }}
@@ -21,16 +21,19 @@
     </p>
 </div>
 
+{{-- SEPARADOR --}}
+<div class="h-px bg-slate-700 max-w-7xl mx-auto mb-6"></div>
+
 {{-- CONTENEDOR DASHBOARD --}}
-<div class="bg-[#111827] rounded-2xl p-8 max-w-7xl mx-auto border border-slate-700 mt-6">
+<div class="max-w-7xl mx-auto bg-slate-900/60 border border-slate-700
+            rounded-2xl p-8">
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {{-- CATEGORÍAS --}}
-        <div class="bg-gradient-to-br from-blue-600/20 to-blue-400/5
-                    rounded-xl p-6 border border-blue-500/30
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-blue-300 uppercase tracking-wide"
-               title="Total de categorías registradas">
+        <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
+                    hover:border-blue-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Categorías
             </p>
             <p class="text-4xl font-bold text-white mt-3">
@@ -39,11 +42,9 @@
         </div>
 
         {{-- PRODUCTOS --}}
-        <div class="bg-gradient-to-br from-emerald-600/20 to-emerald-400/5
-                    rounded-xl p-6 border border-emerald-500/30
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-emerald-300 uppercase tracking-wide"
-               title="Productos activos en el sistema">
+        <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
+                    hover:border-emerald-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Productos
             </p>
             <p class="text-4xl font-bold text-white mt-3">
@@ -52,11 +53,9 @@
         </div>
 
         {{-- STOCK TOTAL --}}
-        <div class="bg-gradient-to-br from-indigo-600/20 to-indigo-400/5
-                    rounded-xl p-6 border border-indigo-500/30
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-indigo-300 uppercase tracking-wide"
-               title="Cantidad total de unidades en inventario">
+        <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
+                    hover:border-indigo-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Stock total
             </p>
             <p class="text-4xl font-bold text-white mt-3">
@@ -65,11 +64,9 @@
         </div>
 
         {{-- STOCK BAJO --}}
-        <div class="bg-gradient-to-br from-red-600/30 to-red-400/10
-                    rounded-xl p-6 border border-red-500/40
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-red-300 uppercase tracking-wide"
-               title="Productos que requieren reposición">
+        <div class="rounded-xl p-6 border border-red-500/60 bg-slate-900
+                    hover:border-red-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Stock bajo
             </p>
             <p class="text-4xl font-bold text-red-400 mt-3">
@@ -78,11 +75,9 @@
         </div>
 
         {{-- EMPLEADOS --}}
-        <div class="bg-gradient-to-br from-cyan-600/20 to-cyan-400/5
-                    rounded-xl p-6 border border-cyan-500/30
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-cyan-300 uppercase tracking-wide"
-               title="Empleados registrados en el sistema">
+        <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
+                    hover:border-cyan-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Empleados
             </p>
             <p class="text-4xl font-bold text-white mt-3">
@@ -91,11 +86,9 @@
         </div>
 
         {{-- USUARIOS --}}
-        <div class="bg-gradient-to-br from-purple-600/20 to-purple-400/5
-                    rounded-xl p-6 border border-purple-500/30
-                    hover:scale-[1.02] hover:shadow-lg transition">
-            <p class="text-sm text-purple-300 uppercase tracking-wide"
-               title="Usuarios con acceso al sistema">
+        <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
+                    hover:border-purple-400 hover:bg-slate-900/80 transition">
+            <p class="text-xs uppercase tracking-wider text-slate-400 text-white">
                 Usuarios
             </p>
             <p class="text-4xl font-bold text-white mt-3">

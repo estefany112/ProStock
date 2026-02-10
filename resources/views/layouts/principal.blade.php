@@ -72,11 +72,9 @@
         @include('layouts.partials.sidebar')
 
         {{-- CONTENIDO --}}
-        <main class="flex-1 p-6" style="background-color: #0f172a !important;">
-            <div class="bg-slate-900 min-h-screen">
-                @yield('content')
-            </div>
-        </main>
+       <main class="flex-1 p-6 bg-slate-900 min-h-screen">
+            @yield('content')
+       </main>
 
     </div>
 
