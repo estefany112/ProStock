@@ -1,33 +1,53 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Editar Categoría
-        </h2>
-    </x-slot>
+@extends('layouts.principal')
 
-    <div class="py-6 max-w-md mx-auto">
-        <div class="bg-white p-6 rounded shadow">
+@section('content')
 
-            <form action="{{ route('categorias.update', $categoria->id) }}" method="POST">
-                @csrf
-                @method('PUT')
+<div class="py-8 max-w-7xl mx-auto">
 
-                <label class="block mb-2 font-semibold">Nombre de categoría</label>
-                <input type="text" name="nombre"
-                    class="w-full border rounded p-2"
-                    value="{{ $categoria->nombre }}"
-                    required>
+    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
 
-                <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        {{-- HEADER --}}
+        <div class="mb-6">
+            <h1 class="text-2xl font-semibold">
+                ✏️ Editar Categoría
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                Actualiza la información de la categoría – PROSERVE
+            </p>
+        </div>
+
+        {{-- FORMULARIO --}}
+        <form action="{{ route('categorias.update', $categoria->id) }}" method="POST" class="max-w-md">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-4">
+                <label class="block mb-2 font-semibold">
+                    Nombre de categoría
+                </label>
+
+                <input type="text"
+                       name="nombre"
+                       class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-200"
+                       value="{{ $categoria->nombre }}"
+                       required>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg
+                               hover:bg-blue-700 transition">
                     Actualizar
                 </button>
 
-                <a href="{{ route('categorias.index') }}" 
-                   class="ml-2 text-gray-600 hover:underline">
-                   Cancelar
+                <a href="{{ route('categorias.index') }}"
+                   class="text-gray-600 hover:underline self-center">
+                    Cancelar
                 </a>
-            </form>
+            </div>
 
-        </div>
+        </form>
+
     </div>
-</x-app-layout>
+</div>
+
+@endsection
