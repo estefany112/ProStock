@@ -1,11 +1,9 @@
-<aside class="w-64 bg-slate-900 text-white flex flex-col justify-between min-h-screen">
+<aside x-show="sidebarOpen"
+    x-transition
+    class="w-64 bg-slate-900 text-white flex flex-col justify-between min-h-screen">
 
     <!-- LOGO -->
     <div>
-        <div class="p-5 text-xl font-bold border-b border-gray-700">
-            PROSERVE
-        </div>
-
         <!-- MENU -->
         <nav class="mt-4 space-y-1 px-3">
 
@@ -16,8 +14,9 @@
                 🏠 <span>Dashboard</span>
             </a>
 
-            <!-- Inventario (submenu) -->
+            <!-- Inventario -->
             <div x-data="{ open: {{ request()->routeIs('prostock.*') ? 'true' : 'false' }} }">
+
                 <button @click="open = !open"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                     <span class="flex items-center gap-3">
@@ -28,8 +27,8 @@
 
                 <div x-show="open" x-collapse class="ml-6 mt-1 space-y-1">
                     <a href="{{ route('prostock.index') }}"
-                       class="block px-3 py-1.5 rounded hover:bg-gray-700
-                       {{ request()->routeIs('prostock.index') ? 'bg-blue-600' : '' }}">
+                    class="block px-3 py-1.5 rounded hover:bg-gray-700
+                    {{ request()->routeIs('prostock.index') ? 'bg-blue-600' : '' }}">
                         ProStock
                     </a>
                 </div>
