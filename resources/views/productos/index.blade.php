@@ -112,7 +112,8 @@
                                 @if(auth()->user()->hasPermission('delete_products'))
                                     <form action="{{ route('productos.destroy', $producto->id) }}"
                                           method="POST" class="inline"
-                                          onsubmit="return confirmDelete(event)">
+                                          onsubmit="confirmDelete(event, '{{ $producto->descripcion }}')"
+                                          class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button class="text-red-600 ml-1">
@@ -161,13 +162,24 @@
 </div>
 
 <script>
-function confirmDelete(event) {
+function confirmDelete(event, nombre) {
     event.preventDefault();
+
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'No podrás revertir esta acción',
+        title: 'Confirmar eliminación',
+        html: `
+            <p>¿Deseas eliminar el siguiente registro?</p>
+            <p class="mt-2 font-semibold text-red-600">
+                ${nombre}
+            </p>
+            <p class="mt-2 text-sm text-gray-500">
+                Esta acción no se puede deshacer.
+            </p>
+        `,
         icon: 'warning',
         showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
         reverseButtons: true

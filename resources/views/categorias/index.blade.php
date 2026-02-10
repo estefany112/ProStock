@@ -63,16 +63,16 @@
                                     Editar
                                 </a>
 
-                                <button onclick="confirmDelete({{ $categoria->id }})"
-                                        class="text-red-600 hover:text-red-800">
-                                    Eliminar
-                                </button>
-
-                                <form id="delete-form-{{ $categoria->id }}"
-                                      action="{{ route('categorias.destroy', $categoria->id) }}"
-                                      method="POST" class="hidden">
+                                <form action="{{ route('categorias.destroy', $categoria->id) }}"
+                                    method="POST"
+                                    onsubmit="confirmDelete(event, '{{ $categoria->nombre }}')"
+                                    class="inline">
                                     @csrf
                                     @method('DELETE')
+
+                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                        Eliminar
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -101,5 +101,35 @@
 
     </div>
 </div>
+
+<script>
+function confirmDelete(event, nombre) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Confirmar eliminación',
+        html: `
+            <p>¿Deseas eliminar la categoría:</p>
+            <p class="mt-2 font-semibold text-red-600">
+                ${nombre}
+            </p>
+            <p class="mt-2 text-sm text-gray-500">
+                Esta acción no se puede deshacer.
+            </p>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            event.target.submit();
+        }
+    });
+}
+</script>
 
 @endsection
