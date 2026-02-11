@@ -91,6 +91,7 @@
                                 Editar
                             </a>
 
+                        @if(auth()->user()->hasPermission('delete_salidas'))
                             <form action="{{ route('salidas.destroy', $salida->id) }}"
                                   method="POST"
                                   class="inline"
@@ -101,6 +102,7 @@
                                     Eliminar
                                 </button>
                             </form>
+                        @endif
                         </td>
                     </tr>
                 @empty

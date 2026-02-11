@@ -84,6 +84,7 @@
                                 Editar
                             </a>
 
+                        @if(auth()->user()->hasPermission('delete_entradas'))
                             <form action="{{ route('entradas.destroy', $entrada->id) }}"
                                 method="POST"
                                 onsubmit="confirmDelete(event, '{{ $entrada->producto->descripcion }}')">
@@ -94,6 +95,7 @@
                                     Eliminar
                                 </button>
                             </form>
+                        @endif
                         </td>
                     </tr>
                 @empty

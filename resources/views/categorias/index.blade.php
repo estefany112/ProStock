@@ -63,6 +63,7 @@
                                     Editar
                                 </a>
 
+                            @if(auth()->user()->hasPermission('delete_categorias'))
                                 <form action="{{ route('categorias.destroy', $categoria->id) }}"
                                     method="POST"
                                     onsubmit="confirmDelete(event, '{{ $categoria->nombre }}')"
@@ -74,6 +75,7 @@
                                         Eliminar
                                     </button>
                                 </form>
+                            @endif
                             </td>
                         </tr>
                     @empty
