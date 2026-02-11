@@ -74,6 +74,7 @@
             </p>
         </div>
 
+    @if(auth()->user()->hasPermission('employee.view'))
         {{-- EMPLEADOS --}}
         <div class="rounded-xl p-6 border border-slate-600 bg-slate-900
                     hover:border-cyan-400 hover:bg-slate-900/80 transition">
@@ -95,6 +96,7 @@
                 {{ $totalUsuarios }}
             </p>
         </div>
+    @endif
 
     </div>
 </div>
