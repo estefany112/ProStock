@@ -11,7 +11,7 @@ class EmployeeController extends Controller
     {
         abort_unless(auth()->user()->hasPermission('employee.view'), 403);
 
-        $employees = Employee::orderBy('name')->get();
+        $employees = Employee::orderBy('created_at', 'asc')->paginate(15);
 
         return view('employees.index', compact('employees'));
     }

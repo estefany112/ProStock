@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.principal')
+
+@section('content')
     <div class="max-w-5xl mx-auto py-8">
 
         {{-- FORMULARIO CREAR PLANILLA --}}
@@ -62,4 +64,4 @@
         </div>
 
     </div>
-</x-app-layout>
+@endsection

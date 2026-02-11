@@ -2,9 +2,16 @@
 
 @section('content')
 
-<h1 class="text-2xl font-semibold mb-2 text-white">
-    Bienvenido, {{ auth()->user()->name }}
-</h1>
+@php
+    $hora = now()->format('H');
+    $saludo = $hora < 12 ? 'Buenos días' : ($hora < 18 ? 'Buenas tardes' : 'Buenas noches');
+@endphp
+
+{{-- HEADER --}}
+<div class="max-w-7xl mx-auto mb-6">
+    <h1 class="text-2xl font-semibold text-white">
+        {{ $saludo }}, {{ auth()->user()->name }}
+    </h1>
 
 <p class="mb-6 text-gray-400">
     Sistema empresarial de control de inventario para {{ config('app.name') }}

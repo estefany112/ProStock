@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.principal')
+
+@section('content')
     <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow">
 
         <h1 class="text-2xl font-semibold mb-6">👥 Gestión de usuarios</h1>
@@ -71,4 +73,4 @@
         </div>
 
     </div>
-</x-app-layout>
+@endsection

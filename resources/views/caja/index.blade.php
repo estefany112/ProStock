@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.principal')
+
+@section('content')
 
     <div class="py-8 max-w-6xl mx-auto">
 
@@ -268,4 +270,4 @@
     }
 </script>
 
-</x-app-layout>
+@endsection

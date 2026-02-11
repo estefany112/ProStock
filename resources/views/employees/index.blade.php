@@ -50,6 +50,7 @@
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="p-2">#</th>
+                        <th>Dpi</th>
                         <th>Nombre</th>
                         <th>Puesto</th>
                         <th>Salario base</th>
@@ -61,6 +62,7 @@
                     @foreach ($employees as $employee)
                         <tr class="border-t">
                             <td class="p-2">{{ $loop->iteration }}</td>
+                            <td>{{ $employee->dpi }}</td>
                             <td>{{ $employee->name }}</td>
                             <td>{{ $employee->position }}</td>
                             <td>Q {{ number_format($employee->salary_base, 2) }}</td>
