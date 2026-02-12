@@ -41,9 +41,9 @@ public function index(Request $request)
         });
     }
 
-    // Orden por fecha de creación (más recientes primero)
+    // Orden por fecha de creación (desde el ultimo al más reciente)
     $employees = $query
-        ->orderBy('created_at', 'desc')
+        ->orderBy('created_at', 'asc')
         ->paginate(15)
         ->appends($request->query());
 
