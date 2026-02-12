@@ -44,6 +44,12 @@
             </div>
         @endif
 
+        {{-- BUSCADOR --}}
+        <x-search-bar
+            action="{{ route('employees.index') }}"
+            placeholder="Buscar por empleado, nombre o dpi..."
+        />
+
         {{-- TABLA --}}
         <div class="overflow-x-auto text-center">
             <table class="w-full mt-4 border">

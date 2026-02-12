@@ -7,14 +7,48 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index()
-    {
-        abort_unless(auth()->user()->hasPermission('employee.view'), 403);
+public function index(Request $request)
+{
+    abort_unless(auth()->user()->hasPermission('employee.view'), 403);
 
-        $employees = Employee::orderBy('created_at', 'asc')->paginate(15);
+    // Query base
+    $query = Employee::query();
 
-        return view('employees.index', compact('employees'));
+    // BUSCADOR
+    if ($request->filled('search')) {
+
+        $search = trim($request->search);
+
+        $query->where(function ($q) use ($search) {
+
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('dpi', 'like', "%{$search}%")
+              ->orWhere('position', 'like', "%{$search}%")
+              ->orWhere('salary_base', 'like', "%{$search}%")
+
+              // Buscar por estado escrito
+              ->orWhere(function ($sub) use ($search) {
+
+                  if (strtolower($search) === 'activo') {
+                      $sub->where('active', 1);
+                  }
+
+                  if (strtolower($search) === 'inactivo') {
+                      $sub->where('active', 0);
+                  }
+
+              });
+        });
     }
+
+    // Orden por fecha de creación (más recientes primero)
+    $employees = $query
+        ->orderBy('created_at', 'desc')
+        ->paginate(15)
+        ->appends($request->query());
+
+    return view('employees.index', compact('employees'));
+}
 
     public function create()
     {
