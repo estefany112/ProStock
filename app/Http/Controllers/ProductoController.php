@@ -10,6 +10,7 @@ use App\Models\Nivel;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProductoController extends Controller
@@ -80,6 +81,7 @@ class ProductoController extends Controller
     $rules = [
         'codigo' => 'required|unique:productos',
         'descripcion' => 'required',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'stock_actual' => 'required|numeric|min:0',
         'categoria_id' => 'nullable|exists:categorias,id',
         'unidad_medida' => 'nullable|string|max:50',
@@ -117,6 +119,14 @@ class ProductoController extends Controller
             $ubicacion .= $nivel ? '-'.$nivel->numero : '';
         }
 
+        // GUARDAR IMAGEN
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')
+                ->store('productos', 'public');
+        }
+
     Producto::create([
         'codigo' => $request->codigo,
         'descripcion' => $request->descripcion,
@@ -129,6 +139,7 @@ class ProductoController extends Controller
         'columna_id' => $request->columna_id,
         'nivel_id' => $request->nivel_id,
         'ubicacion' => $ubicacion,
+        'image' => $imagePath,
     ]);
 
     return redirect()->route('productos.index')
@@ -168,6 +179,7 @@ class ProductoController extends Controller
                 Rule::unique('productos')->ignore($producto->id),
             ],
             'descripcion' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'stock_actual' => 'required|numeric|min:0',
             'categoria_id' => 'nullable|exists:categorias,id',
             'unidad_medida' => 'nullable|string|max:50',
@@ -212,6 +224,18 @@ class ProductoController extends Controller
 
         $data['ubicacion'] = $ubicacion;
 
+        // ACTUALIZAR IMAGEN
+        if ($request->hasFile('image')) {
+
+            // eliminar anterior
+            if ($producto->image) {
+                Storage::disk('public')->delete($producto->image);
+            }
+
+            $data['image'] = $request->file('image')
+                ->store('productos', 'public');
+        }
+
         $producto->update($data);
 
         return redirect()
@@ -226,7 +250,13 @@ class ProductoController extends Controller
     {
         abort_unless(auth()->user()->hasRole('admin'), 403);
 
-        Producto::findOrFail($id)->delete();
+        $producto = Producto::findOrFail($id);
+        
+        // Eliminar imagen si existe
+        if ($producto->image) {
+            Storage::disk('public')->delete($producto->image);
+        }
+        $producto->delete();
 
         return redirect()->route('productos.index')
             ->with('success','Producto eliminado.');

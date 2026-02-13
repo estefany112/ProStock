@@ -20,7 +20,8 @@ class Producto extends Model
         'fila_id',
         'columna_id',
         'nivel_id',
-        'ubicacion',      
+        'ubicacion',  
+        'image',    
     ];
 
     public function categoria()

@@ -18,7 +18,8 @@
         {{-- FORMULARIO --}}
         <form action="{{ route('productos.update', $producto) }}"
               method="POST"
-              class="space-y-6 max-w-4xl">
+              class="space-y-6 max-w-4xl"
+              enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -40,6 +41,15 @@
                        value="{{ $producto->descripcion }}"
                        class="w-full border rounded-lg px-3 py-2"
                        required>
+            </div>
+
+            {{-- IMAGEN --}}
+            <div class="mb-4">
+                <label class="block font-medium">Cambiar imagen</label>
+                <input type="file"
+                    name="image"
+                    class="w-full border rounded-lg px-3 py-2"
+                    accept="image/*">
             </div>
 
             {{-- CATEGORÍA --}}

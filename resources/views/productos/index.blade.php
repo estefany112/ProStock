@@ -64,6 +64,7 @@
                         <th class="p-2">Item</th>
                         <th>Código</th>
                         <th>Nombre</th>
+                        <th>Imagen</th>
                         <th>Categoría</th>
                         <th>Marca</th>
                         <th>Unidad</th>
@@ -82,6 +83,14 @@
                             <td>{{ $productos->firstItem() + $loop->index }}</td>
                             <td>{{ $producto->codigo }}</td>
                             <td>{{ $producto->descripcion }}</td>
+                            <td>
+                                <img src="{{ $producto->image && file_exists(public_path('storage/' . $producto->image)) 
+                                    ? asset('storage/' . $producto->image) 
+                                    : asset('images/no-image.jpg') }}"
+                                    width="60"
+                                    height="60"
+                                    style="object-fit: cover; border-radius: 5px;">
+                            </td>
                             <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
                             <td>{{ $producto->marca }}</td>
                             <td>{{ $producto->unidad_medida }}</td>

@@ -16,7 +16,7 @@
         </div>
 
         {{-- FORMULARIO --}}
-        <form action="{{ route('productos.store') }}" method="POST" class="space-y-6 max-w-4xl">
+        <form action="{{ route('productos.store') }}" method="POST" class="space-y-6 max-w-4xl" enctype="multipart/form-data">
             @csrf
 
             {{-- CÓDIGO --}}
@@ -33,6 +33,15 @@
                 <input type="text" name="descripcion"
                        class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200"
                        required>
+            </div>
+
+            {{-- IMAGEN --}}
+            <div>
+                <label class="block font-medium">Imagen del producto</label>
+                <input type="file"
+                    name="image"
+                    accept="image/*"
+                    class="w-full border rounded-lg px-3 py-2">
             </div>
 
             {{-- CATEGORÍA --}}
