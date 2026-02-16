@@ -14,48 +14,36 @@
                 🏠 <span>Dashboard</span>
             </a>
 
-             <!-- Solicitudes -->
             @if(auth()->user()->hasAnyRole(['admin','almacen']))
-                <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
+            <div x-data="{ open: {{ request()->routeIs('solicitudes.*') || request()->routeIs('prostock.*') ? 'true' : 'false' }} }">
 
-                    <button @click="openAdmin = !openAdmin"
-                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
-                        <span class="flex items-center gap-3">
-                             <span>Solicitudes</span>
-                        </span>
-                        <span x-text="openAdmin ? '▾' : '▸'"></span>
-                    </button>
-
-                    <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
-                        <a href="{{ route('solicitudes.index') }}"
-                           class="block px-3 py-1.5 rounded hover:bg-gray-700
-                           {{ request()->routeIs('solicitudes.index') ? 'bg-blue-600' : '' }}">
-                            Listado de solicitudes
-                        </a>
-                    </div>
-
-                </div>
-            @endif
-
-            <!-- Inventario -->
-        
-            <div x-data="{ open: {{ request()->routeIs('prostock.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                     <span class="flex items-center gap-3">
-                        📦 <span>Inventario</span>
+                       📋 <span>Operaciones</span>
                     </span>
                     <span x-text="open ? '▾' : '▸'"></span>
                 </button>
 
                 <div x-show="open" x-collapse class="ml-6 mt-1 space-y-1">
+
+                    <!-- Gestión de Solicitudes -->
+                    <a href="{{ route('solicitudes.index') }}"
+                    class="block px-3 py-1.5 rounded hover:bg-gray-700
+                    {{ request()->routeIs('solicitudes.*') ? 'bg-blue-600' : '' }}">
+                        Gestión de Solicitudes
+                    </a>
+
+                    <!-- Gestión de Inventario -->
                     <a href="{{ route('prostock.index') }}"
                     class="block px-3 py-1.5 rounded hover:bg-gray-700
-                    {{ request()->routeIs('prostock.index') ? 'bg-blue-600' : '' }}">
-                        ProStock
+                    {{ request()->routeIs('prostock.*') ? 'bg-blue-600' : '' }}">
+                        Gestión de Inventario
                     </a>
+
                 </div>
             </div>
+        @endif
 
              <!-- Empleados -->
             @if(auth()->user()->hasPermission('employee.view'))
@@ -64,7 +52,7 @@
                 <button @click="openEmployees = !openEmployees"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                     <span class="flex items-center gap-3">
-                        👥 <span>RRHH</span>
+                        👥 <span>Recursos Humanos</span>
                     </span>
                     <span x-text="openEmployees ? '▾' : '▸'"></span>
                 </button>
@@ -89,29 +77,6 @@
             </div>
         @endif
 
-            <!-- Administración -->
-            @if(auth()->user()->hasAnyRole(['admin','rrhh']))
-                <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
-
-                    <button @click="openAdmin = !openAdmin"
-                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
-                        <span class="flex items-center gap-3">
-                            ⚙️ <span>Administración</span>
-                        </span>
-                        <span x-text="openAdmin ? '▾' : '▸'"></span>
-                    </button>
-
-                    <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
-                        <a href="{{ route('admin.users') }}"
-                           class="block px-3 py-1.5 rounded hover:bg-gray-700
-                           {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
-                            Usuarios
-                        </a>
-                    </div>
-
-                </div>
-            @endif
-
             <!-- Finanzas -->
             @if(auth()->user()->hasAnyRole(['admin','auditor']))
                 <div x-data="{ openFinance: {{ request()->routeIs('caja.*') ? 'true' : 'false' }} }">
@@ -129,6 +94,29 @@
                            class="block px-3 py-1.5 rounded hover:bg-gray-700
                            {{ request()->routeIs('caja.*') ? 'bg-blue-600' : '' }}">
                             Caja Chica
+                        </a>
+                    </div>
+
+                </div>
+            @endif
+
+        <!-- Administración -->
+            @if(auth()->user()->hasAnyRole(['admin','rrhh']))
+                <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
+
+                    <button @click="openAdmin = !openAdmin"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                        <span class="flex items-center gap-3">
+                            ⚙️ <span>Administración</span>
+                        </span>
+                        <span x-text="openAdmin ? '▾' : '▸'"></span>
+                    </button>
+
+                    <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
+                        <a href="{{ route('admin.users') }}"
+                           class="block px-3 py-1.5 rounded hover:bg-gray-700
+                           {{ request()->routeIs('admin.users') ? 'bg-blue-600' : '' }}">
+                            Usuarios
                         </a>
                     </div>
 
