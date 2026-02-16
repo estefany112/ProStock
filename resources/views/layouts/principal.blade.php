@@ -86,5 +86,47 @@
     </main>
     @endauth
 
+    @auth
+        @php
+            $user = auth()->user();
+            $rol = $user->roles->pluck('name')->first();
+
+            $hayNotificacion = false;
+            $mensaje = '';
+
+            if ($rol === 'admin' || $rol === 'supervisor') {
+                $hayNotificacion = \App\Models\Solicitud::where('estado', 'pendiente')->exists();
+                $mensaje = 'Hay solicitudes pendientes por aprobar.';
+            }
+
+            if ($rol === 'almacen') {
+                $hayNotificacion = \App\Models\Solicitud::where('estado', 'aprobado')->exists();
+                $mensaje = 'Hay solicitudes aprobadas pendientes de entrega.';
+            }
+        @endphp
+
+        @if($hayNotificacion)
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // clave única por tipo de rol
+            let alertaKey = 'alerta_solicitudes_{{ $rol }}';
+
+            if (!sessionStorage.getItem(alertaKey)) {
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Notificación',
+                    text: '{{ $mensaje }}',
+                    confirmButtonColor: '#2563eb'
+                });
+
+                sessionStorage.setItem(alertaKey, 'mostrada');
+            }
+
+        });
+        </script>
+        @endif
+    @endauth
 </body>
 </html>

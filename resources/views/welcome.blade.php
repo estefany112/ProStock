@@ -40,6 +40,7 @@
         <ul>
           <li><a href="{{ route('login') }}">Iniciar Sesión</a></li>
           <li><a href="{{ route('register') }}" class="text-blue-600 hover:underline">Regístrate</a></li>
+           <li><a href="{{ route('solicitudes.create') }}" class="text-blue-600 hover:underline">Solicitudes</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
