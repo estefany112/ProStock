@@ -10,6 +10,7 @@ class Solicitud extends Model
     use HasFactory;
 
     protected $table = 'solicitudes';
+
     protected $fillable = [
         'empleado_id',
         'estado',
@@ -19,6 +20,11 @@ class Solicitud extends Model
         'fecha_aprobacion',
         'entregado_por',
         'fecha_entrega',
+    ];
+
+    protected $casts = [
+        'fecha_aprobacion' => 'datetime',
+        'fecha_entrega'    => 'datetime',
     ];
 
     // Relación con empleado

@@ -38,8 +38,8 @@
             @endif
 
             <!-- Inventario -->
+        
             <div x-data="{ open: {{ request()->routeIs('prostock.*') ? 'true' : 'false' }} }">
-
                 <button @click="open = !open"
                         class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
                     <span class="flex items-center gap-3">

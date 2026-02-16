@@ -84,12 +84,16 @@
                         <td class="p-3 text-center space-x-2">
 
                             {{-- VER --}}
-                            @can('solicitudes.view')
+                            @if(
+                                auth()->user()->roles->pluck('name')->contains('admin') ||
+                                auth()->user()->roles->pluck('name')->contains('supervisor') ||
+                                auth()->user()->roles->pluck('name')->contains('almacen')
+                            )
                                 <a href="{{ route('solicitudes.show', $solicitud->id) }}"
-                                   class="text-blue-600 hover:underline text-xs">
+                                class="text-blue-600 hover:underline text-xs">
                                     Ver
                                 </a>
-                            @endcan
+                            @endif
 
                             {{-- APROBAR / RECHAZAR --}}
                             @if(auth()->user()->roles->pluck('name')->contains('admin') 
