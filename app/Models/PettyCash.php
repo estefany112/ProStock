@@ -52,13 +52,14 @@ class PettyCash extends Model
                 CASE
                     WHEN movement_category = 'income' THEN amount
                     WHEN movement_category = 'expense' THEN -amount
-                    WHEN movement_category = 'advance' THEN -amount
+                    WHEN movement_category = 'advance' AND status = 'approved' THEN -amount
+                    ELSE 0
                 END
             "));
 
-            $this->update([
-                'current_balance' => $this->initial_balance + $movementsBalance
-            ]);
+        $this->update([
+            'current_balance' => $this->initial_balance + $movementsBalance
+        ]);
     }
 
 }

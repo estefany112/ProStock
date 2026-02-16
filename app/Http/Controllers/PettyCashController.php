@@ -29,7 +29,7 @@ class PettyCashController extends Controller
         ]);
 
         // No permitir dos cajas abiertas
-        if (PettyCash::where('is_open', true)->exists()) {
+        if (PettyCash::where('status', 'open')->exists()) {
             return back()->with('error', 'Ya existe una caja abierta');
         }
 
@@ -85,12 +85,12 @@ class PettyCashController extends Controller
 
     public function close()
     {
-        if (!auth()->user()->hasPermission('caja.close')) {
-            abort(403);
+        $cash = PettyCash::where('status', 'open')->first();
+
+        if (!$cash) {
+            return back()->with('error', 'No hay caja abierta');
         }
-
-        $cash = PettyCash::where('status', 'open')->firstOrFail();
-
+        
         $cash->update([
             'status'   => 'closed',
             'closed_at' => now(),
@@ -106,7 +106,7 @@ class PettyCashController extends Controller
             abort(403);
         }
 
-        $cajas = PettyCash::where('is_open', false)
+        $cajas = PettyCash::where('status', 'closed')
             ->orderByDesc('period_start')
             ->paginate(10);
 
