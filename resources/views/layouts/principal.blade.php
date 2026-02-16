@@ -8,18 +8,21 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body x-data="{ sidebarOpen: true }" class="bg-slate-900">
- 
-    {{-- TOPBAR (FIJA EN TODAS LAS VISTAS) --}}
+<body class="@auth bg-slate-900 @else bg-gray-100 @endauth"
+      @auth 
+        x-data="{ sidebarOpen: localStorage.getItem('sidebarOpen') === 'false' ? false : true }"
+        x-init="$watch('sidebarOpen', value => localStorage.setItem('sidebarOpen', value))" 
+      @endauth>
+
+    {{-- HEADER --}}
     <header class="h-16 bg-white border-b border-slate-200
                 flex items-center justify-between px-6
-                sticky top-0 z-50
-                text-slate-800">
+                sticky top-0 z-50 text-slate-800">
 
-        {{-- IZQUIERDA: BOTÓN + LOGO --}}
         <div class="flex items-center gap-4">
 
-            {{-- BOTÓN SIDEBAR --}}
+            @auth
+            {{-- BOTÓN SIDEBAR SOLO SI ESTÁ LOGEADO --}}
             <button
                 @click="sidebarOpen = !sidebarOpen"
                 class="flex items-center justify-center w-10 h-10
@@ -36,20 +39,20 @@
                         d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
             </button>
+            @endauth
 
-            {{-- LOGO / NOMBRE --}}
-            <div class="flex items-center gap-2">
-                <span class="text-xl font-bold text-slate-800 tracking-wide">
-                    PROSERVE
-                </span>
-            </div>
+            <span class="text-xl font-bold tracking-wide">
+                PROSERVE
+            </span>
+
         </div>
 
-        {{-- DERECHA: USUARIO --}}
+        @auth
+        {{-- USUARIO SOLO SI ESTÁ LOGEADO --}}
         <div class="flex items-center gap-4">
 
             <div class="text-right leading-tight hidden sm:block">
-                <p class="text-sm font-medium text-slate-800">
+                <p class="text-sm font-medium">
                     {{ auth()->user()->name }}
                 </p>
                 <p class="text-xs text-slate-500">
@@ -63,20 +66,25 @@
             </div>
 
         </div>
+        @endauth
 
     </header>
 
+    @auth
+    {{-- SISTEMA INTERNO --}}
     <div class="flex">
-
-        {{-- SIDEBAR --}}
         @include('layouts.partials.sidebar')
 
-        {{-- CONTENIDO --}}
-       <main class="flex-1 p-6 bg-slate-900 min-h-screen">
+        <main class="flex-1 p-6 bg-slate-900 min-h-screen">
             @yield('content')
-       </main>
-
+        </main>
     </div>
+    @else
+    {{-- VISTA PUBLICA --}}
+    <main class="p-6 min-h-screen">
+        @yield('content')
+    </main>
+    @endauth
 
 </body>
 </html>

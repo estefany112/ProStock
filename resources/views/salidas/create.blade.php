@@ -9,58 +9,83 @@
         {{-- HEADER --}}
         <div class="mb-6">
             <h1 class="text-2xl font-semibold flex items-center gap-2">
-                ➕ Registrar Salida
+                📄 Nueva Solicitud
             </h1>
             <p class="text-sm text-gray-500 mt-1">
-                Registrar salida de producto del inventario – PROSERVE
+                Registrar solicitud de materiales o equipos – PROSERVE
             </p>
         </div>
 
         {{-- FORM --}}
-        <form method="POST" action="{{ route('salidas.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('solicitudes.store') }}" class="space-y-4">
             @csrf
 
-            {{-- PRODUCTO --}}
+            {{-- EMPLEADO --}}
             <div>
-                <label class="block font-medium mb-1">Producto</label>
-                <select name="producto_id"
+                <label class="block font-medium mb-1">Empleado</label>
+                <select name="empleado_id"
                         class="w-full border rounded-lg p-2"
                         required>
-                    <option value="">Seleccione un producto</option>
-                    @foreach($productos as $p)
-                        <option value="{{ $p->id }}">
-                            {{ $p->descripcion }} (Stock: {{ $p->stock_actual }})
+                    <option value="">Seleccione empleado</option>
+                    @foreach($empleados as $empleado)
+                        <option value="{{ $empleado->id }}">
+                            {{ $empleado->name }} - {{ $empleado->position }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            {{-- CANTIDAD --}}
+            {{-- OBSERVACION --}}
             <div>
-                <label class="block font-medium mb-1">Cantidad</label>
-                <input type="number"
-                       min="1"
-                       name="cantidad"
-                       class="w-full border rounded-lg p-2"
-                       required>
+                <label class="block font-medium mb-1">Observación</label>
+                <textarea name="observacion"
+                          rows="3"
+                          class="w-full border rounded-lg p-2"
+                          placeholder="Detalle adicional de la solicitud..."></textarea>
             </div>
 
-            {{-- MOTIVO --}}
-            <div>
-                <label class="block font-medium mb-1">Motivo</label>
-                <input type="text"
-                       name="motivo"
-                       class="w-full border rounded-lg p-2"
-                       required>
+            <hr class="my-4">
+
+            {{-- MATERIALES --}}
+            <h2 class="text-lg font-semibold">Materiales solicitados</h2>
+
+            <div id="materiales" class="space-y-3">
+
+                <div class="flex gap-3 items-center material-row">
+                    <input type="text"
+                           name="descripcion[]"
+                           class="w-2/3 border rounded-lg p-2"
+                           placeholder="Descripción del material"
+                           required>
+
+                    <input type="number"
+                           name="cantidad[]"
+                           min="1"
+                           class="w-1/3 border rounded-lg p-2"
+                           placeholder="Cantidad"
+                           required>
+
+                    <button type="button"
+                            class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 remove-row">
+                        ✕
+                    </button>
+                </div>
+
             </div>
+
+            <button type="button"
+                    id="addRow"
+                    class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+                ➕ Agregar otro material
+            </button>
 
             {{-- BOTONES --}}
-            <div class="flex gap-3 pt-4">
-                <button class="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition">
-                    Registrar salida
+            <div class="flex gap-3 pt-6">
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+                    Enviar Solicitud
                 </button>
 
-                <a href="{{ route('salidas.index') }}"
+                <a href="{{ route('solicitudes.index') }}"
                    class="text-gray-600 hover:underline self-center">
                     Cancelar
                 </a>
@@ -70,5 +95,39 @@
 
     </div>
 </div>
+
+{{-- SCRIPT DINÁMICO --}}
+<script>
+document.getElementById('addRow').addEventListener('click', function() {
+    let row = `
+        <div class="flex gap-3 items-center material-row">
+            <input type="text"
+                   name="descripcion[]"
+                   class="w-2/3 border rounded-lg p-2"
+                   placeholder="Descripción del material"
+                   required>
+
+            <input type="number"
+                   name="cantidad[]"
+                   min="1"
+                   class="w-1/3 border rounded-lg p-2"
+                   placeholder="Cantidad"
+                   required>
+
+            <button type="button"
+                    class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 remove-row">
+                ✕
+            </button>
+        </div>
+    `;
+    document.getElementById('materiales').insertAdjacentHTML('beforeend', row);
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-row')) {
+        e.target.closest('.material-row').remove();
+    }
+});
+</script>
 
 @endsection

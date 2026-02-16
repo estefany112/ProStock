@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PlanillaController;
+use App\Http\Controllers\SolicitudController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () {
@@ -24,6 +25,13 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+// RUTA PUBLICA - CREAR SOLICITUD
+Route::get('/solicitudes/create', [SolicitudController::class, 'create'])
+    ->name('solicitudes.create');
+
+Route::post('/solicitudes', [SolicitudController::class, 'store'])
+    ->name('solicitudes.store');
 
 // RUTAS PROTEGIDAS
 Route::middleware(['auth'])->group(function () {
@@ -107,9 +115,35 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::get('/hora', function () {
-    return now()->format('d/m/Y H:i:s');
-});
+    // MÓDULO DE SOLICITUDES
+    Route::get('/solicitudes', [SolicitudController::class, 'index'])
+        ->name('solicitudes.index')
+        ->middleware('permission:solicitudes.view');
+
+    Route::get('/solicitudes/{id}', [SolicitudController::class, 'show'])
+        ->name('solicitudes.show')
+        ->middleware('permission:solicitudes.view');
+
+    Route::post('/solicitudes/{id}/aprobar', [SolicitudController::class, 'aprobar'])
+        ->name('solicitudes.aprobar')
+        ->middleware('permission:solicitudes.approve');
+
+    Route::post('/solicitudes/{id}/rechazar', [SolicitudController::class, 'rechazar'])
+        ->name('solicitudes.rechazar')
+        ->middleware('permission:solicitudes.approve');
+
+    Route::post('/solicitudes/{id}/entregar', [SolicitudController::class, 'entregar'])
+        ->name('solicitudes.entregar')
+        ->middleware('permission:solicitudes.deliver');
+
+    Route::post('/solicitudes/{id}/devolver', [SolicitudController::class, 'devolver'])
+        ->name('solicitudes.devolver')
+        ->middleware('permission:solicitudes.deliver');
+
+    // HORA
+    Route::get('/hora', function () {
+        return now()->format('d/m/Y H:i:s');
+    });
 
 });
 

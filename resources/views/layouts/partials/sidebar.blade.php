@@ -14,6 +14,29 @@
                 🏠 <span>Dashboard</span>
             </a>
 
+             <!-- Solicitudes -->
+            @if(auth()->user()->hasAnyRole(['admin','almacen']))
+                <div x-data="{ openAdmin: {{ request()->routeIs('admin.*') ? 'true' : 'false' }} }">
+
+                    <button @click="openAdmin = !openAdmin"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                        <span class="flex items-center gap-3">
+                             <span>Solicitudes</span>
+                        </span>
+                        <span x-text="openAdmin ? '▾' : '▸'"></span>
+                    </button>
+
+                    <div x-show="openAdmin" x-collapse class="ml-6 mt-1 space-y-1">
+                        <a href="{{ route('solicitudes.index') }}"
+                           class="block px-3 py-1.5 rounded hover:bg-gray-700
+                           {{ request()->routeIs('solicitudes.index') ? 'bg-blue-600' : '' }}">
+                            Listado de solicitudes
+                        </a>
+                    </div>
+
+                </div>
+            @endif
+
             <!-- Inventario -->
             <div x-data="{ open: {{ request()->routeIs('prostock.*') ? 'true' : 'false' }} }">
 

@@ -28,12 +28,20 @@ class RolePermissionSeeder extends Seeder
                 'view_products','create_products','edit_products',
                 'view_entries','create_entries',
                 'view_exits','create_exits',
+
+                // SOLICITUDES
+                'solicitudes.view',
+                'solicitudes.deliver',
             ])->pluck('id')
         );
 
         $operativo->permissions()->sync(
             Permission::whereIn('name', [
-                'view_products','create_exits'
+                'view_products','create_exits',
+
+                // SOLICITUDES
+                'solicitudes.create',
+                'solicitudes.view',
             ])->pluck('id')
         );
 
@@ -41,19 +49,29 @@ class RolePermissionSeeder extends Seeder
             Permission::whereIn('name', [
                 'view_products','view_entries','approve_entries',
                 'view_exits','approve_exits',
-                'view_reports'
+                'view_reports',
+
+                // SOLICITUDES
+                'solicitudes.view',
+                'solicitudes.approve',
             ])->pluck('id')
         );
 
         $compras->permissions()->sync(
             Permission::whereIn('name', [
-                'view_products','view_reports'
+                'view_products','view_reports',
+
+                 // SOLICITUDES
+                'solicitudes.view',
             ])->pluck('id')
         );
 
         $auditor->permissions()->sync(
             Permission::whereIn('name', [
-                'view_products','view_entries','view_exits','view_reports','export_reports'
+                'view_products','view_entries','view_exits','view_reports','export_reports',
+            
+                // SOLICITUDES
+                'solicitudes.view',
             ])->pluck('id')
         );
     }

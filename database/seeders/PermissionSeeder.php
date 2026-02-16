@@ -45,6 +45,11 @@ class PermissionSeeder extends Seeder
         ['name'=>'caja.close','label'=>'Cerrar caja chica'],
         ['name'=>'caja.history','label'=>'Ver histórico de caja chica'],
 
+        // SOLICITUDES
+        ['name'=>'solicitudes.view','label'=>'Ver solicitudes'],
+        ['name'=>'solicitudes.create','label'=>'Crear solicitudes'],
+        ['name'=>'solicitudes.approve','label'=>'Aprobar solicitudes'],
+        ['name'=>'solicitudes.deliver','label'=>'Entregar solicitudes'],
 
     ];
 
