@@ -110,16 +110,12 @@
     <div class="flex">
         @include('layouts.partials.sidebar')
 
-        <main class="flex-1 p-6 bg-slate-900 min-h-screen">
+        @else
+        <main class="min-h-screen">
             @yield('content')
         </main>
-    </div>
-    @else
-    {{-- VISTA PUBLICA --}}
-    <main class="p-6 min-h-screen">
-        @yield('content')
-    </main>
     @endauth
+    </div>
 
     @auth
         @php

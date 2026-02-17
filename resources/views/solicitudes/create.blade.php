@@ -2,7 +2,19 @@
 
 @section('content')
 
-<div class="max-w-5xl mx-auto">
+<section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+
+    <!-- Imagen de fondo -->
+    <div class="absolute inset-0">
+        <img src="{{ asset('assets/img/icono.png') }}"
+             class="w-full h-full object-cover"
+             alt="Fondo">
+        <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="relative z-10 container py-20">
+        <div class="max-w-5xl mx-auto">
 
     {{-- HEADER --}}
     <div class="mb-8">
@@ -130,7 +142,9 @@
         </form>
 
     </div>
-</div>
+        </div>
+    </div>
+</section>
 
 {{-- SCRIPT --}}
 <script>
