@@ -1,6 +1,7 @@
+<div class="flex h-screen">
 <aside x-show="sidebarOpen"
     x-transition
-    class="w-64 bg-slate-900 text-white flex flex-col justify-between min-h-screen">
+    class="w-64 bg-slate-900 text-white flex flex-col justify-between overflow-y-hidden">
 
     <!-- LOGO -->
     <div>
@@ -127,3 +128,4 @@
     </div>
 
 </aside>
+</div>
