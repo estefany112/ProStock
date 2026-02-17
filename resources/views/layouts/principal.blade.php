@@ -41,9 +41,9 @@
             </button>
             @endauth
 
-            <span class="text-xl font-bold tracking-wide">
+            <a href="/" class="text-xl font-bold tracking-wide">
                 PROSERVE
-            </span>
+            </a>
 
         </div>
         
