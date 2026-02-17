@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Salida;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use App\Models\Empleado;
 
 class SalidaController extends Controller
 {
