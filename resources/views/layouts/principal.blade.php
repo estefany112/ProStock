@@ -105,17 +105,19 @@
 
     </header>
 
-    @auth
-    {{-- SISTEMA INTERNO --}}
+   @auth
     <div class="flex">
         @include('layouts.partials.sidebar')
 
-        @else
+        <main class="flex-1 min-h-screen p-4">
+            @yield('content')
+        </main>
+    </div>
+    @else
         <main class="min-h-screen">
             @yield('content')
         </main>
     @endauth
-    </div>
 
     @auth
         @php
