@@ -126,44 +126,4 @@
         </nav>
     </div>
 
-    <!-- USUARIO -->
-    <div class="p-4 border-t border-gray-700">
-        <div class="flex items-start gap-3">
-
-            <div class="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center font-semibold">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-            </div>
-
-            <div class="flex-1">
-                <p class="text-sm font-semibold">
-                    {{ auth()->user()->name }}
-                </p>
-
-                <div class="flex flex-wrap gap-1 mt-1">
-                    @forelse(auth()->user()->roles as $role)
-                        <span class="px-2 py-0.5 text-xs rounded bg-slate-100 text-slate-700">
-                            {{ $role->label }}
-                        </span>
-                    @empty
-                        <span class="text-xs text-gray-400">
-                            Sin rol asignado
-                        </span>
-                    @endforelse
-                </div>
-
-                <a href="{{ route('profile.edit') }}"
-                   class="text-xs text-gray-400 hover:underline mt-1 inline-block">
-                    Editar perfil
-                </a>
-            </div>
-        </div>
-
-        <form method="POST" action="{{ route('logout') }}" class="mt-3">
-            @csrf
-            <button class="text-sm text-red-400 hover:underline">
-                Cerrar sesión
-            </button>
-        </form>
-    </div>
-
 </aside>
