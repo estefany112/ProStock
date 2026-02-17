@@ -23,6 +23,8 @@
             @csrf
             @method('PUT')
 
+            <input type="hidden" name="page" value="{{ request('page') }}">
+
             {{-- CÓDIGO --}}
             <div>
                 <label class="block font-medium">Código</label>

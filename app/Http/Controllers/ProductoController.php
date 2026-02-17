@@ -239,7 +239,7 @@ class ProductoController extends Controller
         $producto->update($data);
 
         return redirect()
-            ->route('productos.index')
+            ->route('productos.index', ['page' => $request->page])
             ->with('success', 'Producto actualizado correctamente.');
     }
 
