@@ -112,8 +112,11 @@
 
                             <td class="space-x-2">
                                 @if(auth()->user()->hasPermission('edit_products'))
-                                    <a href="{{ route('productos.edit', $producto->id) }}"
-                                       class="text-blue-600">
+                                    <a href="{{ route('productos.edit', [
+                                            $producto->id,
+                                            'search' => request('search'),
+                                            'page' => request('page')
+                                        ]) }}" class="text-blue-600">
                                         Editar
                                     </a>
                                 @endif

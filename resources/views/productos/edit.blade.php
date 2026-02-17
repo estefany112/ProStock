@@ -23,6 +23,7 @@
             @csrf
             @method('PUT')
 
+            <input type="hidden" name="search" value="{{ request('search') }}">
             <input type="hidden" name="page" value="{{ request('page') }}">
 
             {{-- CÓDIGO --}}
