@@ -62,7 +62,7 @@
 
                     <td class="py-3 text-center">
                         <input type="number"
-                               step="0.01"
+                               step="any"
                                name="isr[{{ $empleado->id }}]"
                                value="{{ $empleado->pivot->isr }}"
                                class="border rounded-lg px-3 py-1 w-28 text-center 
