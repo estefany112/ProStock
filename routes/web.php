@@ -100,7 +100,14 @@ Route::middleware(['auth'])->group(function () {
     // MÓDULO PLANILLAS
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
     Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
-
+    Route::get('/planillas/{id}', [PlanillaController::class, 'show'])
+    ->name('planillas.show');
+    Route::post('/planillas/{id}/cerrar', [PlanillaController::class, 'cerrar'])
+        ->name('planillas.cerrar');
+    Route::get('/planillas/{planilla}/boleta/{empleado}',
+        [PlanillaController::class, 'boleta'])
+        ->name('planillas.boleta');
+        
     Route::get('/prostock', function () {
         return view('prostock.index');
     })->name('prostock.index');

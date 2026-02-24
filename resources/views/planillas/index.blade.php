@@ -38,6 +38,7 @@
                         <th class="py-2">Fecha inicio</th>
                         <th class="py-2">Fecha fin</th>
                         <th class="py-2">Estado</th>
+                        <th class="py-2">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,28 @@
                                     {{ $planilla->estado === 'abierta' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700' }}">
                                     {{ ucfirst($planilla->estado) }}
                                 </span>
+                            </td>
+                            <td class="py-2 space-x-2">
+                            {{-- Ver detalle --}}
+                            <td class="py-2">
+                                <div class="flex gap-2">
+
+                                    <a href="{{ route('planillas.show', $planilla->id) }}"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs shadow">
+                                        👁 Ver
+                                    </a>
+
+                                    @if($planilla->estado == 'abierta')
+                                    <form action="{{ route('planillas.cerrar', $planilla->id) }}" method="POST">
+                                        @csrf
+                                        <button
+                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs shadow">
+                                            🔒 Cerrar
+                                        </button>
+                                    </form>
+                                    @endif
+
+                                </div>
                             </td>
                         </tr>
                     @empty

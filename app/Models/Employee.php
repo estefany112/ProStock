@@ -10,7 +10,16 @@ class Employee extends Model
         'name',
         'dpi',
         'position',
-        'salary_base',
+        'salary_base_quincenal',
         'active',
+        'isr',
     ];
+
+    public function planillas()
+    {
+        return $this->belongsToMany(Planilla::class, 'planilla_detalles')
+                    ->withPivot('salary_base_quincenal', 'bonificacion', 'igss', 'isr', 'otros_descuentos', 'liquido_recibir')
+                    ->withTimestamps();
+    }
+
 }
