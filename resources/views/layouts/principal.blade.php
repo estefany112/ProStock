@@ -63,12 +63,22 @@
 
                 <!-- Avatar -->
                 <button @click="openUser = !openUser"
-                    class="w-9 h-9 rounded-full bg-slate-800
+                    class="w-9 h-9 rounded-full overflow-hidden
                         flex items-center justify-center
-                        text-sm font-bold text-white focus:outline-none">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                </button>
+                        focus:outline-none border border-slate-300">
 
+                    @if(auth()->user()->avatar)
+                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                            class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full bg-slate-800
+                                    flex items-center justify-center
+                                    text-sm font-bold text-white">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                    @endif
+
+                </button>
             </div>
 
             <!-- Dropdown -->
