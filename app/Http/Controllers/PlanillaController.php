@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Planilla;
 use App\Models\Employee;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class PlanillaController extends Controller
 {
@@ -115,7 +116,13 @@ public function boleta($planillaId, $empleadoId)
 
     $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado'));
 
-    return $pdf->download('boleta_'.$empleado->name.'.pdf');
+    $inicio = Carbon::parse($planilla->fecha_inicio)->format('dmY');
+    $fin    = Carbon::parse($planilla->fecha_fin)->format('dmY');
+
+    return $pdf->download(
+        'boleta_' . str_replace(' ', '_', $empleado->name) . '_' .
+        $inicio . '_al_' . $fin . '.pdf'
+    );
 }
 
 public function editarIsr($id)

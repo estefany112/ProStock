@@ -11,6 +11,7 @@
 <p>Salario: Q {{ number_format($empleado->pivot->salary_base_quincenal,2) }}</p>
 <p>Bonificación: Q {{ number_format($empleado->pivot->bonificacion,2) }}</p>
 <p>IGSS: Q {{ number_format($empleado->pivot->igss,2) }}</p>
+<p>ISR: Q {{ number_format($empleado->pivot->isr,2) }}</p>
 
 <hr>
 
