@@ -3,6 +3,14 @@
 @section('content')
 <div class="max-w-6xl mx-auto py-8">
 
+    <div class="flex justify-end items-center mb-6">
+        <a href="{{ route('planillas.index', $planilla->id) }}"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 
+                px-4 py-2 rounded-lg text-sm shadow-sm">
+            ← Volver
+        </a>
+    </div>
+        
     <div class="bg-white p-6 rounded-xl shadow">
 
         <h2 class="text-xl font-bold mb-4">
