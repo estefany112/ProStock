@@ -116,12 +116,26 @@ public function boleta($planillaId, $empleadoId)
 
     $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado'));
 
-    $inicio = Carbon::parse($planilla->fecha_inicio)->format('dmY');
-    $fin    = Carbon::parse($planilla->fecha_fin)->format('dmY');
+    $inicio = Carbon::parse($planilla->fecha_inicio);
+    $fin    = Carbon::parse($planilla->fecha_fin);
+
+    // Detectar tipo de período
+    if ($inicio->day == 1 && $fin->day == 15) {
+        $tipoPeriodo = 'Quincena';
+    } elseif ($inicio->day == 16) {
+        $tipoPeriodo = 'FinDeMes';
+    } else {
+        $tipoPeriodo = 'Periodo';
+    }
+
+    // Formato MesAño
+    $mesAnio = $inicio->translatedFormat('M Y'); 
+    // Ej: Feb 2026
+
+    $nombreEmpleado = str_replace(' ', '', $empleado->name);
 
     return $pdf->download(
-        'boleta_' . str_replace(' ', '_', $empleado->name) . '_' .
-        $inicio . '_al_' . $fin . '.pdf'
+        "Boleta_{$nombreEmpleado}_{$tipoPeriodo}_{$mesAnio}.pdf"
     );
 }
 
