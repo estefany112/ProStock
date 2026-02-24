@@ -54,9 +54,6 @@ private function generarPlanilla($planilla)
         // 🔹 ISR básico ejemplo (solo si supera cierto monto)
         $isr = 0;
 
-        if ($salarioQuincenal > 3000) {
-            $isr = $salarioQuincenal * 0.05; // ejemplo simple
-        }
 
         $otrosDescuentos = 0;
 
@@ -105,6 +102,36 @@ public function boleta($planillaId, $empleadoId)
     $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado'));
 
     return $pdf->download('boleta_'.$empleado->name.'.pdf');
+}
+
+public function actualizarIsr(Request $request, $planillaId, $empleadoId)
+{
+    $planilla = Planilla::findOrFail($planillaId);
+
+    if ($planilla->estado === 'cerrada') {
+        return back()->with('error', 'La planilla está cerrada.');
+    }
+
+    $detalle = $planilla->employees()
+        ->where('employee_id', $empleadoId)
+        ->firstOrFail();
+
+    $isr = $request->isr ?? 0;
+
+    $salario = $detalle->pivot->salary_base_quincenal;
+    $bonificacion = $detalle->pivot->bonificacion;
+    $igss = $detalle->pivot->igss;
+    $otros = $detalle->pivot->otros_descuentos;
+
+    $liquido = ($salario + $bonificacion)
+                - ($igss + $otros + $isr);
+
+    $planilla->employees()->updateExistingPivot($empleadoId, [
+        'isr' => $isr,
+        'liquido_recibir' => $liquido
+    ]);
+
+    return back()->with('success', 'ISR actualizado correctamente.');
 }
 
 }

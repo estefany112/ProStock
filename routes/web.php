@@ -107,6 +107,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/planillas/{planilla}/boleta/{empleado}',
         [PlanillaController::class, 'boleta'])
         ->name('planillas.boleta');
+    Route::post('/planillas/{planilla}/isr/{empleado}',
+    [PlanillaController::class, 'actualizarIsr'])
+    ->name('planillas.actualizarIsr');
         
     Route::get('/prostock', function () {
         return view('prostock.index');
