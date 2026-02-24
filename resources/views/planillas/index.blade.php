@@ -74,20 +74,36 @@
                         <td class="py-2">
                             <div class="flex gap-2 justify-center">
 
+                                {{-- Ver --}}
                                 <a href="{{ route('planillas.show', $planilla->id) }}"
                                    class="bg-blue-600 hover:bg-blue-700 
                                           text-white px-3 py-1 rounded text-xs shadow">
                                     👁 Ver
                                 </a>
 
+                                {{-- Editar ISR --}}
                                 @if($planilla->estado === 'abierta')
                                     <a href="{{ route('planillas.editarIsr', $planilla->id) }}"
                                        class="bg-amber-500 hover:bg-amber-600 
-                                              text-white px-3 py-1 rounded text-xs shadow">
+                                              text-black px-3 py-1 rounded text-xs shadow">
                                         ✏️ ISR
                                     </a>
                                 @endif
 
+                                
+                                {{-- Cerrar Planilla --}}
+                                 @if($planilla->estado === 'abierta')
+                                    <form action="{{ route('planillas.cerrar', $planilla->id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Está seguro de cerrar esta planilla? Esta acción no se puede deshacer.')">
+                                        @csrf
+                                        <button type="submit"
+                                            class="bg-red-600 hover:bg-red-700 
+                                            text-white px-3 py-1 rounded text-xs shadow">
+                                            🔒 Cerrar
+                                        </button>
+                                    </form>  
+                                 @endif            
                             </div>
                         </td>
                     </tr>
