@@ -31,11 +31,7 @@
                           hover:bg-green-700 transition">
                     ➕ Nueva entrada
                 </a>
-
             </div>
-
-            
-
         </div>
 
         {{-- MENSAJES --}}
@@ -56,26 +52,30 @@
             <table class="w-full mt-4 border">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="p-2">Producto</th>
-                        <th>Cantidad</th>
-                        <th>Motivo</th>
-                        <th>Fecha de entrada</th>
-                        <th>Acciones</th>
+                        <th class="p-2 border">Item</th>
+                        <th class="p-2 border">Código</th>
+                        <th class="p-2 border">Producto</th>
+                        <th class="p-2 border">Cantidad</th>
+                        <th class="p-2 border">Motivo</th>
+                        <th class="p-2 border">Fecha de entrada</th>
+                        <th class="p-2 border">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 @forelse ($entradas as $entrada)
                     <tr class="border-t">
-                        <td>
+                        <td class="p-2">{{ $entradas->total() - (($entradas->currentPage() - 1) * $entradas->perPage()) - $loop->index }}</td>
+                        <td class="p-2">{{ $entrada->producto->codigo }}</td>
+                        <td class="p-2">
                             {{ $entrada->producto->descripcion }}<br>
                             <span class="text-gray-500 text-sm">
                                 {{ $entrada->producto->categoria->nombre ?? 'Sin categoría' }}
                             </span>
                         </td>
-                        <td>{{ $entrada->cantidad }}</td>
-                        <td>{{ $entrada->motivo }}</td>
-                        <td>
+                        <td class="p-2">{{ $entrada->cantidad }}</td>
+                        <td class="p-2">{{ $entrada->motivo }}</td>
+                        <td class="p-2">
                             {{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}
                         </td>
                         <td class="flex gap-3 justify-center">

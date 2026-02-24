@@ -59,6 +59,8 @@
             <table class="w-full mt-4 border">
                 <thead class="bg-gray-100">
                     <tr>
+                        <th class="p-2 border">Item</th>
+                        <th class="p-2 border">Código</th>
                         <th class="p-2 border">Producto</th>
                         <th class="p-2 border">Categoría</th>
                         <th class="p-2 border">Cantidad</th>
@@ -71,6 +73,8 @@
                 <tbody>
                 @forelse($salidas as $salida)
                     <tr class="border-t">
+                        <td class="p-2">{{ $salidas->total() - (($salidas->currentPage() - 1) * $salidas->perPage()) - $loop->index }}</td>
+                        <td class="p-2">{{ $salida->producto->codigo ?? '—' }}</td>
                         <td class="p-2">
                             {{ $salida->producto->descripcion }}
                         </td>
