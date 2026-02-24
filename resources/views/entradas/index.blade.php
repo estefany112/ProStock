@@ -2,10 +2,11 @@
 
 @section('content')
 
-<div class="py-10 max-w-4xl mx-auto">
-    <div class="bg-white p-8 rounded-xl shadow-md">
+<div class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-        {{-- HEADER DE LA VISTA --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
+
+        {{-- HEADER --}}
         <div class="mb-6">
 
             <div class="flex items-center justify-between">
@@ -24,14 +25,14 @@
                 Gestión de entradas de productos – PROSERVE
             </p>
 
-            {{-- ACCIÓN PRINCIPAL --}}
-            <div class="mt-4 flex gap-3">
+            <div class="mt-4">
                 <a href="{{ route('entradas.create') }}"
                    class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
                           hover:bg-green-700 transition">
                     ➕ Nueva entrada
                 </a>
             </div>
+
         </div>
 
         {{-- MENSAJES --}}
@@ -41,10 +42,16 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         {{-- BUSCADOR --}}
         <x-search-bar
             action="{{ route('entradas.index') }}"
-            placeholder="Buscar por producto, motivo o ubicación..."
+            placeholder="Buscar por producto, motivo o categoría..."
         />
 
         {{-- TABLA --}}
@@ -55,9 +62,10 @@
                         <th class="p-2 border">Item</th>
                         <th class="p-2 border">Código</th>
                         <th class="p-2 border">Producto</th>
+                        <th class="p-2 border">Categoría</th>
                         <th class="p-2 border">Cantidad</th>
                         <th class="p-2 border">Motivo</th>
-                        <th class="p-2 border">Fecha de entrada</th>
+                        <th class="p-2 border">Fecha</th>
                         <th class="p-2 border">Acciones</th>
                     </tr>
                 </thead>
@@ -65,33 +73,48 @@
                 <tbody>
                 @forelse ($entradas as $entrada)
                     <tr class="border-t">
-                        <td class="p-2">{{ $entradas->total() - (($entradas->currentPage() - 1) * $entradas->perPage()) - $loop->index }}</td>
-                        <td class="p-2">{{ $entrada->producto->codigo }}</td>
                         <td class="p-2">
-                            {{ $entrada->producto->descripcion }}<br>
-                            <span class="text-gray-500 text-sm">
-                                {{ $entrada->producto->categoria->nombre ?? 'Sin categoría' }}
-                            </span>
+                            {{ $entradas->total() - (($entradas->currentPage() - 1) * $entradas->perPage()) - $loop->index }}
                         </td>
-                        <td class="p-2">{{ $entrada->cantidad }}</td>
-                        <td class="p-2">{{ $entrada->motivo }}</td>
+
+                        <td class="p-2">
+                            {{ $entrada->producto->codigo ?? '—' }}
+                        </td>
+
+                        <td class="p-2">
+                            {{ $entrada->producto->descripcion ?? '—' }}
+                        </td>
+
+                        <td class="p-2 text-gray-600">
+                            {{ $entrada->producto->categoria->nombre ?? 'Sin categoría' }}
+                        </td>
+
+                        <td class="p-2">
+                            {{ $entrada->cantidad }}
+                        </td>
+
+                        <td class="p-2">
+                            {{ $entrada->motivo }}
+                        </td>
+
                         <td class="p-2">
                             {{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}
                         </td>
-                        <td class="flex gap-3 justify-center">
+
+                        <td class="p-2 space-x-2">
                             <a href="{{ route('entradas.edit', $entrada->id) }}"
-                               class="text-blue-600">
+                               class="text-blue-600 hover:underline">
                                 Editar
                             </a>
 
                         @if(auth()->user()->hasPermission('delete_entradas'))
                             <form action="{{ route('entradas.destroy', $entrada->id) }}"
-                                method="POST"
-                                onsubmit="confirmDelete(event, '{{ $entrada->producto->descripcion }}')">
+                                  method="POST"
+                                  class="inline"
+                                  onsubmit="confirmDelete(event, '{{ $entrada->producto->descripcion ?? 'Registro' }}')">
                                 @csrf
                                 @method('DELETE')
-
-                                <button class="text-red-600">
+                                <button class="text-red-600 hover:underline">
                                     Eliminar
                                 </button>
                             </form>
@@ -100,7 +123,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="p-4 text-gray-600">
+                        <td colspan="8" class="p-4 text-gray-600">
                             No hay entradas registradas.
                         </td>
                     </tr>
@@ -132,6 +155,7 @@
     </div>
 </div>
 
+{{-- SWEETALERT --}}
 <script>
 function confirmDelete(event, nombre) {
     event.preventDefault();
