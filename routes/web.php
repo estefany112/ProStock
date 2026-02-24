@@ -100,17 +100,18 @@ Route::middleware(['auth'])->group(function () {
     // MÓDULO PLANILLAS
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
     Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
-    Route::get('/planillas/{id}', [PlanillaController::class, 'show'])
-    ->name('planillas.show');
-    Route::post('/planillas/{id}/cerrar', [PlanillaController::class, 'cerrar'])
-        ->name('planillas.cerrar');
-    Route::get('/planillas/{planilla}/boleta/{empleado}',
-        [PlanillaController::class, 'boleta'])
-        ->name('planillas.boleta');
-    Route::post('/planillas/{planilla}/isr/{empleado}',
-    [PlanillaController::class, 'actualizarIsr'])
-    ->name('planillas.actualizarIsr');
-        
+    Route::get('/planillas/{id}', [PlanillaController::class, 'show'])->name('planillas.show');
+    Route::post('/planillas/{id}/cerrar', [PlanillaController::class, 'cerrar'])->name('planillas.cerrar');
+    Route::get('/planillas/{planilla}/boleta/{empleado}',[PlanillaController::class, 'boleta'])->name('planillas.boleta');
+    Route::get('/planillas/{planilla}/isr',
+        [PlanillaController::class, 'editarIsr'])
+        ->name('planillas.editarIsr');
+
+    Route::post('/planillas/{planilla}/isr/guardar',
+        [PlanillaController::class, 'guardarIsr'])
+        ->name('planillas.guardarIsr');
+
+    //MENÚ DE PROSTOCK
     Route::get('/prostock', function () {
         return view('prostock.index');
     })->name('prostock.index');

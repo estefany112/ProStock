@@ -33,6 +33,7 @@
                 @php
                     $totalSalarios = 0;
                     $totalIGSS = 0;
+                    $totalIsr = 0;
                     $totalLiquido = 0;
                 @endphp
 
@@ -41,6 +42,7 @@
                     @php
                         $totalSalarios += $empleado->pivot->salary_base_quincenal;
                         $totalIGSS += $empleado->pivot->igss;
+                        $totalIsr += $empleado->pivot->isr;
                         $totalLiquido += $empleado->pivot->liquido_recibir;
                     @endphp
 
@@ -56,28 +58,7 @@
                             Q {{ number_format($empleado->pivot->igss,2) }}
                         </td>
                          <td class="p-2 text-center">
-                            @if($planilla->estado === 'abierta')
-
-                            <form action="{{ route('planillas.actualizarIsr', [$planilla->id, $empleado->id]) }}"
-                                method="POST"
-                                class="flex justify-center gap-1">
-                                @csrf
-                                <input type="number"
-                                    step="0.01"
-                                    name="isr"
-                                    value="{{ $empleado->pivot->isr }}"
-                                    class="border rounded px-2 py-1 w-20 text-sm">
-
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
-                                    💾
-                                </button>
-                            </form>
-
-                            @else
-
                             Q {{ number_format($empleado->pivot->isr,2) }}
-
-                            @endif
                         </td>
                         <td class="p-2 text-center font-semibold">
                             Q {{ number_format($empleado->pivot->liquido_recibir,2) }}
@@ -102,6 +83,9 @@
                     <td></td>
                     <td class="p-2 text-center">
                         Q {{ number_format($totalIGSS,2) }}
+                    </td>
+                    <td class="p-2 text-center">
+                        Q {{ number_format($totalIsr,2) }}
                     </td>
                     <td class="p-2 text-center">
                         Q {{ number_format($totalLiquido,2) }}

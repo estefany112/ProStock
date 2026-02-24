@@ -22,14 +22,14 @@ class PlanillaController extends Controller
         'fecha_fin' => 'required|date|after:fecha_inicio',
     ]);
 
-    // 🔒 1️⃣ Verificar si existe planilla abierta
+    // Verificar si existe planilla abierta
     $planillaAbierta = Planilla::where('estado', 'abierta')->exists();
 
     if ($planillaAbierta) {
         return back()->with('error', 'Debe cerrar la planilla abierta antes de crear una nueva.');
     }
 
-    // 🔒 2️⃣ Verificar que no exista solapamiento de fechas
+    // Verificar que no exista solapamiento de fechas
     $existe = Planilla::where(function ($query) use ($request) {
         $query->where('fecha_inicio', '<=', $request->fecha_fin)
               ->where('fecha_fin', '>=', $request->fecha_inicio);
@@ -39,7 +39,7 @@ class PlanillaController extends Controller
         return back()->with('error', 'Ya existe una planilla en ese rango de fechas.');
     }
 
-    // ✅ Crear planilla
+    // Crear planilla
     $planilla = Planilla::create([
         'fecha_inicio' => $request->fecha_inicio,
         'fecha_fin' => $request->fecha_fin,
@@ -66,9 +66,8 @@ private function generarPlanilla($planilla)
         $bonificacion = 125;
         $igss = $salarioQuincenal * 0.0483;
 
-        // 🔹 ISR básico ejemplo (solo si supera cierto monto)
+        // ISR básico 
         $isr = 0;
-
 
         $otrosDescuentos = 0;
 
@@ -119,34 +118,43 @@ public function boleta($planillaId, $empleadoId)
     return $pdf->download('boleta_'.$empleado->name.'.pdf');
 }
 
-public function actualizarIsr(Request $request, $planillaId, $empleadoId)
+public function editarIsr($id)
 {
-    $planilla = Planilla::findOrFail($planillaId);
+    $planilla = Planilla::with('employees')->findOrFail($id);
 
     if ($planilla->estado === 'cerrada') {
         return back()->with('error', 'La planilla está cerrada.');
     }
 
-    $detalle = $planilla->employees()
-        ->where('employee_id', $empleadoId)
-        ->firstOrFail();
+    return view('planillas.editar_isr', compact('planilla'));
+}
 
-    $isr = $request->isr ?? 0;
+public function guardarIsr(Request $request, $id)
+{
+    $planilla = Planilla::with('employees')->findOrFail($id);
 
-    $salario = $detalle->pivot->salary_base_quincenal;
-    $bonificacion = $detalle->pivot->bonificacion;
-    $igss = $detalle->pivot->igss;
-    $otros = $detalle->pivot->otros_descuentos;
+    foreach ($request->isr as $empleadoId => $isr) {
 
-    $liquido = ($salario + $bonificacion)
-                - ($igss + $otros + $isr);
+        $detalle = $planilla->employees()
+            ->where('employee_id', $empleadoId)
+            ->first();
 
-    $planilla->employees()->updateExistingPivot($empleadoId, [
-        'isr' => $isr,
-        'liquido_recibir' => $liquido
-    ]);
+        $salario = $detalle->pivot->salary_base_quincenal;
+        $bonificacion = $detalle->pivot->bonificacion;
+        $igss = $detalle->pivot->igss;
+        $otros = $detalle->pivot->otros_descuentos;
 
-    return back()->with('success', 'ISR actualizado correctamente.');
+        $liquido = ($salario + $bonificacion)
+                    - ($igss + $otros + $isr);
+
+        $planilla->employees()->updateExistingPivot($empleadoId, [
+            'isr' => $isr,
+            'liquido_recibir' => $liquido
+        ]);
+    }
+
+    return redirect()->route('planillas.show', $planilla->id)
+            ->with('success', 'ISR actualizado correctamente.');
 }
 
 }
