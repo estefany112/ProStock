@@ -7,6 +7,18 @@
         <div class="bg-white p-6 rounded-xl shadow mb-6">
             <h2 class="text-lg font-semibold mb-4">Crear Planilla</h2>
 
+            @if(session('error'))
+                <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
             <form action="{{ route('planillas.store') }}" method="POST" class="grid grid-cols-3 gap-4">
                 @csrf
 

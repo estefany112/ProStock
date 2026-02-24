@@ -15,27 +15,42 @@ class PlanillaController extends Controller
         return view('planillas.index', compact('planillas'));
     }
 
-    public function store(Request $request)
-    {
-        // 1️⃣ Validar datos
-        $request->validate([
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'fecha_inicio' => 'required|date',
+        'fecha_fin' => 'required|date|after:fecha_inicio',
+    ]);
 
-        // 2️⃣ Crear planilla
-        $planilla = Planilla::create([
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-            'estado' => 'abierta'
-        ]);
+    // 🔒 1️⃣ Verificar si existe planilla abierta
+    $planillaAbierta = Planilla::where('estado', 'abierta')->exists();
 
-        // 3️⃣ Generar automáticamente los cálculos
-        $this->generarPlanilla($planilla);
-
-        return redirect()->route('planillas.index')
-                        ->with('success', 'Planilla generada correctamente');
+    if ($planillaAbierta) {
+        return back()->with('error', 'Debe cerrar la planilla abierta antes de crear una nueva.');
     }
+
+    // 🔒 2️⃣ Verificar que no exista solapamiento de fechas
+    $existe = Planilla::where(function ($query) use ($request) {
+        $query->where('fecha_inicio', '<=', $request->fecha_fin)
+              ->where('fecha_fin', '>=', $request->fecha_inicio);
+    })->exists();
+
+    if ($existe) {
+        return back()->with('error', 'Ya existe una planilla en ese rango de fechas.');
+    }
+
+    // ✅ Crear planilla
+    $planilla = Planilla::create([
+        'fecha_inicio' => $request->fecha_inicio,
+        'fecha_fin' => $request->fecha_fin,
+        'estado' => 'abierta'
+    ]);
+
+    $this->generarPlanilla($planilla);
+
+    return redirect()->route('planillas.index')
+                    ->with('success', 'Planilla generada correctamente');
+}
 
 private function generarPlanilla($planilla)
 {
