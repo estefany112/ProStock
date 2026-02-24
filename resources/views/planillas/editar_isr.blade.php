@@ -6,12 +6,9 @@
     {{-- Header --}}
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-2xl font-semibold">
+            <h2 class="text-3xl font-bold text-white">
                 Editar ISR
             </h2>
-            <p class="text-gray-500 text-sm">
-                {{ $planilla->fecha_inicio }} al {{ $planilla->fecha_fin }}
-            </p>
         </div>
 
         <a href="{{ route('planillas.show', $planilla->id) }}"
@@ -23,16 +20,20 @@
 
     <div class="bg-white shadow rounded-xl p-6">
 
+         <h2 class="text-xl font-bold mb-4">
+            Planilla del {{ $planilla->fecha_inicio }} al {{ $planilla->fecha_fin }}
+        </h2>
+
         <form action="{{ route('planillas.guardarIsr', $planilla->id) }}" method="POST">
         @csrf
 
-        <table class="w-full text-sm">
-            <thead>
+        <table class="w-full text-sm border">
+            <thead class="bg-gray-100">
                 <tr class="border-b bg-gray-50">
-                    <th class="py-3 text-left font-medium text-gray-600">Empleado</th>
-                    <th class="py-3 text-center font-medium text-gray-600">Salario</th>
-                    <th class="py-3 text-center font-medium text-gray-600">IGSS</th>
-                    <th class="py-3 text-center font-medium text-gray-600">ISR</th>
+                    <th class="py-3 text-left font-medium">Empleado</th>
+                    <th class="py-3 text-center font-medium">Salario</th>
+                    <th class="py-3 text-center font-medium">IGSS</th>
+                    <th class="py-3 text-center font-medium">ISR</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,9 +95,9 @@
                 Cancelar
             </a>
 
-            <button class="bg-amber-500 hover:bg-amber-600 text-white 
+            <button class="bg-amber-500 hover:bg-amber-600 text-black 
                            px-5 py-2 rounded-lg text-sm shadow-sm 
-                           transition duration-200">
+                           transition duration-200 hover:green">
                 💾 Guardar Cambios
             </button>
 
