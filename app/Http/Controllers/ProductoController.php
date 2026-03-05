@@ -91,14 +91,14 @@ class ProductoController extends Controller
         'nivel_id' => 'nullable|exists:niveles,id',
     ];
 
-    if (auth()->user()->hasAnyRole(['admin','compras'])) {
+    if (auth()->user()->hasAnyRole(['admin','compras', 'almacen'])) {
         $rules['precio_unitario'] = 'required|numeric|min:0';
     }
 
     $request->validate($rules);
 
     // PRECIO SEGURO
-    $precio = auth()->user()->hasAnyRole(['admin','compras'])
+    $precio = auth()->user()->hasAnyRole(['admin','compras', 'almacen'])
         ? $request->precio_unitario
         : 0;
 
@@ -189,8 +189,8 @@ class ProductoController extends Controller
             'nivel_id' => 'nullable|exists:niveles,id',
         ];
 
-        // SOLO ADMIN Y COMPRAS VALIDAN PRECIO
-        if (auth()->user()->hasAnyRole(['admin','compras'])) {
+        // SOLO ADMIN, COMPRAS Y ALMACEN VALIDAN PRECIO
+        if (auth()->user()->hasAnyRole(['admin','compras', 'almacen'])) {
             $rules['precio_unitario'] = 'required|numeric|min:0';
         }
 
@@ -199,8 +199,8 @@ class ProductoController extends Controller
         // Datos base
         $data = $request->except('precio_unitario');
 
-        // SOLO ADMIN Y COMPRAS ACTUALIZAN PRECIO
-        if (auth()->user()->hasAnyRole(['admin','compras'])) {
+        // SOLO ADMIN, COMPRAS Y ALMACEN ACTUALIZAN PRECIO
+        if (auth()->user()->hasAnyRole(['admin','compras', 'almacen'])) {
             $data['precio_unitario'] = $request->precio_unitario;
         }
 

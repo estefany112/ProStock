@@ -96,7 +96,7 @@
                             <td>{{ $producto->unidad_medida }}</td>
                             <td>{{ $producto->stock_actual }}</td>
 
-                            @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']))
+                            @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor', 'almacen' ]))
                                 <td>
                                     @if($producto->precio_unitario > 0)
                                         Q {{ number_format($producto->precio_unitario,2) }}
