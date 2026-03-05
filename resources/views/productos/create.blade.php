@@ -82,7 +82,7 @@
 
             {{-- PRECIO --}}
             @php
-                $puedeEditarPrecio = auth()->user()->hasAnyRole(['admin','compras']);
+                $puedeEditarPrecio = auth()->user()->hasAnyRole(['admin','compras', 'almacen']);
             @endphp
 
             @if($puedeEditarPrecio)

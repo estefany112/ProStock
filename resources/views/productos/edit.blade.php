@@ -101,8 +101,8 @@
 
             {{-- PRECIO --}}
             @php
-                $puedeEditarPrecio = auth()->user()->hasAnyRole(['admin','compras']);
-                $puedeVerPrecio = auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']);
+                $puedeEditarPrecio = auth()->user()->hasAnyRole(['admin','compras', 'almacen']);
+                $puedeVerPrecio = auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor', 'almacen']);
             @endphp
 
             <div>

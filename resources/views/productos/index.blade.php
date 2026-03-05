@@ -69,7 +69,7 @@
                         <th>Marca</th>
                         <th>Unidad</th>
                         <th>Stock</th>
-                        @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']))
+                        @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor', 'almacen']))
                             <th>Precio</th>
                         @endif
                         <th>Ubicación</th>

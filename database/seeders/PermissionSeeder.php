@@ -19,6 +19,10 @@ class PermissionSeeder extends Seeder
         ['name'=>'create_products','label'=>'Crear productos'],
         ['name'=>'edit_products','label'=>'Editar productos'],
         ['name'=>'delete_products','label'=>'Eliminar productos'],
+       
+        // Precios de productos
+        ['name'=>'view_product_price','label'=>'Ver precio del producto'],
+        ['name'=>'edit_product_price','label'=>'Editar precio del producto'],
 
         // Entradas
         ['name'=>'view_entries','label'=>'Ver entradas'],

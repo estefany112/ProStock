@@ -105,7 +105,7 @@
                 <div>
                     <p class="text-xs uppercase tracking-wider text-gray-400">Precio Unitario</p>
                     <p class="text-2xl font-semibold text-gray-900">
-                        @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor']))
+                        @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor','almacen']))
                             @if($producto->precio_unitario > 0)
                                 Q {{ number_format($producto->precio_unitario, 2) }}
                             @else
