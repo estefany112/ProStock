@@ -70,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('salidas', SalidaController::class)
         ->middleware('permission:view_exits');
 
+    // BUSCADOR EN ENTRADAS Y SALIDAS
+    Route::get('/productos/buscar', [ProductoController::class, 'buscar'])
+    ->name('productos.buscar');
+
     // MÓDULO DE CAJA CHICA
     Route::get('/caja', [PettyCashController::class, 'index'])
         ->name('caja.index')

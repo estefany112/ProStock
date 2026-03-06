@@ -121,11 +121,13 @@
 
         <main class="flex-1 min-h-screen p-4">
             @yield('content')
+            @yield('scripts')
         </main>
     </div>
     @else
         <main class="min-h-screen">
             @yield('content')
+            @yield('scripts')
         </main>
     @endauth
 
