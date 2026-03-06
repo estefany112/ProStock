@@ -80,7 +80,7 @@
 
                     @foreach ($productos as $producto)
                         <tr class="border-t">
-                            <td>{{ $productos->firstItem() + $loop->index }}</td>
+                            <td>{{ $productos->total() - (($productos->currentPage() - 1) * $productos->perPage()) - $loop->index }}</td>
                             <td>{{ $producto->codigo }}</td>
                             <td>{{ $producto->descripcion }}</td>
                             <td>
