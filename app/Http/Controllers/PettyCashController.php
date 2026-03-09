@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PettyCash;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PettyCashReportMail;
 
 class PettyCashController extends Controller
 {
@@ -120,4 +123,26 @@ class PettyCashController extends Controller
 
         return view('caja.history', compact('cajas'));
     }
+
+    public function generateReport()
+    {
+        $cash = PettyCash::where('status','open')->first();
+
+        $movements = $cash->movements()->orderBy('created_at')->get();
+
+        $pdf = Pdf::loadView('reports.petty_cash_report', [
+            'cash'=>$cash,
+            'movements'=>$movements
+        ]);
+
+        return $pdf->download('reporte_caja_chica.pdf');
+    }
+
+    public function sendReport()
+    {
+        Mail::to(env('REPORT_EMAIL'))->send(new PettyCashReportMail());
+
+        return back()->with('success', 'Reporte enviado correctamente');
+    }
+
 }

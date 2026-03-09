@@ -93,6 +93,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('caja.history')
         ->middleware('permission:caja.report');
 
+    Route::get('/petty-cash/report', [PettyCashController::class,'generateReport'])->name('caja.report.pdf');
+    Route::post('/caja/report/send', [PettyCashController::class, 'sendReport'])->name('caja.report.send');
+
     // MÓDULO DE EMPLEADOS
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
     Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');

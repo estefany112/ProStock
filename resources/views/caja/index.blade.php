@@ -249,6 +249,32 @@
                 </div>
             @endif
 
+            @if(auth()->user()->hasPermission('caja.report'))
+            <div class="mt-4">
+                <form action="{{ route('caja.report.pdf') }}" method="GET">
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-blue-700 transition">
+                        📄 Descargar Reporte PDF
+                    </button>
+                </form>
+            </div>
+            @endif
+
+            @if(auth()->user()->hasPermission('caja.report'))
+            <div class="mt-4">
+                <form id="formEnviarReporte" action="{{ route('caja.report.send') }}" method="POST">
+                    @csrf
+                    <button type="button"
+                        onclick="confirmarEnvioReporte()"
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
+                            hover:bg-green-700 transition">
+                        📧 Enviar Reporte
+                    </button>
+                </form>
+            </div>
+            @endif
+
         </div>
     </div>
 
@@ -268,6 +294,13 @@
             }
         });
     }
+
+    function confirmarEnvioReporte() {
+        if(confirm("¿Enviar el reporte de caja chica al correo?")){
+            document.getElementById('formEnviarReporte').submit();
+        }
+    }
+
 </script>
 
 @endsection
