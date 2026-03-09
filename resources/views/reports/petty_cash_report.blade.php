@@ -1,5 +1,6 @@
 <h2>Reporte Caja Chica - PROSERVE</h2>
 
+<p><strong>Saldo inicial de apertura:</strong> Q {{ number_format($cash->initial_balance, 2) }}</p>
 <p>Semana:
 {{ \Carbon\Carbon::parse($cash->period_start)->format('d/m/Y') }}
 –
