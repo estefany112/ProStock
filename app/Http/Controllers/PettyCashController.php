@@ -65,6 +65,14 @@ class PettyCashController extends Controller
         ]);
 
         $cash = PettyCash::where('status', 'open')->firstOrFail();
+        
+        // Obtener saldo actual
+        $saldoActual = $cash->current_balance;
+
+        // No permitir gastar más de lo disponible
+        if ($request->movement_category !== 'income' && $request->amount > $saldoActual) {
+                return back()->with('error', 'No hay suficiente dinero en caja chica.');
+            }
 
         // Crear movimiento
         $movement = $cash->movements()->create([
@@ -77,7 +85,7 @@ class PettyCashController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        // Recalcular saldo SIEMPRE
+        // Recalcular saldo 
         $cash->recalculateBalance();
 
         return back()->with('success', 'Movimiento registrado correctamente');
