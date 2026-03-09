@@ -1,6 +1,10 @@
 <h2>Reporte Caja Chica - PROSERVE</h2>
 
-<p>Semana: {{ $cash->week_start }} - {{ $cash->week_end }}</p>
+<p>Semana:
+{{ \Carbon\Carbon::parse($cash->period_start)->format('d/m/Y') }}
+–
+{{ \Carbon\Carbon::parse($cash->period_end)->format('d/m/Y') }}
+</p>
 
 <table border="1" width="100%" cellspacing="0" cellpadding="5">
 <thead>

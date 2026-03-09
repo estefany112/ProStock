@@ -128,6 +128,10 @@ class PettyCashController extends Controller
     {
         $cash = PettyCash::where('status','open')->first();
 
+        if(!$cash){
+            return back()->with('error','No hay caja chica abierta.');
+        }
+        
         $movements = $cash->movements()->orderBy('created_at')->get();
 
         $pdf = Pdf::loadView('reports.petty_cash_report', [
