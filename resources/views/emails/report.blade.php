@@ -17,7 +17,7 @@
 <tr>
 <td style="background:#1f4e79; color:white; padding:20px; text-align:center;">
 
-<img src="{{ $message->embed(public_path('images/icono.png')) }}" 
+<img src="{{ $message->embed(public_path('images/logo.jpg')) }}" 
      alt="PROSERVE"
      style="width:120px; margin-bottom:10px;">
 
