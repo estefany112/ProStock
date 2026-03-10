@@ -139,7 +139,10 @@ class PettyCashController extends Controller
             'movements'=>$movements
         ]);
 
-        return $pdf->download('reporte_caja_chica.pdf');
+        $inicio = $cash->period_start->format('Y-m-d');
+        $fin = $cash->period_end->format('Y-m-d');
+
+        return $pdf->download("reporte_caja_chica_{$inicio}_a_{$fin}.pdf");
     }
 
     public function sendReport()
