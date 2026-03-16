@@ -10,7 +10,7 @@ class Employee extends Model
         'name',
         'dpi',
         'position',
-        'salary_base_quincenal',
+        'salary_base',
         'active',
         'isr',
     ];

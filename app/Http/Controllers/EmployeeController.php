@@ -94,7 +94,13 @@ public function index(Request $request)
             'active'       => 'required|boolean',
         ]);
 
-        $employee->update($request->all());
+        $employee->update($request->only([
+            'name',
+            'dpi',
+            'position',
+            'salary_base',
+            'active'
+        ]));
 
         return redirect()
             ->route('employees.index')
