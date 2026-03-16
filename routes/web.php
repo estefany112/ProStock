@@ -17,21 +17,15 @@ use App\Http\Controllers\PlanillaController;
 use App\Http\Controllers\SolicitudController;
 
 // PÁGINA PRINCIPAL
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return view('welcome'); });
 
 // DASHBOARD - SOLO PARA PERSONA AUTENTICADAS
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // RUTA PUBLICA - CREAR SOLICITUD
-Route::get('/solicitudes/create', [SolicitudController::class, 'create'])
-    ->name('solicitudes.create');
+Route::get('/solicitudes/create', [SolicitudController::class, 'create'])->name('solicitudes.create');
 
-Route::post('/solicitudes', [SolicitudController::class, 'store'])
-    ->name('solicitudes.store');
+Route::post('/solicitudes', [SolicitudController::class, 'store'])->name('solicitudes.store');
 
 // RUTAS PROTEGIDAS
 Route::middleware(['auth'])->group(function () {
@@ -51,48 +45,27 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('niveles', NivelController::class);
 
     // MÓDULO DE ADMIN
-    Route::get('/admin/users', [UserController::class, 'index'])
-        ->name('admin.users');
-
-    Route::post('/admin/users/{user}/roles', [UserController::class, 'updateRole'])
-        ->name('admin.users.roles')
-        ->middleware('permission:assign_roles');
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+    Route::post('/admin/users/{user}/roles', [UserController::class, 'updateRole'])->name('admin.users.roles')->middleware('permission:assign_roles');
 
     // MÓDULO DE PRODUCTOS
-    Route::resource('productos', ProductoController::class)
-        ->middleware('permission:view_products');
+    Route::resource('productos', ProductoController::class)->middleware('permission:view_products');
 
     // MÓDULO DE ENTRADAS
-    Route::resource('entradas', EntradaController::class)
-        ->middleware('permission:view_entries');
+    Route::resource('entradas', EntradaController::class)->middleware('permission:view_entries');
 
     // MÓDULO DE SALIDAS
-    Route::resource('salidas', SalidaController::class)
-        ->middleware('permission:view_exits');
+    Route::resource('salidas', SalidaController::class)->middleware('permission:view_exits');
 
     // BUSCADOR EN ENTRADAS Y SALIDAS
-    Route::get('/productos/buscar', [ProductoController::class, 'buscar'])
-    ->name('productos.buscar');
+    Route::get('/productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
     // MÓDULO DE CAJA CHICA
-    Route::get('/caja', [PettyCashController::class, 'index'])
-        ->name('caja.index')
-        ->middleware('permission:caja.view');
-
-    Route::post('/caja/open', [PettyCashController::class, 'open'])
-        ->middleware('permission:caja.open');
-
-    Route::post('/caja/close', [PettyCashController::class, 'close'])
-        ->name('caja.close')
-        ->middleware('permission:caja.close');
-
-    Route::post('/caja/movement', [PettyCashController::class, 'storeMovement'])
-        ->middleware('permission:caja.move');
-    
-    Route::get('/caja/history', [PettyCashController::class, 'history'])
-        ->name('caja.history')
-        ->middleware('permission:caja.report');
-
+    Route::get('/caja', [PettyCashController::class, 'index'])->name('caja.index')->middleware('permission:caja.view');
+    Route::post('/caja/open', [PettyCashController::class, 'open'])->middleware('permission:caja.open');
+    Route::post('/caja/close', [PettyCashController::class, 'close'])->name('caja.close')->middleware('permission:caja.close');
+    Route::post('/caja/movement', [PettyCashController::class, 'storeMovement'])->middleware('permission:caja.move');
+    Route::get('/caja/history', [PettyCashController::class, 'history'])->name('caja.history')->middleware('permission:caja.report');
     Route::get('/petty-cash/report', [PettyCashController::class,'generateReport'])->name('caja.report.pdf');
     Route::post('/caja/report/send', [PettyCashController::class, 'sendReport'])->name('caja.report.send');
 
@@ -115,49 +88,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/planillas/copiar-anterior/{id}', [PlanillaController::class,'copiarDatosAnterior'])->name('planillas.copiarAnterior');
 
     //MENÚ DE PROSTOCK
-    Route::get('/prostock', function () {
-        return view('prostock.index');
-    })->name('prostock.index');
+    Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');
 
-    Route::get('/test', function () {
-    return view('dashboard.index', [
-        'totalCategorias' => 0,
-        'totalProductos'  => 0,
-        'stockTotal'      => 0,
-        'stockBajo'       => 0,
-    ]);
+    //CONTADORES DEL DASHBOARD
+    Route::get('/test', function () { return view('dashboard.index', [ 'totalCategorias' => 0, 'totalProductos' => 0, 'stockTotal' => 0, 'stockBajo' => 0, ]);
 
 });
 
     // MÓDULO DE SOLICITUDES
-    Route::get('/solicitudes', [SolicitudController::class, 'index'])
-        ->name('solicitudes.index')
-        ->middleware('permission:solicitudes.view');
-
-    Route::get('/solicitudes/{id}', [SolicitudController::class, 'show'])
-        ->name('solicitudes.show')
-        ->middleware('permission:solicitudes.view');
-
-    Route::post('/solicitudes/{id}/aprobar', [SolicitudController::class, 'aprobar'])
-        ->name('solicitudes.aprobar')
-        ->middleware('permission:solicitudes.approve');
-
-    Route::post('/solicitudes/{id}/rechazar', [SolicitudController::class, 'rechazar'])
-        ->name('solicitudes.rechazar')
-        ->middleware('permission:solicitudes.approve');
-
-    Route::post('/solicitudes/{id}/entregar', [SolicitudController::class, 'entregar'])
-        ->name('solicitudes.entregar')
-        ->middleware('permission:solicitudes.deliver');
-
-    Route::post('/solicitudes/{id}/devolver', [SolicitudController::class, 'devolver'])
-        ->name('solicitudes.devolver')
-        ->middleware('permission:solicitudes.deliver');
+    Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index')->middleware('permission:solicitudes.view');
+    Route::get('/solicitudes/{id}', [SolicitudController::class, 'show'])->name('solicitudes.show')->middleware('permission:solicitudes.view');
+    Route::post('/solicitudes/{id}/aprobar', [SolicitudController::class, 'aprobar'])->name('solicitudes.aprobar')->middleware('permission:solicitudes.approve');
+    Route::post('/solicitudes/{id}/rechazar', [SolicitudController::class, 'rechazar'])->name('solicitudes.rechazar')->middleware('permission:solicitudes.approve');
+    Route::post('/solicitudes/{id}/entregar', [SolicitudController::class, 'entregar'])->name('solicitudes.entregar')->middleware('permission:solicitudes.deliver');
+    Route::post('/solicitudes/{id}/devolver', [SolicitudController::class, 'devolver'])->name('solicitudes.devolver')->middleware('permission:solicitudes.deliver');
 
     // HORA
-    Route::get('/hora', function () {
-        return now()->format('d/m/Y H:i:s');
-    });
+    Route::get('/hora', function () { return now()->format('d/m/Y H:i:s'); });
 
 });
 
