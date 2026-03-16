@@ -59,31 +59,26 @@ private function generarPlanilla($planilla)
         return;
     }
 
-    $empleados = Employee::where('active', 1)->get();
+    $empleados = Employee::where('active',1)->get();
 
-    foreach ($empleados as $empleado) {
+    foreach($empleados as $empleado){
 
         $salarioQuincenal = $empleado->salary_base / 2;
         $bonificacion = 125;
         $igss = $salarioQuincenal * 0.0483;
 
-        // ISR básico 
-        $isr = 0;
-
-        $otrosDescuentos = 0;
-
-        $liquido = ($salarioQuincenal + $bonificacion)
-                    - ($igss + $isr + $otrosDescuentos);
-
-        $planilla->employees()->attach($empleado->id, [
-            'salary_base_quincenal' => $salarioQuincenal,
-            'bonificacion' => $bonificacion,
-            'igss' => $igss,
-            'isr' => $isr,
-            'otros_descuentos' => $otrosDescuentos,
-            'liquido_recibir' => $liquido,
+        $planilla->employees()->attach($empleado->id,[
+            'salary_base_quincenal'=>$salarioQuincenal,
+            'bonificacion'=>$bonificacion,
+            'igss'=>$igss,
+            'isr'=>0,
+            'otros_descuentos'=>0,
+            'liquido_recibir'=>($salarioQuincenal + $bonificacion) - $igss
         ]);
     }
+
+    // Copiar datos de la anterior planilla
+    $this->copiarDatosAnterior($planilla->id);
 }
 
 public function cerrar($id)
