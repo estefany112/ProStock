@@ -90,6 +90,16 @@
                                     </a>
                                 @endif
 
+                                {{-- Copiar ISR de planilla anterior --}}
+                                 @if($planilla->estado === 'abierta')
+                                <form action="{{ route('planillas.copiarAnterior',$planilla->id) }}" method="POST">
+                                    @csrf
+                                    <button class="bg-purple-600 hover:bg-purple-700 
+                                                text-white px-3 py-1 rounded text-xs shadow">
+                                        📋 Copiar ISR
+                                    </button>
+                                </form>
+                                @endif
                                 
                                 {{-- Cerrar Planilla --}}
                                  @if($planilla->estado === 'abierta')
@@ -103,7 +113,7 @@
                                             🔒 Cerrar
                                         </button>
                                     </form>  
-                                 @endif            
+                                 @endif  
                             </div>
                         </td>
                     </tr>
@@ -117,6 +127,5 @@
             </tbody>
         </table>
     </div>
-
 </div>
 @endsection

@@ -178,4 +178,43 @@ public function guardarIsr(Request $request, $id)
             ->with('success', 'ISR actualizado correctamente.');
 }
 
+public function copiarDatosAnterior($id)
+{
+    $planillaActual = Planilla::with('employees')->findOrFail($id);
+
+    if ($planillaActual->estado === 'cerrada') {
+        return back()->with('error','La planilla está cerrada');
+    }
+
+    $planillaAnterior = Planilla::where('id','<',$planillaActual->id)
+        ->orderBy('id','desc')
+        ->first();
+
+    if(!$planillaAnterior){
+        return back()->with('error','No existe planilla anterior');
+    }
+
+    $planillaAnterior->load('employees');
+
+    foreach($planillaAnterior->employees as $empleadoAnterior){
+
+        $detalleActual = $planillaActual->employees()
+            ->where('employee_id',$empleadoAnterior->id)
+            ->first();
+
+        if($detalleActual){
+
+            $planillaActual->employees()->updateExistingPivot(
+                $empleadoAnterior->id,
+                [
+                    'isr' => $empleadoAnterior->pivot->isr,
+                    'otros_descuentos' => $empleadoAnterior->pivot->otros_descuentos
+                ]
+            );
+        }
+    }
+
+    return back()->with('success','Datos copiados de la planilla anterior');
+}
+
 }
