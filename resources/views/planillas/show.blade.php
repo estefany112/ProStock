@@ -77,6 +77,11 @@
                             class="bg-indigo-600 hover:bg-indigo-700 text-black px-3 py-1 rounded text-xs shadow inline-block">
                                 📄 PDF
                             </a>
+
+                            <a href="{{ route('planillas.boleta.preview', [$planilla->id, $empleado->id]) }}"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-black px-3 py-1 rounded text-xs shadow inline-block">
+                                PREVIEW
+                            </a>
                         </td>
                     </tr>
 

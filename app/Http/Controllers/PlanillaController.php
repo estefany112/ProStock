@@ -212,4 +212,15 @@ public function copiarDatosAnterior($id)
     return back()->with('success','Datos copiados de la planilla anterior');
 }
 
+public function previewBoleta($planillaId, $empleadoId)
+{
+    $planilla = Planilla::findOrFail($planillaId);
+
+    $empleado = $planilla->employees()
+        ->where('employee_id', $empleadoId)
+        ->firstOrFail();
+
+    return view('planillas.boleta_preview', compact('planilla', 'empleado'));
+}
+
 }
