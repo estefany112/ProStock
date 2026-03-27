@@ -66,9 +66,17 @@ public function index(Request $request)
             'dpi'          => 'nullable|string|max:20',
             'position'     => 'required|string|max:100',
             'salary_base'  => 'required|numeric|min:0',
+            'fecha_ingreso'=> 'required|date',
         ]);
 
-        Employee::create($request->all());
+        Employee::create([
+            'name' => $request->name,
+            'dpi' => $request->dpi,
+            'position' => $request->position,
+            'salary_base' => $request->salary_base,
+            'fecha_ingreso' => $request->fecha_ingreso,
+            'fecha_baja' => $request->fecha_baja
+        ]);
 
         return redirect()
             ->route('employees.index')
@@ -92,15 +100,19 @@ public function index(Request $request)
             'position'     => 'required|string|max:100',
             'salary_base'  => 'required|numeric|min:0',
             'active'       => 'required|boolean',
+            'fecha_ingreso'=> 'required|date',
+            'fecha_baja'   => 'nullable|date|after_or_equal:fecha_ingreso',
         ]);
 
-        $employee->update($request->only([
-            'name',
-            'dpi',
-            'position',
-            'salary_base',
-            'active'
-        ]));
+        $employee->update([
+            'name' => $request->name,
+            'dpi' => $request->dpi,
+            'position' => $request->position,
+            'salary_base' => $request->salary_base,
+            'active' => $request->active,
+            'fecha_ingreso' => $request->fecha_ingreso,
+            'fecha_baja' => $request->fecha_baja
+        ]);
 
         return redirect()
             ->route('employees.index')
@@ -111,8 +123,11 @@ public function index(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('employee.disable'), 403);
 
+        $nuevoEstado = !$employee->active;
+
         $employee->update([
-            'active' => !$employee->active
+            'active' => $nuevoEstado,
+            'fecha_baja' => $nuevoEstado ? null : now()
         ]);
 
         return back()->with('success', 'Estado del empleado actualizado');

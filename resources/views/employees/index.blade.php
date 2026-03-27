@@ -60,6 +60,8 @@
                         <th>Nombre</th>
                         <th>Puesto</th>
                         <th>Salario base</th>
+                        <th>Ingreso</th>
+                        <th>Baja</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -72,6 +74,17 @@
                             <td>{{ $employee->name }}</td>
                             <td>{{ $employee->position }}</td>
                             <td>Q {{ number_format($employee->salary_base, 2) }}</td>
+                            <td>
+                                {{ $employee->fecha_ingreso 
+                                    ? \Carbon\Carbon::parse($employee->fecha_ingreso)->format('d/m/Y') 
+                                    : '-' }}
+                            </td>
+
+                            <td>
+                                {{ $employee->fecha_baja 
+                                    ? \Carbon\Carbon::parse($employee->fecha_baja)->format('d/m/Y') 
+                                    : '-' }}
+                            </td>
                             <td>
                                 @if($employee->active)
                                     <span class="text-green-600 font-semibold">Activo</span>

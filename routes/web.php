@@ -87,6 +87,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/planillas/{planilla}/isr/guardar', [PlanillaController::class, 'guardarIsr'])->name('planillas.guardarIsr');
     Route::post('/planillas/copiar-anterior/{id}', [PlanillaController::class,'copiarDatosAnterior'])->name('planillas.copiarAnterior');
     Route::get('/planillas/{planilla}/boleta/{empleado}/preview', [PlanillaController::class, 'previewBoleta'])->name('planillas.boleta.preview');
+    Route::post('/planillas/{id}/recalcular', [PlanillaController::class, 'recalcular'])->name('planillas.recalcular');
 
     //MENÚ DE PROSTOCK
     Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');

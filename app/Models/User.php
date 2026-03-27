@@ -77,4 +77,13 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function scopeActivosEnRango($query, $inicio, $fin)
+    {
+        return $query->where('fecha_ingreso', '<=', $fin)
+            ->where(function($q) use ($inicio) {
+                $q->whereNull('fecha_baja')
+                ->orWhere('fecha_baja', '>=', $inicio);
+            });
+    }
+    
 }

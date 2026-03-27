@@ -59,7 +59,10 @@ private function generarPlanilla($planilla)
         return;
     }
 
-    $empleados = Employee::where('active',1)->get();
+    $inicio = Carbon::parse($planilla->fecha_inicio);
+    $fin = Carbon::parse($planilla->fecha_fin);
+
+    $empleados = Employee::activosEnRango($inicio, $fin)->get();
 
     foreach($empleados as $empleado){
 
@@ -223,4 +226,21 @@ public function previewBoleta($planillaId, $empleadoId)
     return view('planillas.boleta_preview', compact('planilla', 'empleado'));
 }
 
+    public function recalcular($id)
+    {
+        $planilla = Planilla::findOrFail($id);
+
+        // 🔴 OPCIONAL: evitar si está cerrada
+        // if ($planilla->estado === 'cerrada') {
+        //     return back()->with('error', 'No se puede recalcular una planilla cerrada');
+        // }
+
+        // Limpiar empleados actuales
+        $planilla->employees()->detach();
+
+        // Volver a generar con lógica correcta
+        $this->generarPlanilla($planilla);
+
+        return back()->with('success', 'Planilla recalculada correctamente');
+    }
 }

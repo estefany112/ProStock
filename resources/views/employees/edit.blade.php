@@ -69,6 +69,20 @@
                 </div>
 
                 <div>
+                    <label class="block text-sm font-medium">Fecha de ingreso</label>
+                    <input type="date" name="fecha_ingreso"
+                        value="{{ old('fecha_ingreso', $employee->fecha_ingreso) }}"
+                        class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">Fecha de baja</label>
+                    <input type="date" name="fecha_baja"
+                        value="{{ old('fecha_baja', $employee->fecha_baja) }}"
+                        class="w-full border rounded-lg px-3 py-2">
+                </div>
+
+                <div>
                     <label class="block text-sm font-medium">Estado</label>
                     <select name="active" class="w-full border rounded-lg px-3 py-2">
                         <option value="1" {{ $employee->active ? 'selected' : '' }}>Activo</option>

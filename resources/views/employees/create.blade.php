@@ -67,6 +67,20 @@
                            class="w-full border rounded-lg px-3 py-2" required>
                 </div>
 
+                <div>
+                    <label class="block text-sm font-medium">Fecha de ingreso</label>
+                    <input type="date" name="fecha_ingreso"
+                        value="{{ old('fecha_ingreso') }}"
+                        class="w-full border rounded-lg px-3 py-2" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">Fecha de baja</label>
+                    <input type="date" name="fecha_baja"
+                        value="{{ old('fecha_baja') }}"
+                        class="w-full border rounded-lg px-3 py-2">
+                </div>
+
                 <div class="pt-4">
                     <button
                         class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
