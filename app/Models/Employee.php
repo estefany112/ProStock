@@ -33,4 +33,9 @@ class Employee extends Model
             });
     }
 
+    public function salaryHistories()
+    {
+        return $this->hasMany(SalaryHistory::class);
+    }
+
 }

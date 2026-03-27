@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\SalaryHistory;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -78,6 +79,13 @@ public function index(Request $request)
             'fecha_baja' => $request->fecha_baja
         ]);
 
+        SalaryHistory::create([
+            'employee_id' => $employee->id,
+            'salary' => $request->salary_base,
+            'fecha_inicio' => $request->fecha_ingreso,
+            'fecha_fin' => null
+        ]);
+
         return redirect()
             ->route('employees.index')
             ->with('success', 'Empleado creado correctamente');
@@ -103,6 +111,24 @@ public function index(Request $request)
             'fecha_ingreso'=> 'required|date',
             'fecha_baja'   => 'nullable|date|after_or_equal:fecha_ingreso',
         ]);
+
+        if ($employee->salary_base != $request->salary_base) {
+
+        // cerrar salario anterior
+        $employee->salaryHistories()
+            ->whereNull('fecha_fin')
+            ->update([
+                'fecha_fin' => now()
+            ]);
+
+        // crear nuevo salario
+        SalaryHistory::create([
+            'employee_id' => $employee->id,
+            'salary' => $request->salary_base,
+            'fecha_inicio' => now(),
+            'fecha_fin' => null
+        ]);
+    }
 
         $employee->update([
             'name' => $request->name,

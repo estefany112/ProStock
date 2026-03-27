@@ -66,7 +66,15 @@ private function generarPlanilla($planilla)
 
     foreach($empleados as $empleado){
 
-        $salarioQuincenal = $empleado->salary_base / 2;
+        $salario = $empleado->salaryHistories()
+            ->where('fecha_inicio', '<=', $fin)
+            ->where(function($q) use ($inicio){
+                $q->whereNull('fecha_fin')
+                ->orWhere('fecha_fin', '>=', $inicio);
+            })
+            ->first();
+
+        $salarioQuincenal = $salario->salary / 2;
         $bonificacion = 125;
         $igss = $salarioQuincenal * 0.0483;
 
