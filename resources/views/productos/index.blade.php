@@ -110,35 +110,73 @@
                                 {{ $producto->ubicacion ?? '—' }}
                             </td>
 
-                            <td class="space-x-2">
+                           <td>
+                            <div class="flex items-center space-x-3">
+
+                                {{-- Ver --}}
+                                <a href="{{ route('productos.show', $producto->id) }}"
+                                class="flex items-center text-blue-600 hover:text-blue-800">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                        fill="none" viewBox="0 0 24 24" 
+                                        stroke-width="1.5" stroke="currentColor" 
+                                        class="w-5 h-5 mr-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                            d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12s-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                            d="M12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
+                                    </svg>
+
+                                    Ver
+                                </a>
+
+                                {{-- Editar --}}
                                 @if(auth()->user()->hasPermission('edit_products'))
                                     <a href="{{ route('productos.edit', [
                                             $producto->id,
                                             'search' => request('search'),
                                             'page' => request('page')
-                                        ]) }}" class="text-blue-600">
+                                        ]) }}" 
+                                    class="flex items-center text-indigo-600 hover:text-indigo-800">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                            viewBox="0 0 24 24" 
+                                            fill="currentColor" 
+                                            class="w-5 h-5 mr-1">
+                                            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Z" />
+                                            <path d="M19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                        </svg>
                                         Editar
                                     </a>
                                 @endif
 
+                                {{-- Eliminar --}}
                                 @if(auth()->user()->hasPermission('delete_products'))
                                     <form action="{{ route('productos.destroy', $producto->id) }}"
-                                          method="POST" class="inline"
-                                          onsubmit="confirmDelete(event, '{{ $producto->descripcion }}')"
-                                          class="inline">
+                                        method="POST"
+                                        onsubmit="confirmDelete(event, '{{ $producto->descripcion }}')">
+                                        
                                         @csrf
                                         @method('DELETE')
-                                        <button class="text-red-600 ml-1">
+
+                                        <button type="submit" 
+                                                class="flex items-center text-red-600 hover:text-red-800">
+                                            
+                                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                                fill="none" viewBox="0 0 24 24" 
+                                                stroke-width="1.5" stroke="currentColor" 
+                                                class="w-5 h-5 mr-1">
+                                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                                    d="M6 7.5h12M9.75 7.5v9m4.5-9v9M4.5 7.5h15l-1.5 12h-12l-1.5-12Z" />
+                                            </svg>
+
                                             Eliminar
                                         </button>
                                     </form>
                                 @endif
 
-                                <a href="{{ route('productos.show', $producto->id) }}"
-                                   class="text-blue-600">
-                                    Ver
-                                </a>
-                            </td>
+                            </div>
+                        </td>
                         </tr>
                     @endforeach
 
