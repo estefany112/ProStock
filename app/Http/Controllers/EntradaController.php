@@ -105,9 +105,7 @@ class EntradaController extends Controller
      */
     public function edit($id)
     {
-        $entrada = Entrada::findOrFail($id);
-        $productos = Producto::all();
-        return view('entradas.edit', compact('entrada', 'productos'));
+        abort(403, 'No se permite editar entradas.');
     }
 
     /**
@@ -141,10 +139,6 @@ class EntradaController extends Controller
      */
     public function destroy($id)
     {
-        $entrada = Entrada::findOrFail($id);
-        $entrada->delete();
-
-        // Redirigir al listado de entradas con mensaje de éxito
-        return redirect()->route('entradas.index')->with('success', 'Entrada eliminada correctamente.');
+        abort(403, 'No se permite eliminar entradas.');
     }
 }

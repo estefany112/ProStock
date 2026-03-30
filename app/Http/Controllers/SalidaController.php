@@ -120,10 +120,7 @@ class SalidaController extends Controller
      */
     public function edit($id)
     {
-        $salida = Salida::findOrFail($id);
-        $productos = Producto::all();
-
-        return view('salidas.edit', compact('salida', 'productos'));
+        abort(403, 'No se permite editar salidas.');
     }
 
     /**
@@ -164,15 +161,6 @@ class SalidaController extends Controller
      */
     public function destroy(string $id)
     {
-        $salida = Salida::findOrFail($id);
-        $producto = Producto::find($salida->producto_id);
-
-        // devolver al producto la cantidad eliminada
-        $producto->stock_actual += $salida->cantidad;
-        $producto->save();
-
-        $salida->delete();
-
-        return redirect()->route('salidas.index')->with('success', 'Salida eliminada correctamente.');
+       abort(403, 'No se permite eliminar salidas.');
     }
 }
