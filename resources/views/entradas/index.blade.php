@@ -101,24 +101,50 @@
                             {{ \Carbon\Carbon::parse($entrada->fecha_entrada)->format('d-m-Y H:i') }}
                         </td>
 
-                        <td class="p-2 space-x-2">
-                            <a href="{{ route('entradas.edit', $entrada->id) }}"
-                               class="text-blue-600 hover:underline">
-                                Editar
-                            </a>
+                        <td class="p-2">
+                            <div class="flex items-center space-x-3">
 
-                        @if(auth()->user()->hasPermission('delete_entradas'))
-                            <form action="{{ route('entradas.destroy', $entrada->id) }}"
-                                  method="POST"
-                                  class="inline"
-                                  onsubmit="confirmDelete(event, '{{ $entrada->producto->descripcion ?? 'Registro' }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-red-600 hover:underline">
-                                    Eliminar
-                                </button>
-                            </form>
-                        @endif
+                                {{-- Editar --}}
+                                <a href="{{ route('entradas.edit', $entrada->id) }}"
+                                class="flex items-center text-indigo-600 hover:text-indigo-800">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                        viewBox="0 0 24 24" 
+                                        fill="currentColor" 
+                                        class="w-5 h-5 mr-1">
+                                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Z" />
+                                        <path d="M19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                    </svg>
+
+                                    Editar
+                                </a>
+
+                                {{-- Eliminar --}}
+                                @if(auth()->user()->hasPermission('delete_entradas'))
+                                    <form action="{{ route('entradas.destroy', $entrada->id) }}"
+                                        method="POST"
+                                        onsubmit="confirmDelete(event, '{{ $entrada->producto->descripcion ?? 'Registro' }}')">
+                                        
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                                class="flex items-center text-red-600 hover:text-red-800">
+                                            
+                                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                                fill="none" viewBox="0 0 24 24" 
+                                                stroke-width="1.5" stroke="currentColor" 
+                                                class="w-5 h-5 mr-1">
+                                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                                    d="M6 7.5h12M9.75 7.5v9m4.5-9v9M4.5 7.5h15l-1.5 12h-12l-1.5-12Z" />
+                                            </svg>
+
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                @endif
+
+                            </div>
                         </td>
                     </tr>
                 @empty
