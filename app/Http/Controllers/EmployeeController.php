@@ -114,17 +114,18 @@ public function index(Request $request)
 
         if ($employee->salary_base != $request->salary_base) {
 
-        // cerrar salario anterior
+        // actualizar salario actual
+        $employee->salary = $request->salary;
+        $employee->save();
+
         $employee->salaryHistories()
             ->whereNull('fecha_fin')
             ->update([
-                'fecha_fin' => now()
+                'fecha_fin' => now()->subDay() // 👈 evita choque de fechas
             ]);
 
-        // crear nuevo salario
-        SalaryHistory::create([
-            'employee_id' => $employee->id,
-            'salary' => $request->salary_base,
+        $employee->salaryHistories()->create([
+            'salary' => $request->salary,
             'fecha_inicio' => now(),
             'fecha_fin' => null
         ]);
