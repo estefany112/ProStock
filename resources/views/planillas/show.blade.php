@@ -41,6 +41,7 @@
                 @php
                     $totalSalarios = 0;
                     $totalIGSS = 0;
+                    $totalBoni = 0;
                     $totalIsr = 0;
                     $totalLiquido = 0;
                 @endphp
@@ -49,6 +50,7 @@
 
                     @php
                         $totalSalarios += $empleado->pivot->salary_base_quincenal;
+                        $totalBoni += $empleado->pivot->bonificacion;
                         $totalIGSS += $empleado->pivot->igss;
                         $totalIsr += $empleado->pivot->isr;
                         $totalLiquido += $empleado->pivot->liquido_recibir;
@@ -93,7 +95,9 @@
                     <td class="p-2 text-center">
                         Q {{ number_format($totalSalarios,2) }}
                     </td>
-                    <td></td>
+                    <td class="p-2 text-center">
+                        Q {{ number_format($totalBoni,2) }}
+                    </td>
                     <td class="p-2 text-center">
                         Q {{ number_format($totalIGSS,2) }}
                     </td>
