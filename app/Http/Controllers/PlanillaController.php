@@ -67,12 +67,13 @@ private function generarPlanilla($planilla)
     foreach($empleados as $empleado){
 
         $salario = $empleado->salaryHistories()
-            ->where('fecha_inicio', '<=', $fin)
-            ->where(function($q) use ($inicio){
-                $q->whereNull('fecha_fin')
-                ->orWhere('fecha_fin', '>=', $inicio);
-            })
-            ->first();
+        ->where('fecha_inicio', '<=', $fin)
+        ->where(function($q) use ($inicio){
+            $q->whereNull('fecha_fin')
+            ->orWhere('fecha_fin', '>=', $inicio);
+        })
+        ->orderBy('fecha_inicio', 'desc') 
+        ->first();
 
         $salarioQuincenal = $salario->salary / 2;
         $bonificacion = 125;
