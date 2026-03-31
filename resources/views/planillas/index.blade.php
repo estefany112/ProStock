@@ -90,12 +90,12 @@
                                     </a>
                                 @endif
                                 
-                               <form action="{{ route('planillas.recalcular', $planilla->id) }}" method="POST">
+                               {{--<form action="{{ route('planillas.recalcular', $planilla->id) }}" method="POST">
                                     @csrf
                                     <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs">
                                         🔄 Recalcular
                                     </button>
-                                </form>
+                                </form>--}}
 
                                 {{-- Cerrar Planilla --}}
                                  @if($planilla->estado === 'abierta')
