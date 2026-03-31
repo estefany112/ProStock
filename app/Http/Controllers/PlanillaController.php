@@ -75,6 +75,9 @@ private function generarPlanilla($planilla)
         ->orderBy('fecha_inicio', 'desc') 
         ->first();
 
+       dd(
+            $empleado->salaryHistories()->get(['id','salary','fecha_inicio','fecha_fin'])->toArray()
+        );
         $salarioQuincenal = $salario->salary / 2;
         $bonificacion = 125;
         $igss = $salarioQuincenal * 0.0483;
