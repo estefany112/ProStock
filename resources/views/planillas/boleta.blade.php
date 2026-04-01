@@ -143,9 +143,7 @@
 
 @if($i === 0)
 <tr style="height:5mm;">
-    <td style="vertical-align:middle; padding:0;">
-        <hr style="border:none; border-top:1.5px dashed #bbb; margin:0;">
-    </td>
+    <td></td>
 </tr>
 @endif
 
