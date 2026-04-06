@@ -14,9 +14,16 @@ class Planilla extends Model
     ];
 
     public function employees()
-{
-    return $this->belongsToMany(Employee::class, 'planilla_detalles')
-                ->withPivot('salary_base_quincenal', 'bonificacion', 'igss', 'isr', 'otros_descuentos', 'liquido_recibir')
-                ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Employee::class, 'planilla_detalles')
+            ->withPivot([
+                'correlativo',
+                'salary_base_quincenal',
+                'bonificacion',
+                'igss',
+                'isr',
+                'otros_descuentos',
+                'liquido_recibir'
+            ]);
+    }
 }

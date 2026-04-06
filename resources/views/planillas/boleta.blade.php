@@ -63,8 +63,12 @@
             <div style="font-size:10px; color:#1a1a1a;">{{ $empleado->name }}</div>
         </td>
         <td width="50%" style="padding:4px 10px; border-bottom:1px solid #e0e0e0; vertical-align:top;">
-            <div style="font-size:7px; text-transform:uppercase; letter-spacing:0.5px; color:#777; margin-bottom:1px;">No. Recibo</div>
-            <div style="font-size:10px; color:#1a1a1a;">{{ $planilla->id }}</div>
+            <div style="font-size:7px; text-transform:uppercase; letter-spacing:0.5px; color:#777; margin-bottom:1px;">
+                No. Boleta
+            </div>
+            <div style="font-size:11px; color:#1a1a1a; font-weight:bold;">
+                {{ $empleado->pivot->correlativo ?? '-' }}
+            </div>
         </td>
     </tr>
     <tr>

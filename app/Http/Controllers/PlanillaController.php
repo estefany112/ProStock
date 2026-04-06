@@ -7,6 +7,7 @@ use App\Models\Planilla;
 use App\Models\Employee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PlanillaController extends Controller
 {
@@ -116,7 +117,7 @@ public function show($id)
 
 public function boleta($planillaId, $empleadoId)
 {
-    $planilla = Planilla::findOrFail($planillaId);
+    $planilla = Planilla::with('employees')->findOrFail($planillaId);
 
     $empleado = $planilla->employees()
         ->where('employee_id', $empleadoId)
@@ -238,19 +239,42 @@ public function previewBoleta($planillaId, $empleadoId)
 
     public function recalcular($id)
     {
-        $planilla = Planilla::findOrFail($id);
+        $planilla = Planilla::with('employees')->findOrFail($id);
 
-        // 🔴 OPCIONAL: evitar si está cerrada
-        // if ($planilla->estado === 'cerrada') {
-        //     return back()->with('error', 'No se puede recalcular una planilla cerrada');
-        // }
+        if ($planilla->estado === 'cerrada') {
+            return back()->with('error', 'No se puede recalcular una planilla cerrada');
+        }
 
-        // Limpiar empleados actuales
-        $planilla->employees()->detach();
+        $inicio = Carbon::parse($planilla->fecha_inicio);
+        $fin = Carbon::parse($planilla->fecha_fin);
 
-        // Volver a generar con lógica correcta
-        $this->generarPlanilla($planilla);
+        foreach ($planilla->employees as $empleado) {
 
-        return back()->with('success', 'Planilla recalculada correctamente');
+            $salario = $empleado->salaryHistories()
+                ->where(function($q) use ($fin){
+                    $q->whereNull('fecha_fin')
+                    ->orWhere('fecha_fin', '>=', $fin);
+                })
+                ->latest('id')
+                ->first();
+
+            $salarioQuincenal = $salario
+                ? $salario->salary / 2
+                : $empleado->salary / 2;
+
+            $bonificacion = 125;
+            $igss = $salarioQuincenal * 0.0483;
+
+            // ACTUALIZA SIN BORRAR correlativo
+            $planilla->employees()->updateExistingPivot($empleado->id, [
+                'salary_base_quincenal' => $salarioQuincenal,
+                'bonificacion' => $bonificacion,
+                'igss' => $igss,
+                'liquido_recibir' => ($salarioQuincenal + $bonificacion)
+                                    - ($igss + $empleado->pivot->isr + $empleado->pivot->otros_descuentos)
+            ]);
+        }
+
+        return back()->with('success', 'Planilla recalculada sin perder correlativos');
     }
 }
