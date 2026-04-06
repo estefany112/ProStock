@@ -124,6 +124,13 @@
         <td style="padding:5px 10px; text-align:right; color:#fff; font-size:12px; font-weight:bold;">
             Q {{ number_format($empleado->pivot->liquido_recibir, 2) }}
         </td>
+        <tr style="background:#fff;">
+            <td colspan="2" style="padding:5px 10px; text-align:left; font-size:11px;">
+                <strong>Fecha de emisión de pago:</strong> 
+               {{ \Carbon\Carbon::parse($planilla->fecha_fin)
+                    ->locale('es')
+                    ->translatedFormat('d \\d\\e F \\d\\e Y') }}
+        </tr>
     </tr>
     </table>
 
