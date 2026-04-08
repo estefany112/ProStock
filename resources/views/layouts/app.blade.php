@@ -19,6 +19,37 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+    <script>
+        setInterval(() => {
+            fetch('/check-session')
+                .then(response => {
+                    if (response.status === 401) {
+                        window.location.href = '/';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verificando sesión:', error);
+                });
+        }, 60000); // cada 1 minuto
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const originalFetch = window.fetch;
+
+            window.fetch = function () {
+                return originalFetch.apply(this, arguments)
+                    .then(response => {
+                        if (response.status === 401) {
+                            window.location.href = '/';
+                        }
+                        return response;
+                    });
+            };
+
+        });
+    </script>
 
 <body class="font-sans antialiased bg-slate-900">
 <div x-data="{ openSidebar: false }" class="min-h-screen flex">

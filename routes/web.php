@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
@@ -108,6 +109,14 @@ Route::middleware(['auth'])->group(function () {
     // HORA
     Route::get('/hora', function () { return now()->format('d/m/Y H:i:s'); });
 
+});
+
+// VALIDACIÓN DE SESIÓN PARA FRONTEND 
+Route::get('/check-session', function () {
+    if (!Auth::check()) {
+        return response()->json(['message' => 'No autenticado'], 401);
+    }
+    return response()->json(['message' => 'OK']);
 });
 
 require __DIR__.'/auth.php';
