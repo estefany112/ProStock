@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\HoraExtra;
 
 class PlanillaController extends Controller
 {
@@ -81,14 +82,22 @@ private function generarPlanilla($planilla)
         $bonificacion = 125;
         $igss = $salarioQuincenal * 0.0483;
 
+        $horasExtras = HoraExtra::where('empleado_id', $empleado->id)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->sum('total');
+
+        $liquido = ($salarioQuincenal + $bonificacion + $horasExtras) - $igss;
+
         $planilla->employees()->attach($empleado->id,[
             'salary_base_quincenal'=>$salarioQuincenal,
             'bonificacion'=>$bonificacion,
+            'horas_extras'=>$horasExtras,
             'igss'=>$igss,
             'isr'=>0,
             'otros_descuentos'=>0,
-            'liquido_recibir'=>($salarioQuincenal + $bonificacion) - $igss
+            'liquido_recibir'=>$liquido
         ]);
+
     }
 
     // Copiar datos de la anterior planilla
@@ -173,8 +182,9 @@ public function guardarIsr(Request $request, $id)
         $bonificacion = $detalle->pivot->bonificacion;
         $igss = $detalle->pivot->igss;
         $otros = $detalle->pivot->otros_descuentos;
+        $horasExtras = $detalle->pivot->horas_extras;
 
-        $liquido = ($salario + $bonificacion)
+        $liquido = ($salario + $bonificacion + $horasExtras)
                     - ($igss + $otros + $isr);
 
         $planilla->employees()->updateExistingPivot($empleadoId, [
@@ -264,14 +274,20 @@ public function previewBoleta($planillaId, $empleadoId)
 
             $bonificacion = 125;
             $igss = $salarioQuincenal * 0.0483;
+            $horasExtras = HoraExtra::where('empleado_id', $empleado->id)
+                ->whereBetween('fecha', [$inicio, $fin])
+                ->sum('total');
 
             // ACTUALIZA SIN BORRAR correlativo
+            $liquido = ($salarioQuincenal + $bonificacion + $horasExtras)
+            - ($igss + $empleado->pivot->isr + $empleado->pivot->otros_descuentos);
+
             $planilla->employees()->updateExistingPivot($empleado->id, [
                 'salary_base_quincenal' => $salarioQuincenal,
                 'bonificacion' => $bonificacion,
+                'horas_extras' => $horasExtras,
                 'igss' => $igss,
-                'liquido_recibir' => ($salarioQuincenal + $bonificacion)
-                                    - ($igss + $empleado->pivot->isr + $empleado->pivot->otros_descuentos)
+                'liquido_recibir' => $liquido
             ]);
         }
 

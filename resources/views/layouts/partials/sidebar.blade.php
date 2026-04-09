@@ -74,6 +74,13 @@
                         Planillas
                     </a>
 
+                    {{-- Opción 3: Crear Horas Extras --}}
+                    <a href="{{ route('horas-extras.quincena') }}"
+                    class="block px-3 py-1.5 rounded hover:bg-gray-700
+                    {{ request()->routeIs('horas-extras.quincena') ? 'bg-blue-600' : '' }}">
+                        Horas Extras
+                    </a>
+
                 </div>
             </div>
         @endif

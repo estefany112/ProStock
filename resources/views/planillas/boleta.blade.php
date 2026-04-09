@@ -107,6 +107,10 @@
         <td style="padding:3px 10px; text-align:right; border-bottom:1px solid #e8e8e8;">{{ number_format($empleado->pivot->bonificacion, 2) }}</td>
     </tr>
     <tr style="background:#fff;">
+        <td style="padding:3px 10px; border-bottom:1px solid #e8e8e8;">Horas Extras</td>
+        <td style="padding:3px 10px; text-align:right; border-bottom:1px solid #e8e8e8;">{{ number_format($empleado->pivot->horas_extras, 2) }}</td>
+    </tr>
+    <tr style="background:#fafafa;">
         <td style="padding:3px 10px; border-bottom:1px solid #e8e8e8;">IGSS</td>
         <td style="padding:3px 10px; text-align:right; border-bottom:1px solid #e8e8e8; color:#c0392b;">-{{ number_format($empleado->pivot->igss, 2) }}</td>
     </tr>

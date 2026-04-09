@@ -20,6 +20,7 @@ class Planilla extends Model
                 'correlativo',
                 'salary_base_quincenal',
                 'bonificacion',
+                'horas_extras',
                 'igss',
                 'isr',
                 'otros_descuentos',

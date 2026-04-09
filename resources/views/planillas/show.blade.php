@@ -31,6 +31,7 @@
                     <th class="p-2 text-left">Empleado</th>
                     <th class="p-2">Salario</th>
                     <th class="p-2">Bonificación</th>
+                    <th class="p-2">Horas Extras</th>
                     <th class="p-2">IGSS</th>
                     <th class="p-2">ISR</th>
                     <th class="p-2">Líquido</th>
@@ -42,6 +43,7 @@
                     $totalSalarios = 0;
                     $totalIGSS = 0;
                     $totalBoni = 0;
+                    $totalHorasExtras = 0;
                     $totalIsr = 0;
                     $totalLiquido = 0;
                 @endphp
@@ -51,6 +53,7 @@
                     @php
                         $totalSalarios += $empleado->pivot->salary_base_quincenal;
                         $totalBoni += $empleado->pivot->bonificacion;
+                        $totalHorasExtras += $empleado->pivot->horas_extras;
                         $totalIGSS += $empleado->pivot->igss;
                         $totalIsr += $empleado->pivot->isr;
                         $totalLiquido += $empleado->pivot->liquido_recibir;
@@ -65,6 +68,9 @@
                             Q {{ number_format($empleado->pivot->bonificacion,2) }}
                         </td>
                         <td class="p-2 text-center">
+                            Q {{ number_format($empleado->pivot->horas_extras ?? 0, 2) }}
+                        </td>
+                        <td class="p-2 text-center">
                             Q {{ number_format($empleado->pivot->igss,2) }}
                         </td>
                          <td class="p-2 text-center">
@@ -73,7 +79,6 @@
                         <td class="p-2 text-center font-semibold">
                             Q {{ number_format($empleado->pivot->liquido_recibir,2) }}
                         </td>
-
                         <td class="p-2 text-center">
                             <a href="{{ route('planillas.boleta.preview', [$planilla->id, $empleado->id]) }}"
                             class="bg-indigo-600 hover:bg-indigo-700 text-black px-3 py-1 rounded text-xs shadow inline-block">
@@ -99,6 +104,8 @@
                     <td class="p-2 text-center">
                         Q {{ number_format($totalIsr,2) }}
                     </td>
+                    <td class="p-2 text-center">
+                        Q {{ number_format($totalHorasExtras,2) }}
                     <td class="p-2 text-center">
                         Q {{ number_format($totalLiquido,2) }}
                     </td>

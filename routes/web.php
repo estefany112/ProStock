@@ -16,6 +16,7 @@ use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PlanillaController;
 use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\HoraExtraController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -90,10 +91,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/planillas/{planilla}/boleta/{empleado}/preview', [PlanillaController::class, 'previewBoleta'])->name('planillas.boleta.preview');
     Route::post('/planillas/{id}/recalcular', [PlanillaController::class, 'recalcular'])->name('planillas.recalcular');
 
-    //MENÚ DE PROSTOCK
+    // MÓDULO DE HORAS EXTRAS
+    Route::get('/horas-extras/quincena', [HoraExtraController::class, 'formQuincena'])->name('horas-extras.quincena');
+    Route::post('/horas-extras/guardar', [HoraExtraController::class, 'storeQuincena'])->name('horas-extras.guardar');
+
+    // MENÚ DE PROSTOCK
     Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');
 
-    //CONTADORES DEL DASHBOARD
+    // CONTADORES DEL DASHBOARD
     Route::get('/test', function () { return view('dashboard.index', [ 'totalCategorias' => 0, 'totalProductos' => 0, 'stockTotal' => 0, 'stockBajo' => 0, ]);
 
 });
