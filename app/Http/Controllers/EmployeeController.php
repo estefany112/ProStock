@@ -115,7 +115,7 @@ public function index(Request $request)
         if ($employee->salary_base != $request->salary_base) {
 
         // actualizar salario actual
-        $employee->salary = $request->salary;
+        $employee->salary_base = $request->salary_base;
         $employee->save();
 
         $employee->salaryHistories()
