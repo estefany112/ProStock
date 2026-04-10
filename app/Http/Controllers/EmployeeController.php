@@ -121,11 +121,11 @@ public function index(Request $request)
         $employee->salaryHistories()
             ->whereNull('fecha_fin')
             ->update([
-                'fecha_fin' => now()->subDay() // 👈 evita choque de fechas
+                'fecha_fin' => now()->subDay() 
             ]);
 
         $employee->salaryHistories()->create([
-            'salary' => $request->salary,
+            'salary' => $request->salary_base,
             'fecha_inicio' => now(),
             'fecha_fin' => null
         ]);
