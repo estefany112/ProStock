@@ -34,7 +34,7 @@
                     <th class="p-2">Horas Extras</th>
                     <th class="p-2">IGSS</th>
                     <th class="p-2">ISR</th>
-                    <th class="p-2">Líquido</th>
+                    <th class="p-2">Líquido a recibir</th>
                     <th class="p-2">Boleta</th>
                 </tr>
             </thead>
@@ -48,36 +48,36 @@
                     $totalLiquido = 0;
                 @endphp
 
-                @foreach($planilla->employees as $empleado)
+                @foreach($empleados as $empleado)
 
                     @php
-                        $totalSalarios += $empleado->pivot->salary_base_quincenal;
-                        $totalBoni += $empleado->pivot->bonificacion;
-                        $totalHorasExtras += $empleado->pivot->horas_extras;
-                        $totalIGSS += $empleado->pivot->igss;
-                        $totalIsr += $empleado->pivot->isr;
-                        $totalLiquido += $empleado->pivot->liquido_recibir;
+                        $totalSalarios += $empleado->calc->salario;
+                        $totalBoni += $empleado->calc->bonificacion;
+                        $totalHorasExtras += $empleado->calc->horas_extras;
+                        $totalIGSS += $empleado->calc->igss;
+                        $totalIsr += $empleado->calc->isr;
+                        $totalLiquido += $empleado->calc->liquido;
                     @endphp
 
                     <tr class="border-t">
                         <td class="p-2">{{ $empleado->name }}</td>
                         <td class="p-2 text-center">
-                            Q {{ number_format($empleado->pivot->salary_base_quincenal,2) }}
+                            Q {{ number_format($empleado->calc->salario,2) }}
                         </td>
                         <td class="p-2 text-center">
-                            Q {{ number_format($empleado->pivot->bonificacion,2) }}
+                            Q {{ number_format($empleado->calc->bonificacion,2) }}
                         </td>
                         <td class="p-2 text-center">
-                            Q {{ number_format($empleado->pivot->horas_extras ?? 0, 2) }}
+                            Q {{ number_format($empleado->calc->horas_extras, 2) }}
                         </td>
                         <td class="p-2 text-center">
-                            Q {{ number_format($empleado->pivot->igss,2) }}
+                            Q {{ number_format($empleado->calc->igss,2) }}
                         </td>
                          <td class="p-2 text-center">
-                            Q {{ number_format($empleado->pivot->isr,2) }}
+                            Q {{ number_format($empleado->calc->isr,2) }}
                         </td>
                         <td class="p-2 text-center font-semibold">
-                            Q {{ number_format($empleado->pivot->liquido_recibir,2) }}
+                            Q {{ number_format($empleado->calc->liquido,2) }}
                         </td>
                         <td class="p-2 text-center">
                             <a href="{{ route('planillas.boleta.preview', [$planilla->id, $empleado->id]) }}"
@@ -92,26 +92,33 @@
                 {{-- Totales --}}
                 <tr class="border-t bg-gray-100 font-bold">
                     <td class="p-2">Totales</td>
+
                     <td class="p-2 text-center">
                         Q {{ number_format($totalSalarios,2) }}
                     </td>
+
                     <td class="p-2 text-center">
                         Q {{ number_format($totalBoni,2) }}
                     </td>
+
+                    <td class="p-2 text-center">
+                        Q {{ number_format($totalHorasExtras,2) }}
+                    </td>
+
                     <td class="p-2 text-center">
                         Q {{ number_format($totalIGSS,2) }}
                     </td>
+
                     <td class="p-2 text-center">
                         Q {{ number_format($totalIsr,2) }}
                     </td>
-                    <td class="p-2 text-center">
-                        Q {{ number_format($totalHorasExtras,2) }}
+
                     <td class="p-2 text-center">
                         Q {{ number_format($totalLiquido,2) }}
                     </td>
+
                     <td></td>
                 </tr>
-
             </tbody>
         </table>
 

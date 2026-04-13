@@ -75,11 +75,36 @@
                     </a>
 
                     {{-- Opción 3: Crear Horas Extras --}}
-                    <a href="{{ route('horas-extras.quincena') }}"
-                    class="block px-3 py-1.5 rounded hover:bg-gray-700
-                    {{ request()->routeIs('horas-extras.quincena') ? 'bg-blue-600' : '' }}">
-                        Horas Extras
-                    </a>
+                    <div x-data="{ openHoras: {{ request()->routeIs('horas-extras.*') ? 'true' : 'false' }} }">
+
+                        <button @click="openHoras = !openHoras"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                            
+                            <span class="flex items-center gap-3">
+                                <span>Horas Extras</span>
+                            </span>
+
+                            <span x-text="openHoras ? '▾' : '▸'"></span>
+                        </button>
+
+                        <div x-show="openHoras" x-collapse class="ml-6 mt-1 space-y-1">
+
+                            {{-- Registrar --}}
+                            <a href="{{ route('horas-extras.quincena') }}"
+                            class="block px-3 py-1.5 rounded hover:bg-gray-700
+                            {{ request()->routeIs('horas-extras.quincena') ? 'bg-blue-600' : '' }}">
+                                Registrar
+                            </a>
+
+                            {{-- Historial --}}
+                            <a href="{{ route('horas-extras.historial') }}"
+                            class="block px-3 py-1.5 rounded hover:bg-gray-700
+                            {{ request()->routeIs('horas-extras.historial') ? 'bg-blue-600' : '' }}">
+                                Historial
+                            </a>
+
+                        </div>
+                    </div>
 
                 </div>
             </div>

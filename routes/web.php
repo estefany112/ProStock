@@ -94,6 +94,8 @@ Route::middleware(['auth'])->group(function () {
     // MÓDULO DE HORAS EXTRAS
     Route::get('/horas-extras/quincena', [HoraExtraController::class, 'formQuincena'])->name('horas-extras.quincena');
     Route::post('/horas-extras/guardar', [HoraExtraController::class, 'storeQuincena'])->name('horas-extras.guardar');
+    Route::get('/horas-extras/historial', [HoraExtraController::class, 'historial'])->name('horas-extras.historial');
+    Route::get('/horas-extras/detalle/{empleado}/{inicio}/{fin}', [HoraExtraController::class, 'detalle'])->name('horas-extras.detalle');
 
     // MENÚ DE PROSTOCK
     Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');

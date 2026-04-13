@@ -120,8 +120,45 @@ public function cerrar($id)
 
 public function show($id)
 {
-    $planilla = Planilla::with('employees')->findOrFail($id);
-    return view('planillas.show', compact('planilla'));
+    $planilla = Planilla::findOrFail($id);
+
+    $inicio = \Carbon\Carbon::parse($planilla->fecha_inicio);
+    $fin    = \Carbon\Carbon::parse($planilla->fecha_fin);
+
+    // traer empleados activos
+    $empleados = \App\Models\Employee::activosEnRango($inicio, $fin)->get();
+
+    foreach ($empleados as $empleado) {
+
+        // salario quincenal
+        $salario = $empleado->salary_base / 2;
+
+        // bonificación
+        $bonificacion = 125;
+
+        // igss
+        $igss = $salario * 0.0483;
+
+        // horas extras desde BD
+        $horasExtras = \App\Models\HoraExtra::where('empleado_id', $empleado->id)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->sum('total');
+
+        // liquido
+        $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
+
+        // Guardar temporal (NO BD)
+        $empleado->calc = (object)[
+            'salario' => $salario,
+            'bonificacion' => $bonificacion,
+            'horas_extras' => $horasExtras,
+            'igss' => $igss,
+            'isr' => 0,
+            'liquido' => $liquido
+        ];
+    }
+
+    return view('planillas.show', compact('planilla','empleados'));
 }
 
 public function boleta($planillaId, $empleadoId)

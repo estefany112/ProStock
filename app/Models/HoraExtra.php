@@ -15,4 +15,9 @@ class HoraExtra extends Model
         'salario_base',
         'total'
     ];
+
+    public function empleado()
+    {
+        return $this->belongsTo(Employee::class, 'empleado_id');
+    }
 }
