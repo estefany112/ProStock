@@ -125,29 +125,41 @@ public function show($id)
     $inicio = \Carbon\Carbon::parse($planilla->fecha_inicio);
     $fin    = \Carbon\Carbon::parse($planilla->fecha_fin);
 
-    // traer empleados activos
     $empleados = \App\Models\Employee::activosEnRango($inicio, $fin)->get();
 
     foreach ($empleados as $empleado) {
 
-        // salario quincenal
+        // 🔥 VERIFICAR SI YA EXISTE EN PLANILLA
+        $existe = $planilla->employees()
+            ->where('employee_id', $empleado->id)
+            ->exists();
+
+        // salario
         $salario = $empleado->salary_base / 2;
-
-        // bonificación
         $bonificacion = 125;
-
-        // igss
         $igss = $salario * 0.0483;
 
-        // horas extras desde BD
+        // horas extras
         $horasExtras = \App\Models\HoraExtra::where('empleado_id', $empleado->id)
             ->whereBetween('fecha', [$inicio, $fin])
             ->sum('total');
 
-        // liquido
         $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
 
-        // Guardar temporal (NO BD)
+        // 🟢 SI NO EXISTE → LO INSERTA
+        if (!$existe) {
+            $planilla->employees()->attach($empleado->id, [
+                'salary_base_quincenal' => $salario,
+                'bonificacion' => $bonificacion,
+                'horas_extras' => $horasExtras,
+                'igss' => $igss,
+                'isr' => 0,
+                'otros_descuentos' => 0,
+                'liquido_recibir' => $liquido
+            ]);
+        }
+
+        // 🔵 CALC PARA MOSTRAR
         $empleado->calc = (object)[
             'salario' => $salario,
             'bonificacion' => $bonificacion,
@@ -169,10 +181,17 @@ public function boleta($planillaId, $empleadoId)
         ->where('employee_id', $empleadoId)
         ->firstOrFail();
 
-    $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado'));
-
     $inicio = Carbon::parse($planilla->fecha_inicio);
     $fin    = Carbon::parse($planilla->fecha_fin);
+    $horasExtrasTotal = HoraExtra::where('empleado_id', $empleadoId)
+    ->whereBetween('fecha', [$inicio, $fin])
+    ->sum('total');
+    $horasCantidad = HoraExtra::where('empleado_id', $empleadoId)
+    ->whereBetween('fecha', [$inicio, $fin])
+    ->sum('horas');
+
+    $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado', 'horasCantidad', 'horasExtrasTotal'));
+
 
     // Detectar tipo de período
     if ($inicio->day == 1 && $fin->day == 15) {
@@ -188,6 +207,8 @@ public function boleta($planillaId, $empleadoId)
     // Ej: Feb 2026
 
     $nombreEmpleado = str_replace(' ', '', $empleado->name);
+
+
 
     return $pdf->download(
         "Boleta_{$nombreEmpleado}_{$tipoPeriodo}_{$mesAnio}.pdf"
@@ -276,12 +297,19 @@ public function copiarDatosAnterior($id)
 public function previewBoleta($planillaId, $empleadoId)
 {
     $planilla = Planilla::findOrFail($planillaId);
-
     $empleado = $planilla->employees()
         ->where('employee_id', $empleadoId)
         ->firstOrFail();
+    $inicio = Carbon::parse($planilla->fecha_inicio);
+    $fin    = Carbon::parse($planilla->fecha_fin);
+    $horasExtrasTotal = HoraExtra::where('empleado_id', $empleadoId)
+    ->whereBetween('fecha', [$inicio, $fin])
+    ->sum('total');
+    $horasCantidad = HoraExtra::where('empleado_id', $empleadoId)
+        ->whereBetween('fecha', [$inicio, $fin])
+        ->sum('horas');
 
-    return view('planillas.boleta_preview', compact('planilla', 'empleado'));
+    return view('planillas.boleta_preview', compact('planilla', 'empleado', 'horasCantidad', 'horasExtrasTotal'));
 }
 
     public function recalcular($id)
