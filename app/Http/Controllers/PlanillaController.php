@@ -120,34 +120,34 @@ public function cerrar($id)
 
 public function show($id)
 {
-    $planilla = Planilla::findOrFail($id);
+    $planilla = Planilla::with('employees')->findOrFail($id);
 
     $inicio = \Carbon\Carbon::parse($planilla->fecha_inicio);
     $fin    = \Carbon\Carbon::parse($planilla->fecha_fin);
 
+    // Empleados activos
     $empleados = \App\Models\Employee::activosEnRango($inicio, $fin)->get();
 
     foreach ($empleados as $empleado) {
 
-        // 🔥 VERIFICAR SI YA EXISTE EN PLANILLA
-        $existe = $planilla->employees()
-            ->where('employee_id', $empleado->id)
-            ->exists();
+        // Buscar si ya existe en la planilla (sin query extra)
+        $detalle = $planilla->employees->firstWhere('id', $empleado->id);
 
-        // salario
+        // Valores base
         $salario = $empleado->salary_base / 2;
         $bonificacion = 125;
         $igss = $salario * 0.0483;
 
-        // horas extras
+        // Horas extras
         $horasExtras = \App\Models\HoraExtra::where('empleado_id', $empleado->id)
             ->whereBetween('fecha', [$inicio, $fin])
             ->sum('total');
 
-        $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
+        // Si NO existe → lo insertamos
+        if (!$detalle) {
 
-        // 🟢 SI NO EXISTE → LO INSERTA
-        if (!$existe) {
+            $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
+
             $planilla->employees()->attach($empleado->id, [
                 'salary_base_quincenal' => $salario,
                 'bonificacion' => $bonificacion,
@@ -157,15 +157,25 @@ public function show($id)
                 'otros_descuentos' => 0,
                 'liquido_recibir' => $liquido
             ]);
+
+            // volver a obtenerlo ya insertado
+            $detalle = $planilla->employees()->where('employee_id', $empleado->id)->first();
         }
 
-        // 🔵 CALC PARA MOSTRAR
+        // USAR VALORES REALES DE BD (NO forzar 0)
+        $isr = $detalle->pivot->isr ?? 0;
+        $otros = $detalle->pivot->otros_descuentos ?? 0;
+
+        $liquido = ($salario + $bonificacion + $horasExtras)
+                    - ($igss + $isr + $otros);
+
+        // SOLO PARA VISTA
         $empleado->calc = (object)[
             'salario' => $salario,
             'bonificacion' => $bonificacion,
             'horas_extras' => $horasExtras,
             'igss' => $igss,
-            'isr' => 0,
+            'isr' => $isr, 
             'liquido' => $liquido
         ];
     }
