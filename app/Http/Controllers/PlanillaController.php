@@ -65,6 +65,8 @@ private function generarPlanilla($planilla)
     $fin = Carbon::parse($planilla->fecha_fin);
 
     $empleados = Employee::activosEnRango($inicio, $fin)->get();
+    $ultimoCorrelativo = DB::table('planilla_detalles')->max('correlativo') ?? 0;
+    $correlativo = $ultimoCorrelativo + 1;
 
     foreach($empleados as $empleado){
 
@@ -89,6 +91,7 @@ private function generarPlanilla($planilla)
         $liquido = ($salarioQuincenal + $bonificacion + $horasExtras) - $igss;
 
         $planilla->employees()->attach($empleado->id,[
+            'correlativo' => $correlativo,
             'salary_base_quincenal'=>$salarioQuincenal,
             'bonificacion'=>$bonificacion,
             'horas_extras'=>$horasExtras,
@@ -97,6 +100,8 @@ private function generarPlanilla($planilla)
             'otros_descuentos'=>0,
             'liquido_recibir'=>$liquido
         ]);
+
+        $correlativo++;
 
     }
 
@@ -131,7 +136,9 @@ public function show($id)
     foreach ($empleados as $empleado) {
 
         // Buscar si ya existe en la planilla (sin query extra)
-        $detalle = $planilla->employees->firstWhere('id', $empleado->id);
+        $detalle = $planilla->employees()
+            ->where('employee_id', $empleado->id)
+            ->first();
 
         // Valores base
         $salario = $empleado->salary_base / 2;
@@ -146,7 +153,7 @@ public function show($id)
         // Si NO existe → lo insertamos
         if (!$detalle) {
 
-            $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
+           $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
 
             $planilla->employees()->attach($empleado->id, [
                 'salary_base_quincenal' => $salario,
@@ -154,6 +161,7 @@ public function show($id)
                 'horas_extras' => $horasExtras,
                 'igss' => $igss,
                 'isr' => 0,
+                'anticipos' => 0,
                 'otros_descuentos' => 0,
                 'liquido_recibir' => $liquido
             ]);
@@ -217,8 +225,6 @@ public function boleta($planillaId, $empleadoId)
     // Ej: Feb 2026
 
     $nombreEmpleado = str_replace(' ', '', $empleado->name);
-
-
 
     return $pdf->download(
         "Boleta_{$nombreEmpleado}_{$tipoPeriodo}_{$mesAnio}.pdf"
@@ -368,4 +374,43 @@ public function previewBoleta($planillaId, $empleadoId)
 
         return back()->with('success', 'Planilla recalculada sin perder correlativos');
     }
+
+    public function guardarAnticipo(Request $request, $id)
+{
+    $request->validate([
+        'empleado_id' => 'required',
+        'anticipo' => 'required|numeric'
+    ]);
+
+    $planilla = Planilla::with('employees')->findOrFail($id);
+
+    $empleadoId = $request->empleado_id;
+    $anticipo = $request->anticipo ?? 0;
+
+    $detalle = $planilla->employees()
+        ->where('employee_id', $empleadoId)
+        ->first();
+
+    if (!$detalle) {
+        return response()->json(['error' => 'Empleado no encontrado'], 404);
+    }
+
+    $salario = $detalle->pivot->salary_base_quincenal;
+    $bonificacion = $detalle->pivot->bonificacion;
+    $horasExtras = $detalle->pivot->horas_extras;
+    $igss = $detalle->pivot->igss;
+    $isr = $detalle->pivot->isr;
+    $otros = $detalle->pivot->otros_descuentos;
+
+    // AQUÍ SE DESCUENTA EL ANTICIPO
+    $liquido = ($salario + $bonificacion + $horasExtras)
+                - ($igss + $isr + $otros + $anticipo);
+
+    $planilla->employees()->updateExistingPivot($empleadoId, [
+        'anticipos' => $anticipo,
+        'liquido_recibir' => $liquido
+    ]);
+
+    return response()->json(['success' => true]);
+}
 }
