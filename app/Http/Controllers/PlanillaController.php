@@ -56,6 +56,7 @@ class PlanillaController extends Controller
                     ->with('success', 'Planilla generada correctamente');
 }
 
+
 private function generarPlanilla($planilla)
 {
     if ($planilla->employees()->count() > 0) {
@@ -65,9 +66,11 @@ private function generarPlanilla($planilla)
     $inicio = Carbon::parse($planilla->fecha_inicio);
     $fin = Carbon::parse($planilla->fecha_fin);
 
-    $empleados = Employee::activosEnRango($inicio, $fin)->get();
-    $ultimoCorrelativo = DB::table('planilla_detalles')->max('correlativo') ?? 0;
-    $correlativo = $ultimoCorrelativo + 1;
+    $empleados = Employee::activosEnRango($inicio, $fin)
+    ->where('id', '!=', 13)
+    ->get();
+    $ultimoCorrelativo = DB::table('planilla_detalles')->lockForUpdate()->max('correlativo') ?? 0;
+    $correlativo = $ultimoCorrelativo;
 
     foreach($empleados as $empleado){
 
@@ -104,6 +107,9 @@ private function generarPlanilla($planilla)
 
         $correlativo++;
 
+        $planilla->employees()->attach($empleado->id, [
+            'correlativo' => $correlativo,
+        ]);
     }
 
     // Copiar datos de la anterior planilla
@@ -132,7 +138,9 @@ public function show($id)
     $fin    = \Carbon\Carbon::parse($planilla->fecha_fin);
 
     // Empleados activos
-    $empleados = \App\Models\Employee::activosEnRango($inicio, $fin)->get();
+    $empleados = Employee::activosEnRango($inicio, $fin)
+    ->where('id', '!=', 13)
+    ->get();
 
     foreach ($empleados as $empleado) {
 
