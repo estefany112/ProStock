@@ -17,6 +17,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PlanillaController;
 use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\HoraExtraController;
+use App\Http\Controllers\AnticipoController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -96,6 +97,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/horas-extras/guardar', [HoraExtraController::class, 'storeQuincena'])->name('horas-extras.guardar');
     Route::get('/horas-extras/historial', [HoraExtraController::class, 'historial'])->name('horas-extras.historial');
     Route::get('/horas-extras/detalle/{empleado}/{inicio}/{fin}', [HoraExtraController::class, 'detalle'])->name('horas-extras.detalle');
+
+    // ANTICIPOS EN PLANILLAS
+    Route::get('/anticipos/quincena', [AnticipoController::class, 'formQuincena'])->name('anticipos.quincena');
+    Route::post('/anticipos/guardar', [AnticipoController::class, 'storeQuincena'])->name('anticipos.guardar');
+    Route::get('/anticipos/historial', [AnticipoController::class, 'historial'])->name('anticipos.historial');
+    Route::get('/anticipos/detalle/{empleado}/{inicio}/{fin}', [AnticipoController::class, 'detalle'])->name('anticipos.detalle');
 
     // MENÚ DE PROSTOCK
     Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');

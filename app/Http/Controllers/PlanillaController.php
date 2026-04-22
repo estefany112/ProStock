@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\HoraExtra;
+use App\Models\Anticipo;
 
 class PlanillaController extends Controller
 {
@@ -181,9 +182,12 @@ public function show($id)
         // USAR VALORES REALES DE BD (NO forzar 0)
         $isr = $detalle->pivot->isr ?? 0;
         $otros = $detalle->pivot->otros_descuentos ?? 0;
-
+        $anticipos = \App\Models\Anticipo::where('employee_id', $empleado->id)
+                    ->whereBetween('fecha', [$inicio, $fin])
+                    ->where('estado', 'pendiente')
+                    ->sum('monto');
         $liquido = ($salario + $bonificacion + $horasExtras)
-                    - ($igss + $isr + $otros);
+                    - ($igss + $isr + $otros + $anticipos);
 
         // SOLO PARA VISTA
         $empleado->calc = (object)[
@@ -192,6 +196,7 @@ public function show($id)
             'horas_extras' => $horasExtras,
             'igss' => $igss,
             'isr' => $isr, 
+            'anticipos' => $anticipos,
             'liquido' => $liquido
         ];
     }
@@ -367,15 +372,21 @@ public function previewBoleta($planillaId, $empleadoId)
                 ->whereBetween('fecha', [$inicio, $fin])
                 ->sum('total');
 
+            $anticipos = Anticipo::where('employee_id', $empleado->id)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->where('estado', 'pendiente')
+            ->sum('monto');
+
             // ACTUALIZA SIN BORRAR correlativo
             $liquido = ($salarioQuincenal + $bonificacion + $horasExtras)
-            - ($igss + $empleado->pivot->isr + $empleado->pivot->otros_descuentos);
+            - ($igss + $empleado->pivot->isr + $empleado->pivot->otros_descuentos + $anticipos);
 
             $planilla->employees()->updateExistingPivot($empleado->id, [
                 'salary_base_quincenal' => $salarioQuincenal,
                 'bonificacion' => $bonificacion,
                 'horas_extras' => $horasExtras,
                 'igss' => $igss,
+                'anticipos' => $anticipos,
                 'liquido_recibir' => $liquido
             ]);
         }
@@ -383,42 +394,4 @@ public function previewBoleta($planillaId, $empleadoId)
         return back()->with('success', 'Planilla recalculada sin perder correlativos');
     }
 
-    public function guardarAnticipo(Request $request, $id)
-{
-    $request->validate([
-        'empleado_id' => 'required',
-        'anticipo' => 'required|numeric'
-    ]);
-
-    $planilla = Planilla::with('employees')->findOrFail($id);
-
-    $empleadoId = $request->empleado_id;
-    $anticipo = $request->anticipo ?? 0;
-
-    $detalle = $planilla->employees()
-        ->where('employee_id', $empleadoId)
-        ->first();
-
-    if (!$detalle) {
-        return response()->json(['error' => 'Empleado no encontrado'], 404);
-    }
-
-    $salario = $detalle->pivot->salary_base_quincenal;
-    $bonificacion = $detalle->pivot->bonificacion;
-    $horasExtras = $detalle->pivot->horas_extras;
-    $igss = $detalle->pivot->igss;
-    $isr = $detalle->pivot->isr;
-    $otros = $detalle->pivot->otros_descuentos;
-
-    // AQUÍ SE DESCUENTA EL ANTICIPO
-    $liquido = ($salario + $bonificacion + $horasExtras)
-                - ($igss + $isr + $otros + $anticipo);
-
-    $planilla->employees()->updateExistingPivot($empleadoId, [
-        'anticipos' => $anticipo,
-        'liquido_recibir' => $liquido
-    ]);
-
-    return response()->json(['success' => true]);
-}
 }

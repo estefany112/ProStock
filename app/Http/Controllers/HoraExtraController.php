@@ -60,7 +60,7 @@ class HoraExtraController extends Controller
         ]
     );
 
-    // 🔥 ACTUALIZAR PLANILLA EN ESA MISMA ITERACIÓN
+    // ACTUALIZAR PLANILLA EN ESA MISMA ITERACIÓN
     $planilla = \App\Models\Planilla::where('estado','abierta')
         ->where('fecha_inicio','<=',$fecha)
         ->where('fecha_fin','>=',$fecha)

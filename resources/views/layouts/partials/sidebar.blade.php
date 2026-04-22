@@ -106,6 +106,37 @@
                         </div>
                     </div>
 
+                     {{-- Opción 3: Crear Anticipos --}}
+                    <div x-data="{ openAnticipos: {{ request()->routeIs('anticipos.*') ? 'true' : 'false' }} }">
+
+                        <button @click="openAnticipos = !openAnticipos"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-700">
+                            
+                            <span class="flex items-center gap-3">
+                                <span>Anticipos</span>
+                            </span>
+
+                            <span x-text="openAnticipos ? '▾' : '▸'"></span>
+                        </button>
+
+                        <div x-show="openAnticipos" x-collapse class="ml-6 mt-1 space-y-1">
+
+                            {{-- Registrar --}}
+                            <a href="{{ route('anticipos.quincena') }}"
+                            class="block px-3 py-1.5 rounded hover:bg-gray-700
+                            {{ request()->routeIs('anticipos.quincena') ? 'bg-blue-600' : '' }}">
+                                Registrar
+                            </a>
+
+                            {{-- Historial --}}
+                            <a href="{{ route('anticipos.historial') }}"
+                            class="block px-3 py-1.5 rounded hover:bg-gray-700
+                            {{ request()->routeIs('anticipos.historial') ? 'bg-blue-600' : '' }}">
+                                Historial
+                            </a>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif
