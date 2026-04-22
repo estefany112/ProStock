@@ -34,6 +34,7 @@
                     <th class="p-2">Horas Extras</th>
                     <th class="p-2">IGSS</th>
                     <th class="p-2">ISR</th>
+                    <th class="px-3 py-2">Anticipos</th>
                     <th class="p-2">Líquido a recibir</th>
                     <th class="p-2">Boleta</th>
                 </tr>
@@ -45,6 +46,7 @@
                     $totalBoni = 0;
                     $totalHorasExtras = 0;
                     $totalIsr = 0;
+                    $totalAnticipos = 0;
                     $totalLiquido = 0;
                 @endphp
 
@@ -56,6 +58,7 @@
                         $totalHorasExtras += $empleado->calc->horas_extras;
                         $totalIGSS += $empleado->calc->igss;
                         $totalIsr += $empleado->calc->isr;
+                        $totalAnticipos += $empleado->calc->anticipos;
                         $totalLiquido += $empleado->calc->liquido;
                     @endphp
 
@@ -75,6 +78,9 @@
                         </td>
                          <td class="p-2 text-center">
                             Q {{ number_format($empleado->calc->isr,2) }}
+                        </td>
+                        <td class="p-2 text-center">
+                            Q {{ number_format($empleado->calc->anticipos, 2) }}
                         </td>
                         <td class="p-2 text-center font-semibold">
                             Q {{ number_format($empleado->calc->liquido,2) }}
@@ -114,6 +120,10 @@
                     </td>
 
                     <td class="p-2 text-center">
+                        Q {{ number_format($totalAnticipos,2) }}
+                    </td>
+
+                    <td class="p-2 text-center">
                         Q {{ number_format($totalLiquido,2) }}
                     </td>
 
@@ -124,4 +134,5 @@
 
     </div>
 </div>
+
 @endsection
