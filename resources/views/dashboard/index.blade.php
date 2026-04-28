@@ -99,16 +99,15 @@
     </div>
 
     {{-- SOLO ADMINISTRADORES --}}
-    @role('admin')
+   @if(auth()->user()->hasAnyRole(['admin', 'auditor']))
     <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6">
         <h2 class="text-lg font-semibold text-white mb-4">
             Acceso Administrativo
         </h2>
 
         <div class="space-y-3">
-
             <a href="{{ route('planillas.index') }}"
-               class="flex items-center justify-between p-3 bg-slate-800 hover:bg-blue-600 hover:text-white rounded-xl transition text-slate-300">
+            class="flex items-center justify-between p-3 bg-slate-800 hover:bg-blue-600 hover:text-white rounded-xl transition text-slate-300">
                 <span>Gestionar Planillas</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -116,16 +115,15 @@
             </a>
 
             <a href="{{ route('admin.users') }}"
-               class="flex items-center justify-between p-3 bg-slate-800 hover:bg-blue-600 hover:text-white rounded-xl transition text-slate-300">
+            class="flex items-center justify-between p-3 bg-slate-800 hover:bg-blue-600 hover:text-white rounded-xl transition text-slate-300">
                 <span>Configuración de Roles</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
-
         </div>
     </div>
-    @endrole
+    @endif
 
 </div>
 
