@@ -15,105 +15,70 @@
       @endauth>
 
     {{-- HEADER --}}
-    <header class="h-16 bg-white border-b border-slate-200
-                flex items-center justify-between px-6
-                sticky top-0 z-50 text-slate-800">
-
-        <div class="flex items-center gap-4">
-
-            @auth
-            {{-- BOTÓN SIDEBAR SOLO SI ESTÁ LOGEADO --}}
-            <button
-                @click="sidebarOpen = !sidebarOpen"
-                class="flex items-center justify-center w-10 h-10
-                    rounded-md border border-slate-300
-                    text-slate-600 hover:bg-slate-100 transition">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5"
-                    fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-            @endauth
-
-            <a href="/" class="text-xl font-bold tracking-wide">
-                PROSERVE
-            </a>
-
-        </div>
-        
-       @auth
-        <div x-data="{ openUser: false }" class="relative">
-
-            <div class="flex items-center gap-4">
-
-                <div class="text-right leading-tight hidden sm:block">
-                    <p class="text-sm font-medium">
-                        {{ auth()->user()->name }}
-                    </p>
-                    <p class="text-xs text-slate-500">
-                        {{ auth()->user()->roles->first()->label ?? 'Usuario' }}
-                    </p>
-                </div>
-
-                <!-- Avatar -->
-                <button @click="openUser = !openUser"
-                    class="w-9 h-9 rounded-full overflow-hidden
-                        flex items-center justify-center
-                        focus:outline-none border border-slate-300">
-
-                    @if(auth()->user()->avatar)
-                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
-                            class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full bg-slate-800
-                                    flex items-center justify-center
-                                    text-sm font-bold text-white">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
-                    @endif
-
-                </button>
-            </div>
-
-            <!-- Dropdown -->
-            <div x-show="openUser"
-                @click.away="openUser = false"
-                x-transition
-                class="absolute right-0 mt-3 w-48 bg-white
-                        border border-slate-200 rounded-lg shadow-lg
-                        py-2 z-50">
-
-                <!-- Editar Perfil -->
-                <a href="{{ route('profile.edit') }}"
-                class="block px-4 py-2 text-sm text-slate-700
-                        hover:bg-slate-100 transition">
-                    Editar perfil
-                </a>
-
-                <!-- Divider -->
-                <div class="border-t border-slate-200 my-1"></div>
-
-                <!-- Cerrar sesión -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="w-full text-left px-4 py-2 text-sm
-                            text-red-600 hover:bg-red-50 transition">
-                        Cerrar sesión
-                    </button>
-                </form>
-
-            </div>
-        </div>
+   <header class="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm transition-all duration-300">
+    
+    <div class="flex items-center gap-4">
+        @auth
+        <button @click="sidebarOpen = !sidebarOpen"
+            class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 group">
+            <svg class="w-6 h-6 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
         @endauth
 
-    </header>
+        <div class="flex items-center gap-3">
+            {{-- LOGO DE LA EMPRESA (Templo Proserve) --}}
+           <img src="{{ public_path('images/no-image.jpg') }}">
+            
+            <span class="text-xl font-extrabold text-slate-900 tracking-tighter">PROSERVE</span>
+        </div>
+    </div>
+    
+    @auth
+    <div x-data="{ openUser: false }" class="relative">
+        <button @click="openUser = !openUser" 
+                class="flex items-center gap-3 group focus:outline-none transition-transform duration-300 hover:-translate-y-0.5">
+            
+            <div class="text-right hidden sm:block">
+                <p class="text-sm font-semibold text-slate-800">{{ auth()->user()->name }}</p>
+                {{-- Gradiente sutil para el rol, muy profesional --}}
+                <p class="text-[10px] uppercase tracking-widest font-extrabold mt-0.5 
+                          bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+                    {{ auth()->user()->roles->first()->label ?? 'Usuario' }}
+                </p>
+            </div>
+
+            <div class="relative w-11 h-11 rounded-full overflow-hidden shadow-inner ring-2 ring-transparent group-hover:ring-emerald-300 transition-all duration-300">
+                @if(auth()->user()->avatar)
+                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" class="w-full h-full object-cover">
+                @else
+                    {{-- Gradiente moderno para cuando no hay foto --}}
+                    <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
+                {{-- Indicador de Online Vibrante --}}
+                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+            </div>
+        </button>
+
+        <div x-show="openUser"
+            @click.away="openUser = false"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100"
+            class="absolute right-0 mt-3 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-2 z-50">
+            <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition">Editar perfil</a>
+            <div class="border-t border-slate-100 my-1"></div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+    @endauth
+</header>
 
    @auth
     <div class="flex">
