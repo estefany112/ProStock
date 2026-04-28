@@ -52,23 +52,16 @@
         });
     </script>
 
-<body class="font-sans antialiased bg-slate-900">
-<div x-data="{ openSidebar: false }" class="min-h-screen flex">
-
-    @include('layouts.partials.sidebar')
-
-    <div class="flex-1 flex flex-col">
-
-        <header class="">
-
-        </header>
-
-        <main class="flex-1 p-6">
-            {{ $slot }}
-        </main>
-
+<body class="font-sans antialiased bg-[#0B1120] text-slate-200">
+    <div x-data="{ openSidebar: false }" class="min-h-screen flex">
+        @include('layouts.partials.sidebar')
+        <div class="flex-1 flex flex-col">
+            <header class="h-16 border-b border-slate-800/50 bg-[#0B1120]/80 backdrop-blur-md sticky top-0 z-40"></header>
+            <main class="flex-1 p-8">
+                {{ $slot ?? '' }} @yield('content')
+            </main>
+        </div>
     </div>
-</div>
 </body>
 
 </html>

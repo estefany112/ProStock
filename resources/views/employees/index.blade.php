@@ -1,151 +1,103 @@
 @extends('layouts.principal')
 
 @section('content')
+<div class="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-in fade-in duration-700">
 
-<div class="py-8 max-w-7xl mx-auto">
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border text-gray-800">
-
-        {{-- HEADER DE LA VISTA --}}
-        <div class="mb-6">
-
-            <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
-                    👥 EMPLEADOS
-                </h1>
+    {{-- HEADER RESPONSIVO --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl shadow-2xl mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="p-4 bg-indigo-500/20 text-indigo-300 rounded-2xl">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </div>
+                
+                <div>
+                    <h1 class="text-3xl font-extrabold text-white tracking-tight">Personal</h1>
+                    <p class="text-indigo-200/70 mt-1">Administración estratégica de talento humano</p>
+                </div>
             </div>
 
-            <p class="text-sm text-gray-500 mt-1">
-                Gestión de empleados – PROSERVE
-            </p>
-
-            <div class="mt-4">
-                @if(auth()->user()->hasPermission('employee.create'))
-                    <a href="{{ route('employees.create') }}"
-                       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
-                              hover:bg-green-700 transition">
-                        ➕ Nuevo empleado
-                    </a>
-                @endif
+            <div class="hidden md:block">
+                <span class="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-indigo-300 text-xs font-bold uppercase tracking-widest">
+                    Dashboard Activo
+                </span>
             </div>
-
         </div>
 
-        {{-- MENSAJES --}}
-        @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
-                {{ session('success') }}
-            </div>
+        @if(auth()->user()->hasPermission('employee.create'))
+            <a href="{{ route('employees.create') }}"
+               class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-lg transition-all hover:scale-105">
+                <span>➕</span> Nuevo Empleado
+            </a>
         @endif
+    </div>
 
-        @if(session('error'))
-            <div class="bg-red-100 text-red-700 p-4 rounded mt-4 mb-4">
-                {{ session('error') }}
-            </div>
-        @endif
+    {{-- CONTENEDOR DE TABLA RESPONSIVO --}}
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+        
+        <div class="p-4 border-b border-slate-50">
+            <x-search-bar action="{{ route('employees.index') }}" placeholder="Buscar por nombre o DPI..." />
+        </div>
 
-        {{-- BUSCADOR --}}
-        <x-search-bar
-            action="{{ route('employees.index') }}"
-            placeholder="Buscar por empleado, nombre o dpi..."
-        />
-
-        {{-- TABLA --}}
-        <div class="overflow-x-auto text-center">
-            <table class="w-full mt-4 border">
-                <thead class="bg-gray-100">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-400 uppercase tracking-wider text-[10px] font-bold">
                     <tr>
-                        <th class="p-2">#</th>
-                        <th>Dpi</th>
-                        <th>Nombre</th>
-                        <th>Puesto</th>
-                        <th>Salario base</th>
-                        <th>Ingreso</th>
-                        <th>Baja</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
+                        <th class="px-4 py-4 text-center hidden sm:table-cell">#</th>
+                        <th class="px-4 py-4 text-left">Empleado</th>
+                        <th class="px-4 py-4 text-left hidden md:table-cell">Puesto</th>
+                        <th class="px-4 py-4 text-left">Salario</th>
+                        <th class="px-4 py-4 text-center">Estado</th>
+                        <th class="px-4 py-4 text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($employees as $employee)
-                        <tr class="border-t">
-                            <td class="p-2">{{ $loop->iteration }}</td>
-                            <td>{{ $employee->dpi }}</td>
-                            <td>{{ $employee->name }}</td>
-                            <td>{{ $employee->position }}</td>
-                            <td>Q {{ number_format($employee->salary_base, 2) }}</td>
-                            <td>
-                                {{ $employee->fecha_ingreso 
-                                    ? \Carbon\Carbon::parse($employee->fecha_ingreso)->format('d/m/Y') 
-                                    : '-' }}
+                <tbody class="divide-y divide-slate-50">
+                    @forelse ($employees as $employee)
+                        <tr class="hover:bg-indigo-50/30 transition-colors">
+                            <td class="px-4 py-4 text-slate-300 text-center hidden sm:table-cell">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-4">
+                                <div class="font-bold text-slate-800">{{ $employee->name }}</div>
+                                <div class="text-slate-400 text-[10px] md:hidden">{{ $employee->position }}</div>
+                                <div class="text-slate-400 text-xs">{{ $employee->dpi }}</div>
                             </td>
-
-                            <td>
-                                {{ $employee->fecha_baja 
-                                    ? \Carbon\Carbon::parse($employee->fecha_baja)->format('d/m/Y') 
-                                    : '-' }}
+                            <td class="px-4 py-4 text-slate-600 font-medium hidden md:table-cell">{{ $employee->position }}</td>
+                            <td class="px-4 py-4 font-bold text-emerald-600">Q {{ number_format($employee->salary_base, 2) }}</td>
+                            <td class="px-4 py-4 text-center">
+                                <span class="px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-wider 
+                                    {{ $employee->active ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
+                                    {{ $employee->active ? 'Activo' : 'Inactivo' }}
+                                </span>
                             </td>
-                            <td>
-                                @if($employee->active)
-                                    <span class="text-green-600 font-semibold">Activo</span>
-                                @else
-                                    <span class="text-red-600 font-semibold">Inactivo</span>
-                                @endif
-                            </td>
-                            <td class="flex gap-3 justify-center">
-                                @if(auth()->user()->hasPermission('employee.edit'))
-                                    <a href="{{ route('employees.edit', $employee) }}" class="text-blue-600">
-                                        Editar
-                                    </a>
-                                @endif
-
-                                @if(auth()->user()->hasPermission('employee.disable'))
-                                    <form action="{{ route('employees.toggle', $employee) }}"
-                                          method="POST"
-                                          onsubmit="return confirmToggle(event)">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button class="text-red-600">
-                                            {{ $employee->active ? 'Desactivar' : 'Activar' }}
-                                        </button>
-                                    </form>
-                                @endif
+                            <td class="px-4 py-4 flex flex-col md:flex-row items-center justify-center gap-2">
+                                <a href="{{ route('employees.edit', $employee) }}" 
+                                   class="text-indigo-500 font-bold hover:underline">Editar</a>
+                                <form action="{{ route('employees.toggle', $employee) }}" method="POST" onsubmit="return confirmToggle(event)">
+                                    @csrf @method('PATCH')
+                                    <button class="font-bold {{ $employee->active ? 'text-rose-500' : 'text-emerald-500' }} hover:underline">
+                                        {{ $employee->active ? 'Desactivar' : 'Activar' }}
+                                    </button>
+                                </form>
                             </td>
                         </tr>
-                    @endforeach
-
-                    @if($employees->count() === 0)
-                        <tr>
-                            <td colspan="6" class="p-4 text-gray-600">
-                                No hay empleados registrados.
-                            </td>
-                        </tr>
-                    @endif
+                    @empty
+                        <tr><td colspan="6" class="p-8 text-center text-slate-400">Sin empleados registrados.</td></tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>
 
 <script>
     function confirmToggle(event) {
         event.preventDefault();
-
         Swal.fire({
             title: '¿Confirmar acción?',
-            text: 'Se cambiará el estado del empleado.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, continuar',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.submit();
-            }
-        });
+            text: 'Se actualizará el estatus del colaborador.',
+            icon: 'question',
+            confirmButtonColor: '#4f46e5',
+            showCancelButton: true
+        }).then((result) => { if (result.isConfirmed) event.target.submit(); });
     }
 </script>
-
 @endsection
