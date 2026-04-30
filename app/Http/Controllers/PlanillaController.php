@@ -106,10 +106,6 @@ private function generarPlanilla($planilla)
         ]);
 
         $correlativo++;
-
-        $planilla->employees()->attach($empleado->id, [
-            'correlativo' => $correlativo,
-        ]);
     }
 
     // Copiar datos de la anterior planilla
@@ -149,39 +145,18 @@ public function show($id)
             ->where('employee_id', $empleado->id)
             ->first();
 
-        // Valores base
-        $salario = $empleado->salary_base / 2;
-        $bonificacion = 125;
-        $igss = $salario * 0.0483;
-
-        // Horas extras
-        $horasExtras = \App\Models\HoraExtra::where('empleado_id', $empleado->id)
-            ->whereBetween('fecha', [$inicio, $fin])
-            ->sum('total');
-
-        // Si NO existe → lo insertamos
         if (!$detalle) {
-
-           $liquido = ($salario + $bonificacion + $horasExtras) - $igss;
-
-            $planilla->employees()->attach($empleado->id, [
-                'salary_base_quincenal' => $salario,
-                'bonificacion' => $bonificacion,
-                'horas_extras' => $horasExtras,
-                'igss' => $igss,
-                'isr' => 0,
-                'anticipos' => 0,
-                'otros_descuentos' => 0,
-                'liquido_recibir' => $liquido
-            ]);
-
-            // volver a obtenerlo ya insertado
-            $detalle = $planilla->employees()->where('employee_id', $empleado->id)->first();
+            continue; // evita errores si no existe
         }
 
-        // USAR VALORES REALES DE BD (NO forzar 0)
-        $isr = $detalle->pivot->isr ?? 0;
-        $otros = $detalle->pivot->otros_descuentos ?? 0;
+        // TODO desde la BD (pivot)
+        $salario      = $detalle->pivot->salary_base_quincenal ?? 0;
+        $bonificacion = $detalle->pivot->bonificacion ?? 0;
+        $horasExtras  = $detalle->pivot->horas_extras ?? 0;
+        $igss         = $detalle->pivot->igss ?? 0;
+        $isr          = $detalle->pivot->isr ?? 0;
+        $otros        = $detalle->pivot->otros_descuentos ?? 0;
+
         $anticipos = \App\Models\Anticipo::where('employee_id', $empleado->id)
                     ->whereBetween('fecha', [$inicio, $fin])
                     ->where('estado', 'pendiente')
@@ -292,9 +267,10 @@ public function copiarDatosAnterior($id)
         return back()->with('error','La planilla está cerrada');
     }
 
-    $planillaAnterior = Planilla::where('id','<',$planillaActual->id)
-        ->orderBy('id','desc')
-        ->first();
+    $planillaAnterior = Planilla::where('estado', 'cerrada')
+    ->where('id','<',$planillaActual->id)
+    ->orderBy('id','desc')
+    ->first();
 
     if(!$planillaAnterior){
         return back()->with('error','No existe planilla anterior');
