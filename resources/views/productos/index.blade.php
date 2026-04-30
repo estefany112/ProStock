@@ -3,7 +3,7 @@
 @section('content')
 
 {{-- CONTENEDOR PRINCIPAL: pt-16 para separación elegante del header superior --}}
-<div class="max-w-7xl mx-auto pt-28 pb-16 px-4 sm:px-6 lg:px-8 mt-2">
+<div class="max-w-7xl mx-auto pt-12 pb-16 px-4 sm:px-6 lg:px-8 mt-2">
 
     {{-- HEADER DE LA VISTA CON ANIMACIÓN DE ENTRADA SUAVE --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
@@ -240,7 +240,7 @@
     }
 </script>
 
-
+@endsection
 
 
 
