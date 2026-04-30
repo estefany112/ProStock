@@ -87,7 +87,7 @@
                 @forelse ($productos as $producto)
                     <tr class="hover:bg-blue-500/5 transition-colors group">
                         <td class="px-5 py-4 whitespace-nowrap text-slate-500 font-mono text-center text-xs">
-                            #{{ $loop->iteration }}
+                            #{{ $productos->total() - (($productos->currentPage() - 1) * $productos->perPage() + $loop->index) }}
                         </td>
                         <td class="px-5 py-4 whitespace-nowrap font-bold text-blue-400">
                             {{ $producto->codigo }}
