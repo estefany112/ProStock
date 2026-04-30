@@ -105,12 +105,41 @@
         @endif
     </div>
 
-    <div class="mt-8 flex justify-end">
-        <a href="{{ route('productos.index') }}"
-           class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center gap-3 font-bold">
-            Ir a Productos
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
+   {{-- BLOQUE DE NAVEGACIÓN ENTRE MÓDULOS --}}
+    <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in">
+        {{-- Información de contexto --}}
+        <div class="text-slate-400 text-sm font-medium bg-slate-800/30 px-4 py-2 rounded-lg border border-slate-700/50">
+            Navegación de Módulos: <span class="text-blue-400 font-bold uppercase ml-1">Inventario</span>
+        </div>
+
+        {{-- Botones de flujo --}}
+        <div class="flex items-center gap-4">
+            {{-- Anterior: Menú Principal --}}
+            <a href="{{ route('prostock.index') }}" 
+               class="group px-6 py-3 bg-slate-800 text-slate-200 rounded-2xl border border-slate-600 hover:bg-slate-700 hover:border-amber-500/50 hover:text-amber-400 text-sm font-bold flex items-center gap-3 transition-all shadow-lg active:scale-95">
+                <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+                </svg>
+                <div class="flex flex-col items-start leading-tight">
+                    <span class="text-[10px] text-slate-500 uppercase font-extrabold tracking-tighter">Módulo Anterior</span>
+                    <span>Menú Principal</span>
+                </div>
+            </a>
+
+            <div class="hidden md:block h-10 w-[1px] bg-slate-700/50 mx-2"></div>
+
+            {{-- Siguiente: Productos --}}
+            <a href="{{ route('productos.index') }}" 
+               class="group px-6 py-3 bg-slate-800 text-slate-200 rounded-2xl border border-slate-600 hover:bg-slate-700 hover:border-emerald-500/50 hover:text-emerald-400 text-sm font-bold flex items-center gap-3 transition-all shadow-lg active:scale-95 text-right">
+                <div class="flex flex-col items-end leading-tight">
+                    <span class="text-[10px] text-slate-500 uppercase font-extrabold tracking-tighter">Siguiente Módulo</span>
+                    <span>Gestión de Productos</span>
+                </div>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
     </div>
 </div>
 
