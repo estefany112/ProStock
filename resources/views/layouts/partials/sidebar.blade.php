@@ -54,8 +54,71 @@
                     <div class="pt-2">
                         <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest pl-2 mb-1">Planillas</p>
                         <a href="{{ route('planillas.index') }}" class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('planillas.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">Ver Planillas</a>
-                        <a href="{{ route('horas-extras.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('horas-extras.quincena') ? 'text-white' : '' }}">Horas Extras</a>
-                        <a href="{{ route('anticipos.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('anticipos.quincena') ? 'text-white' : '' }}">Anticipos</a>
+                       
+                        {{-- HORAS EXTRAS DROPDOWN --}}
+                        <div x-data="{ openHE: {{ request()->routeIs('horas-extras.*') ? 'true' : 'false' }} }">
+
+                            <button @click="openHE = !openHE"
+                                class="w-full flex items-center justify-between px-4 py-1.5 text-sm pl-6 rounded-r-lg
+                                text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition">
+
+                                <span>Horas Extras</span>
+
+                                <svg class="w-3 h-3 transition-transform duration-300"
+                                    :class="openHE ? 'rotate-180' : ''"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="openHE" x-collapse class="ml-4 mt-1 space-y-1">
+                                <a href="{{ route('horas-extras.quincena') }}"
+                                class="block px-4 py-1 text-xs rounded-lg
+                                {{ request()->routeIs('horas-extras.quincena') ? 'text-white bg-slate-900' : 'text-slate-500 hover:text-slate-300' }}">
+                                    Quincena
+                                </a>
+
+                                <a href="{{ route('horas-extras.historial') }}"
+                                class="block px-4 py-1 text-xs rounded-lg
+                                {{ request()->routeIs('horas-extras.historial') ? 'text-white bg-slate-900' : 'text-slate-500 hover:text-slate-300' }}">
+                                    Historial
+                                </a>
+                            </div>
+                        </div>
+
+
+                        {{-- ANTICIPOS DROPDOWN --}}
+                        <div x-data="{ openAnt: {{ request()->routeIs('anticipos.*') ? 'true' : 'false' }} }">
+
+                            <button @click="openAnt = !openAnt"
+                                class="w-full flex items-center justify-between px-4 py-1.5 text-sm pl-6 rounded-r-lg
+                                text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition">
+
+                                <span>Anticipos</span>
+
+                                <svg class="w-3 h-3 transition-transform duration-300"
+                                    :class="openAnt ? 'rotate-180' : ''"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="openAnt" x-collapse class="ml-4 mt-1 space-y-1">
+                                <a href="{{ route('anticipos.quincena') }}"
+                                class="block px-4 py-1 text-xs rounded-lg
+                                {{ request()->routeIs('anticipos.quincena') ? 'text-white bg-slate-900' : 'text-slate-500 hover:text-slate-300' }}">
+                                    Quincena
+                                </a>
+
+                                <a href="{{ route('anticipos.historial') }}"
+                                class="block px-4 py-1 text-xs rounded-lg
+                                {{ request()->routeIs('anticipos.historial') ? 'text-white bg-slate-900' : 'text-slate-500 hover:text-slate-300' }}">
+                                    Historial
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
