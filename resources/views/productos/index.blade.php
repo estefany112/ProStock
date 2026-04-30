@@ -190,6 +190,10 @@
     </div>
 </div>
 
+<div class="mt-4 mb-6">
+    {{ $productos->links() }}
+</div>
+
 {{-- BLOQUE DE NAVEGACIÓN ENTRE MÓDULOS --}}
     <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-6">
         {{-- Información de contexto --}}
