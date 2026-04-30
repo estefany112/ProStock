@@ -1,11 +1,16 @@
 <aside x-show="sidebarOpen"
-    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter="transition ease-in-out duration-300"
     x-transition:enter-start="-translate-x-full"
     x-transition:enter-end="translate-x-0"
-    class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col h-screen overflow-y-auto shadow-2xl">
+    x-transition:leave="transition ease-in-out duration-300"
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="-translate-x-full"
+    {{-- FIXED: Imprescindible para evitar el doble scroll --}}
+    class="fixed left-0 top-16 z-40 w-64 bg-slate-950 border-r border-slate-800 h-[calc(100vh-4rem)] flex flex-col shadow-2xl">
 
-    <nav class="flex-1 px-4 py-6 space-y-2">
+    <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-sidebar-scroll">
         
+        {{-- DASHBOARD --}}
         <a href="{{ route('dashboard') }}"
            class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 
            {{ request()->routeIs('dashboard') ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/20' : 'text-slate-400 hover:text-emerald-400 hover:bg-slate-900' }}">
@@ -13,6 +18,7 @@
             <span class="font-medium">Dashboard</span>
         </a>
 
+        {{-- OPERACIONES --}}
         @if(auth()->user()->hasAnyRole(['admin','almacen']))
             <div x-data="{ open: {{ request()->routeIs('solicitudes.*') || request()->routeIs('prostock.*') ? 'true' : 'false' }} }" class="space-y-1">
                 <button @click="open = !open"
@@ -31,9 +37,9 @@
             </div>
         @endif
 
+        {{-- TALENTO HUMANO --}}
         @if(auth()->user()->hasPermission('employee.view'))
             <div x-data="{ openEmp: {{ request()->routeIs('employees.*') || request()->routeIs('planillas.*') || request()->routeIs('horas-extras.*') || request()->routeIs('anticipos.*') ? 'true' : 'false' }} }" class="space-y-1">
-                
                 <button @click="openEmp = !openEmp"
                         class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-400 hover:text-violet-400 hover:bg-slate-900 transition-all duration-300">
                     <span class="flex items-center gap-3">
@@ -44,35 +50,18 @@
                 </button>
 
                 <div x-show="openEmp" x-collapse class="pl-4 space-y-1">
-                    <a href="{{ route('employees.index') }}" 
-                    class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('employees.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">
-                    Personal
-                    </a>
-
+                    <a href="{{ route('employees.index') }}" class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('employees.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">Personal</a>
                     <div class="pt-2">
-                        <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest pl-2 mb-1">Gestión de Planillas</p>
-                        
-                        <a href="{{ route('planillas.index') }}" 
-                        class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('planillas.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">
-                        Ver Planillas
-                        </a>
-                        
-                        <div class="mt-2">
-                            <p class="text-[9px] text-slate-600 uppercase pl-4 font-semibold mb-0.5">Horas Extras</p>
-                            <a href="{{ route('horas-extras.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('horas-extras.quincena') ? 'text-white' : '' }}">Registrar</a>
-                            <a href="{{ route('horas-extras.historial') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('horas-extras.historial') ? 'text-white' : '' }}">Historial</a>
-                        </div>
-                        
-                        <div class="mt-2">
-                            <p class="text-[9px] text-slate-600 uppercase pl-4 font-semibold mb-0.5">Anticipos</p>
-                            <a href="{{ route('anticipos.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('anticipos.quincena') ? 'text-white' : '' }}">Registrar</a>
-                            <a href="{{ route('anticipos.historial') }}" class="block px-4 py-2 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('anticipos.historial') ? 'text-white' : '' }}">Historial</a>
-                        </div>
+                        <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest pl-2 mb-1">Planillas</p>
+                        <a href="{{ route('planillas.index') }}" class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('planillas.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">Ver Planillas</a>
+                        <a href="{{ route('horas-extras.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('horas-extras.quincena') ? 'text-white' : '' }}">Horas Extras</a>
+                        <a href="{{ route('anticipos.quincena') }}" class="block px-4 py-1.5 text-sm text-slate-500 hover:text-slate-300 pl-6 hover:bg-slate-900/50 rounded-r-lg {{ request()->routeIs('anticipos.quincena') ? 'text-white' : '' }}">Anticipos</a>
                     </div>
                 </div>
             </div>
         @endif
 
+        {{-- FINANZAS --}}
         @if(auth()->user()->hasAnyRole(['admin','auditor']))
             <a href="{{ route('caja.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('caja.*') ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/20' : 'text-slate-400 hover:text-emerald-400 hover:bg-slate-900' }}">
