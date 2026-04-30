@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="max-w-6xl mx-auto pt-10 pb-10">
+<div class="max-w-6xl mx-auto pt-12 pb-12">
     {{-- HEADER DE LA VISTA --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
