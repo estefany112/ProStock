@@ -236,12 +236,55 @@
 {{-- SCRIPT DE CONFIRMACIÓN DE ELIMINACIÓN --}}
 <script>
     function confirmDelete(event, productName) {
-        event.preventDefault();                                                             
-        if (confirm(`¿Estás seguro de que deseas eliminar el producto "${productName}"? Esta acción no se puede deshacer.`)) {
-            event.target.submit();
-        }                                   
+        event.preventDefault(); // Detenemos el envío automático
+        const form = event.target;
 
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `Vas a eliminar el producto: "${productName}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            // Colores personalizados para combinar con PROSERVE
+            background: '#1e293b', // Slate 800
+            color: '#ffffff',
+            confirmButtonColor: '#ef4444', // Red 400 (Eliminar)
+            cancelButtonColor: '#64748b',  // Slate 500 (Cancelar)
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                popup: 'rounded-2xl border border-slate-700 shadow-2xl',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, enviamos el formulario
+                form.submit();
+            }
+        });
     }
+
+    // Opcional: Reemplazar las alertas de sesión por SweetAlert2 Toasts
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: '¡Logrado!',
+            text: "{{ session('success') }}",
+            background: '#1e293b',
+            color: '#ffffff',
+            confirmButtonColor: '#3b82f6',
+            timer: 3000
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ session('error') }}",
+            background: '#1e293b',
+            color: '#ffffff',
+            confirmButtonColor: '#3b82f6'
+        });
+    @endif
 </script>
 
 @endsection
