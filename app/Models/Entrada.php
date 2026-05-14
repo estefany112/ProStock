@@ -9,7 +9,7 @@ class Entrada extends Model
 {
     use HasFactory;
 
-    // Campos que son permitidos para asignación masiva
+    // Campos permitidos para asignación masiva
     protected $fillable = [
         'producto_id',
         'cantidad',
@@ -17,11 +17,40 @@ class Entrada extends Model
         'fecha_entrada', 
     ];
 
-    protected $dates = ['fecha_entrada'];
+    /**
+     * Ajuste para Laravel moderno:
+     * En lugar de $dates, usamos $casts para manejar la fecha automáticamente.
+     */
+    protected $casts = [
+        'fecha_entrada' => 'datetime',
+        'cantidad' => 'integer',
+    ];
 
-    // Relación con Producto (un producto puede tener muchas entradas)
+    /**
+     * Relación con Producto.
+     * Un registro de entrada pertenece a un único producto.
+     */
     public function producto()
     {
-        return $this->belongsTo(Producto::class);
+        // Añadimos withDefault para evitar errores si un producto fuera borrado por accidente
+        return $this->belongsTo(Producto::class)->withDefault([
+            'descripcion' => 'Producto eliminado',
+            'codigo' => 'N/A'
+        ]);
+    }
+
+    /**
+     * Opcional: Boot method para asignar la fecha de entrada automáticamente
+     * si no se envía en el formulario.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($entrada) {
+            if (!$entrada->fecha_entrada) {
+                $entrada->fecha_entrada = now();
+            }
+        });
     }
 }

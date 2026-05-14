@@ -1,129 +1,125 @@
 @extends('layouts.principal')
 
 @section('content')
-
 <div class="py-10 max-w-4xl mx-auto">
-    <div class="bg-white p-8 rounded-xl shadow-md">
+    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
+        <h1 class="text-2xl font-bold mb-6">📥 Registrar Entrada</h1>
 
-        {{-- HEADER --}}
-        <div class="mb-6">
-            <h1 class="text-2xl font-semibold flex items-center gap-2">
-                📥 Registrar Entrada de Producto
-            </h1>
-
-            <p class="text-sm text-gray-500 mt-1">
-                Registro de ingreso de productos al inventario – PROSERVE
-            </p>
-        </div>
-
-        {{-- MENSAJE DE ÉXITO --}}
-        @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- FORMULARIO --}}
-        <form action="{{ route('entradas.store') }}" method="POST" class="space-y-6 max-w-2xl">
+        <form action="{{ route('entradas.store') }}" method="POST">
             @csrf
 
-            {{-- PRODUCTO --}}
-            <div>
-                <label for="producto_id" class="block mb-1 font-medium">
-                    Producto
-                </label>
+            <div class="bg-slate-50 p-6 rounded-xl mb-6 border">
+                <!-- BUSCADOR -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">1. Buscar Producto</label>
+                    <input type="text" id="input_buscar" 
+                           class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" 
+                           placeholder="Escribe el nombre o código..." autocomplete="off">
+                    <span id="mensaje_estado" class="text-xs text-blue-600 mt-1 block font-bold"></span>
+                </div>
 
-                {{-- BUSCAR PRODUCTO --}}
+                <!-- SELECT DINÁMICO -->
                 <div>
-                    <input type="text"
-                        id="buscar"
-                        placeholder="Buscar por código o nombre"
-                        class="w-full border rounded-lg px-3 py-2 mb-2">
-
-                    <select name="producto_id"
-                        id="producto_select"
-                        required
-                        class="w-full border rounded-lg px-3 py-2">
-
-                        <option value="">Seleccione un producto</option>
-
-                        @foreach(\App\Models\Producto::orderBy('descripcion')->get() as $producto)
-                            <option value="{{ $producto->id }}">
-                                {{ $producto->descripcion }} | Código: {{ $producto->codigo }}
-                            </option>
-                        @endforeach
-
+                    <label class="block text-sm font-bold mb-2">2. Seleccionar Resultado</label>
+                    <select name="producto_id" id="producto_select" required 
+                            class="w-full p-3 border rounded-lg bg-white">
+                        <option value="">Esperando búsqueda...</option>
                     </select>
                 </div>
             </div>
 
-            {{-- CANTIDAD --}}
-            <div>
-                <label for="cantidad" class="block mb-1 font-medium">
-                    Cantidad
-                </label>
-                <input type="number"
-                       name="cantidad"
-                       id="cantidad"
-                       min="1"
-                       required
-                       class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200">
+            <!-- CANTIDAD Y MOTIVO -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-bold mb-2">Cantidad</label>
+                    <input type="number" name="cantidad" min="1" required class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">Motivo</label>
+                    <input type="text" name="motivo" required class="w-full p-3 border rounded-lg" placeholder="Ej: Factura #123">
+                </div>
             </div>
 
-            {{-- MOTIVO --}}
-            <div>
-                <label for="motivo" class="block mb-1 font-medium">
-                    Motivo
-                </label>
-                <input type="text"
-                       name="motivo"
-                       id="motivo"
-                       required
-                       class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200">
-            </div>
-
-            {{-- BOTONES --}}
-            <div class="flex gap-3 pt-4">
-                <button type="submit"
-                        class="bg-green-600 text-white px-6 py-2 rounded-lg shadow
-                               hover:bg-green-700 transition">
-                    Registrar Entrada
-                </button>
-
-                <a href="{{ route('entradas.index') }}"
-                   class="text-gray-600 hover:underline self-center">
-                    Cancelar
-                </a>
-            </div>
-
+            <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700">
+                Guardar Entrada
+            </button>
         </form>
-
     </div>
 </div>
-
 @endsection
 
 @section('scripts')
-
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('input_buscar');
+        const select = document.getElementById('producto_select');
+        let timer = null;
 
-const buscar = document.getElementById('buscar');
-const select = document.getElementById('producto_select');
+        if (!input || !select) {
+            alert("Error: No se encontraron los elementos en el HTML. Revisa los IDs.");
+            return;
+        }
 
-buscar.addEventListener('keyup', function(){
+        input.addEventListener('input', function() {
+            clearTimeout(timer);
+            const query = this.value.trim();
 
-    let filtro = this.value.toLowerCase();
+            if (query.length < 2) {
+                select.innerHTML = '<option value="">Esperando búsqueda...</option>';
+                return;
+            }
 
-    for(let option of select.options){
+            timer = setTimeout(() => {
+                // Forzamos la URL absoluta con el puerto actual
+                const host = window.location.origin; 
+                const url = host + "/productos/buscar?search=" + encodeURIComponent(query);
+                
+                console.log("Intentando conectar a:", url);
 
-        let texto = option.text.toLowerCase();
+                fetch(url, {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value // Añadimos esto
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Servidor respondió con error " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Datos recibidos con éxito:", data);
+                    select.innerHTML = '';
 
-        option.style.display = texto.includes(filtro) ? '' : 'none';
+                    if (data.length === 0) {
+                        select.innerHTML = '<option value="">❌ Sin resultados</option>';
+                    } else {
+                        let headerOpt = document.createElement('option');
+                        headerOpt.text = "✅ Se encontraron " + data.length + " productos. Seleccione uno:";
+                        headerOpt.value = "";
+                        select.appendChild(headerOpt);
 
-    }
+                        data.forEach(p => {
+                            let opt = document.createElement('option');
+                            opt.value = p.id;
+                            opt.text = p.descripcion.toUpperCase() + " (Stock: " + p.stock_actual + ")";
+                            select.appendChild(opt);
+                        });
+                        
+                        select.size = data.length + 1;
+                    }
+                })
+                .catch(err => {
+                    console.error("Error en Fetch:", err);
+                    alert("Error al buscar: " + err.message);
+                });
+            }, 500);
+        });
 
-});
-
+        select.addEventListener('change', function() { this.size = 0; });
+    });
 </script>
 
 @endsection

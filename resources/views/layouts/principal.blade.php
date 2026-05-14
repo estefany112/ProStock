@@ -73,6 +73,7 @@
               :class="sidebarOpen ? 'md:ml-64' : 'ml-0'">
             <div class="p-4 lg:p-8">
                 @yield('content')
+                @yield('scripts')
             </div>
         </main>
     </div>

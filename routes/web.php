@@ -37,12 +37,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // BUSCADOR EN ENTRADAS Y SALIDAS
+    Route::get('/productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
     // MÓDULOS DE SISTEMA
     Route::resource('productos', ProductoController::class);
     Route::resource('entradas', EntradaController::class);
-    Route::resource('categorias', CategoriaController::class);
     Route::resource('salidas', SalidaController::class);
+    Route::resource('categorias', CategoriaController::class);
     Route::resource('filas', FilaController::class);
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
@@ -59,9 +62,6 @@ Route::middleware(['auth'])->group(function () {
 
     // MÓDULO DE SALIDAS
     Route::resource('salidas', SalidaController::class)->middleware('permission:view_exits');
-
-    // BUSCADOR EN ENTRADAS Y SALIDAS
-    Route::get('/productos/buscar', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
     // MÓDULO DE CAJA CHICA
     Route::get('/caja', [PettyCashController::class, 'index'])->name('caja.index')->middleware('permission:caja.view');

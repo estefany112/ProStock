@@ -8,137 +8,90 @@ use Illuminate\Http\Request;
 
 class EntradaController extends Controller
 {
-     /**
-     * Mostrar el listado de todas las entradas.
+    /**
+     * Muestra el historial de entradas con buscador optimizado.
      */
     public function index(Request $request)
     {
         $query = Entrada::with([
-            'producto',
             'producto.categoria',
             'producto.fila',
             'producto.columna',
             'producto.nivel',
         ]);
 
-        // BUSCADOR
         if ($request->filled('search')) {
             $search = trim($request->search);
 
             $query->where(function ($q) use ($search) {
-
-                // Motivo de la entrada
                 $q->where('motivo', 'like', "%{$search}%")
-
-                // Datos del producto
                 ->orWhereHas('producto', function ($p) use ($search) {
                     $p->where('descripcion', 'like', "%{$search}%")
-                    ->orWhere('codigo', 'like', "%{$search}%")
-                    ->orWhere('marca', 'like', "%{$search}%")
-                    ->orWhere('ubicacion', 'like', "%{$search}%");
-                })
-
-                // Categoría
-                ->orWhereHas('producto.categoria', function ($c) use ($search) {
-                    $c->where('nombre', 'like', "%{$search}%");
-                })
-
-                // Ubicación relacional
-                ->orWhereHas('producto.fila', function ($f) use ($search) {
-                    $f->where('nombre', 'like', "%{$search}%");
-                })
-                ->orWhereHas('producto.columna', function ($c) use ($search) {
-                    $c->where('numero', 'like', "%{$search}%");
-                })
-                ->orWhereHas('producto.nivel', function ($n) use ($search) {
-                    $n->where('numero', 'like', "%{$search}%");
+                      ->orWhere('codigo', 'like', "%{$search}%");
                 });
             });
         }
 
-        $entradas = $query
-            ->orderByDesc('id')
-            ->paginate(10);
+        // Ordenamos por las más recientes primero
+        $entradas = $query->orderByDesc('id')->paginate(15);
 
         return view('entradas.index', compact('entradas'));
     }
 
     /**
-     * Mostrar el formulario para crear una nueva entrada.
+     * Formulario de creación.
+     * OPTIMIZACIÓN: Ya no cargamos Producto::all() para no saturar la RAM.
      */
     public function create()
     {
-        // Obtener todos los productos disponibles
-        $productos = Producto::all();
-        return view('entradas.create', compact('productos'));
+        // Enviamos la vista sin productos, el JS se encarga de la búsqueda dinámica
+        return view('entradas.create');
     }
 
     /**
-     * Almacenar una nueva entrada.
+     * Guarda la entrada y actualiza el stock automáticamente.
      */
     public function store(Request $request)
     {
+        // 1. Validación estricta
         $request->validate([
-            'producto_id' => 'required|exists:productos,id', // Verifica que el producto exista
-            'cantidad' => 'required|numeric|min:1',
-            'motivo' => 'required|string',
+            'producto_id' => 'required|exists:productos,id',
+            'cantidad'    => 'required|numeric|min:1',
+            'motivo'      => 'required|string|max:255',
         ]);
 
-        // Crear la entrada de inventario
-        $entrada = Entrada::create([
-            'producto_id' => $request->producto_id,
-            'cantidad' => $request->cantidad,
-            'motivo' => $request->motivo,
-        ]);
+        try {
+            // Usamos una transacción o simplemente actualizamos (más seguro en producción)
+            $producto = Producto::findOrFail($request->producto_id);
 
-        // Actualizar el stock del producto relacionado
-        $producto = Producto::find($request->producto_id);
-        $producto->stock_actual += $request->cantidad;
-        $producto->save();
+            // 2. Crear el registro de entrada
+            Entrada::create([
+                'producto_id' => $request->producto_id,
+                'cantidad'    => $request->cantidad,
+                'motivo'      => $request->motivo,
+            ]);
 
-        return redirect()->route('entradas.index')->with('success', 'Entrada registrada correctamente.');
+            // 3. Sumar al stock actual
+            $producto->increment('stock_actual', $request->cantidad);
+
+            return redirect()->route('entradas.index')
+                ->with('success', "Se han ingresado {$request->cantidad} unidades a: {$producto->descripcion}");
+
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'No se pudo registrar la entrada: ' . $e->getMessage()]);
+        }
     }
 
-
     /**
-     * Mostrar el formulario para editar una entrada.
+     * Las entradas de inventario no se deben editar ni borrar por integridad contable.
      */
     public function edit($id)
     {
-        abort(403, 'No se permite editar entradas.');
+        abort(403, 'Las entradas de inventario son registros permanentes y no se pueden editar.');
     }
 
-    /**
-     * Actualizar una entrada.
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'producto_id' => 'required|exists:productos,id',
-            'cantidad' => 'required|numeric|min:1',
-            'motivo' => 'required|string',
-        ]);
-
-        $entrada = Entrada::findOrFail($id);
-        $entrada->update([
-            'producto_id' => $request->producto_id,
-            'cantidad' => $request->cantidad,
-            'motivo' => $request->motivo,
-        ]);
-
-        // Actualizar el stock del producto
-        $producto = Producto::find($request->producto_id);
-        $producto->stock_actual += $request->cantidad;
-        $producto->save();
-
-        return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
-    }
-
-    /**
-     * Eliminar una entrada.
-     */
     public function destroy($id)
     {
-        abort(403, 'No se permite eliminar entradas.');
+        abort(403, 'No se permite eliminar registros de entrada por seguridad de auditoría.');
     }
 }
