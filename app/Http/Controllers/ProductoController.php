@@ -56,7 +56,8 @@ class ProductoController extends Controller
 
         $productos = $query
             ->orderBy('descripcion')
-            ->paginate(10);
+            ->paginate(10)
+             ->withQueryString();
 
         return view('productos.index', compact('productos'));
     }
