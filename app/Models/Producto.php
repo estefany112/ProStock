@@ -63,4 +63,15 @@ class Producto extends Model
             : null;
     }
 
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(function ($q) use ($term) {
+            $q->where('descripcion', 'like', "%{$term}%")
+            ->orWhere('codigo', 'like', "%{$term}%")
+            ->orWhere('marca', 'like', "%{$term}%")
+            ->orWhereHas('categoria', fn($c) => $c->where('nombre', 'like', "%{$term}%"));
+            // Agrega aquí las demás relaciones si son críticas
+        });
+    }
+
 }

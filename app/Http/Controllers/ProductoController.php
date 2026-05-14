@@ -19,48 +19,35 @@ class ProductoController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $query = Producto::query();
+{
+    // Añadimos 'with' para traer las relaciones en una sola consulta
+    $query = Producto::with(['categoria', 'fila', 'columna', 'nivel']);
 
-        if ($request->filled('search')) {
-            $search = trim($request->search);
+    if ($request->filled('search')) {
+        $search = trim($request->search);
 
-            $query->where(function ($q) use ($search) {
+        $query->where(function ($q) use ($search) {
+            // Campos directos de la tabla productos
+            $q->where('descripcion', 'like', "%{$search}%")
+              ->orWhere('codigo', 'like', "%{$search}%")
+              ->orWhere('marca', 'like', "%{$search}%")
+              ->orWhere('ubicacion', 'like', "%{$search}%");
 
-                $q->where('descripcion', 'like', "%{$search}%")
-                ->orWhere('codigo', 'like', "%{$search}%")
-                ->orWhere('marca', 'like', "%{$search}%")
-                ->orWhere('ubicacion', 'like', "%{$search}%");
-
-                // Categoría
-                $q->orWhereHas('categoria', function ($c) use ($search) {
-                    $c->where('nombre', 'like', "%{$search}%");
-                });
-
-                // Fila
-                $q->orWhereHas('fila', function ($f) use ($search) {
-                    $f->where('nombre', 'like', "%{$search}%");
-                });
-
-                // Columna
-                $q->orWhereHas('columna', function ($c) use ($search) {
-                    $c->where('numero', 'like', "%{$search}%");
-                });
-
-                // Nivel
-                $q->orWhereHas('nivel', function ($n) use ($search) {
-                    $n->where('numero', 'like', "%{$search}%");
-                });
-            });
-        }
-
-        $productos = $query
-            ->orderBy('descripcion')
-            ->paginate(10)
-             ->withQueryString();
-
-        return view('productos.index', compact('productos'));
+            // Búsquedas en relaciones
+            $q->orWhereHas('categoria', fn($c) => $c->where('nombre', 'like', "%{$search}%"))
+              ->orWhereHas('fila', fn($f) => $f->where('nombre', 'like', "%{$search}%"))
+              ->orWhereHas('columna', fn($c) => $c->where('numero', 'like', "%{$search}%"))
+              ->orWhereHas('nivel', fn($n) => $n->where('numero', 'like', "%{$search}%"));
+        });
     }
+
+    $productos = $query
+        ->orderBy('descripcion')
+        ->paginate(15) // Puedes subirlo a 15 o 20 ahora que es más rápido
+        ->withQueryString();
+
+    return view('productos.index', compact('productos'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -266,12 +253,20 @@ class ProductoController extends Controller
             ->with('success','Producto eliminado.');
     }
     
+    // Busca este nombre en tu ProductoController.php
     public function buscar(Request $request)
     {
         $search = $request->search;
 
+        // Si el buscador está vacío, no devolvemos nada para ahorrar recursos
+        if (!$search) {
+            return response()->json([]);
+        }
+
         $productos = Producto::where('descripcion', 'like', "%$search%")
             ->orWhere('codigo', 'like', "%$search%")
+            // Esto es lo nuevo: solo pedimos 4 datos, no los 15 o 20 que tiene la tabla
+            ->select('id', 'codigo', 'descripcion', 'stock_actual') 
             ->limit(10)
             ->get();
 

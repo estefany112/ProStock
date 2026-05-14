@@ -3,6 +3,7 @@
         type="text"
         name="search"
         value="{{ request('search') }}"
+        x-model.debounce.400ms="query"
         placeholder="{{ $placeholder }}"
         class="border rounded-lg px-3 py-2 w-64"
     >
