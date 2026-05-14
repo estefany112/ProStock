@@ -18,6 +18,10 @@ use App\Http\Controllers\PlanillaController;
 use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\HoraExtraController;
 use App\Http\Controllers\AnticipoController;
+use App\Models\Categoria;
+use App\Models\Producto;
+use App\Models\Entrada;
+use App\Models\Salida;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -105,7 +109,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/anticipos/detalle/{empleado}/{inicio}/{fin}', [AnticipoController::class, 'detalle'])->name('anticipos.detalle');
 
     // MENÚ DE PROSTOCK
-    Route::get('/prostock', function () {return view('prostock.index');})->name('prostock.index');
+    Route::get('/prostock', function () {
+        // Consultas reales a la base de datos
+        $totalProductos = Producto::count();
+        $totalCategorias = Categoria::count();
+        $entradasHoy = Entrada::whereDate('created_at', today())->count();
+        $salidasHoy = Salida::whereDate('created_at', today())->count();
+        
+        return view('prostock.index', compact(
+            'totalProductos', 
+            'totalCategorias', 
+            'entradasHoy', 
+            'salidasHoy'
+        ));
+    })->name('prostock.index');
 
     // CONTADORES DEL DASHBOARD
     Route::get('/test', function () { return view('dashboard.index', [ 'totalCategorias' => 0, 'totalProductos' => 0, 'stockTotal' => 0, 'stockBajo' => 0, ]);
