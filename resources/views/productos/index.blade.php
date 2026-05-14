@@ -181,7 +181,32 @@
                                 </td>
                                 @if(auth()->user()->hasAnyRole(['admin','compras','auditor','supervisor', 'almacen']))
                                     <td class="px-6 py-6">
-                                        <span class="text-white font-mono font-bold">Q{{ number_format($producto->precio_unitario, 2) }}</span>
+                                        {{-- Verificamos que el precio sea numérico y mayor a cero --}}
+                                        @if(isset($producto->precio_unitario) && $producto->precio_unitario > 0)
+                                            <div class="flex flex-col">
+                                                <span class="text-white font-mono font-bold tracking-tighter text-lg">
+                                                    <span class="text-blue-500/50 text-xs mr-0.5">Q</span>{{ number_format($producto->precio_unitario, 2) }}
+                                                </span>
+                                                <span class="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Precio Unitario</span>
+                                            </div>
+                                        @else
+                                            {{-- Diseño de Alerta en ROJO cuando es 0 o null --}}
+                                            <div class="flex items-center gap-3">
+                                                <div class="relative flex h-3 w-3">
+                                                    {{-- El puntito que parpadea --}}
+                                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-40"></span>
+                                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]"></span>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="text-rose-500 font-black text-[11px] uppercase tracking-[0.15em] leading-none">
+                                                        Sin Precio
+                                                    </span>
+                                                    <span class="text-[9px] text-rose-500/40 font-medium uppercase tracking-tighter mt-1">
+                                                        Dato requerido
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </td>
                                 @endif
                                 <td class="px-6 py-6 text-right">
