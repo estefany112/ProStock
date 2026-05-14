@@ -8,7 +8,7 @@
 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
     
     <h2 class="text-xl font-bold text-gray-800 mb-6">
-        Registrar Horas Extras (Quincena)
+        Registrar Bonificación Por Productividad (Quincena)
     </h2>
 
     @if(session('success'))
@@ -79,7 +79,7 @@
         <!-- SUBMIT -->
         <div class="mt-6">
             <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow transition">
-                Guardar Horas Extras
+                Guardar Bonificación Por Productividad
             </button>
         </div>
 

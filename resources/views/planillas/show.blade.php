@@ -31,7 +31,7 @@
                     <th class="p-2 text-left">Empleado</th>
                     <th class="p-2">Salario</th>
                     <th class="p-2">Bonificación</th>
-                    <th class="p-2">Horas Extras</th>
+                    <th class="p-2">Bonificación Por Productividad</th>
                     <th class="p-2">IGSS</th>
                     <th class="p-2">ISR</th>
                     <th class="px-3 py-2">Anticipos</th>

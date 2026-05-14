@@ -17,7 +17,7 @@
 <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
 
     <h2 class="text-xl font-bold text-gray-800 mb-6">
-        Historial de Horas Extras
+        Historial de Bonificaciones Por Productividad
     </h2>
 
     <!-- FILTRO -->

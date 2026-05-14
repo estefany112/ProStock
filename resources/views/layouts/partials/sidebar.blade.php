@@ -56,14 +56,14 @@
                         <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest pl-2 mb-1">Planillas</p>
                         <a href="{{ route('planillas.index') }}" class="block px-4 py-2 text-sm rounded-lg border-l-2 {{ request()->routeIs('planillas.*') ? 'border-violet-500 text-white bg-slate-900' : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">Ver Planillas</a>
                        
-                        {{-- HORAS EXTRAS DROPDOWN --}}
+                        {{-- BONIFICACIÓN POR PRODUCTIVIDAD DROPDOWN --}}
                         <div x-data="{ openHE: {{ request()->routeIs('horas-extras.*') ? 'true' : 'false' }} }">
 
                             <button @click="openHE = !openHE"
                                 class="w-full flex items-center justify-between px-4 py-1.5 text-sm pl-6 rounded-r-lg
                                 text-slate-500 hover:text-slate-300 hover:bg-slate-900/50 transition">
 
-                                <span>Horas Extras</span>
+                                <span>Boni-Productiv</span>
 
                                 <svg class="w-3 h-3 transition-transform duration-300"
                                     :class="openHE ? 'rotate-180' : ''"
