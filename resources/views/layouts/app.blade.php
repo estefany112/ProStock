@@ -18,6 +18,26 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .custom-sidebar-scroll::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .custom-sidebar-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 
     <script>
