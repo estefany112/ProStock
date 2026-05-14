@@ -29,13 +29,6 @@
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(8px);
     }
-
-    .bg-mesh {
-        background-color: #0f172a;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
-    }
 </style>
 
 <div class="min-h-screen bg-mesh py-12 px-6 relative overflow-hidden">
