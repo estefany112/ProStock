@@ -22,6 +22,7 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Entrada;
 use App\Models\Salida;
+use App\Http\Controllers\ClienteController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -53,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('filas', FilaController::class);
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
+    Route::resource('clientes', ClienteController::class);
 
     // MÓDULO DE ADMIN
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');

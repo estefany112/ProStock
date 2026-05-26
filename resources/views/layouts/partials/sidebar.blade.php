@@ -19,6 +19,80 @@
             <span class="font-medium">Dashboard</span>
         </a>
 
+        {{-- GESTIÓN COMERCIAL --}}
+        @if(auth()->user()->hasAnyRole(['admin','ventas']))
+
+            <div 
+                x-data="{ openComercial: false }"
+                class="space-y-1"
+            >
+
+                <button 
+                    @click="openComercial = !openComercial"
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl 
+                    text-slate-400 hover:text-cyan-400 hover:bg-slate-900 
+                    transition-all duration-300"
+                >
+
+                    <span class="flex items-center gap-3">
+
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round" 
+                                stroke-width="2" 
+                                d="M17 20h5V4H2v16h5m10 0v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m12 0H5m12 0h-2m-8 0H5m4-10a4 4 0 110-8 4 4 0 010 8zm8 4h.01"
+                            />
+                        </svg>
+
+                        <span class="font-medium">
+                            Gestión Comercial
+                        </span>
+
+                    </span>
+
+                    <svg 
+                        class="w-4 h-4 transition-transform duration-300"
+                        :class="openComercial ? 'rotate-180' : ''"
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                        />
+
+                    </svg>
+
+                </button>
+
+                <div 
+                    x-show="openComercial" 
+                    x-collapse 
+                    class="pl-4 space-y-1"
+                >
+
+                    {{-- CLIENTES --}}
+                    <a href="{{ route('clientes.index') }}"
+                        class="block px-4 py-2 text-sm rounded-lg border-l-2
+                        {{ request()->routeIs('clientes.*')
+                        ? 'border-cyan-500 text-white bg-slate-900'
+                        : 'border-slate-800 text-slate-500 hover:text-slate-300' }}">
+
+                        Clientes
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        @endif
+        
         {{-- OPERACIONES --}}
         @if(auth()->user()->hasAnyRole(['admin','almacen']))
             <div x-data="{ open: {{ request()->routeIs('solicitudes.*') || request()->routeIs('prostock.*') ? 'true' : 'false' }} }" class="space-y-1">
