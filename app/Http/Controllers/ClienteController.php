@@ -75,4 +75,48 @@ class ClienteController extends Controller
             ->route('clientes.index')
             ->with('success', 'Cliente creado correctamente');
     }
+
+    // VER CLIENTE
+    public function show(Cliente $cliente)
+    {
+        return view('clientes.show', compact('cliente'));
+    }
+
+    // FORM EDITAR
+    public function edit(Cliente $cliente)
+    {
+        return view('clientes.edit', compact('cliente'));
+    }
+
+    // ACTUALIZAR
+    public function update(Request $request, Cliente $cliente)
+    {
+        $request->validate([
+
+            'tipo_cliente' => 'required',
+            'nombre' => 'required|max:150',
+            'empresa' => 'nullable|max:150',
+            'nit' => 'nullable|max:50',
+            'telefono' => 'nullable|max:50',
+            'correo' => 'nullable|email',
+            'direccion' => 'nullable',
+
+        ]);
+
+        $cliente->update($request->all());
+
+        return redirect()
+            ->route('clientes.index')
+            ->with('success', 'Cliente actualizado correctamente');
+    }
+
+    // ELIMINAR
+    public function destroy(Cliente $cliente)
+    {
+        $cliente->delete();
+
+        return redirect()
+            ->route('clientes.index')
+            ->with('success', 'Cliente eliminado correctamente');
+    }
 }
