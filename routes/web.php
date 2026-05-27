@@ -23,6 +23,8 @@ use App\Models\Producto;
 use App\Models\Entrada;
 use App\Models\Salida;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CotizacionController;
+use App\Http\Controllers\EmpresaConfigController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -55,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('columnas', ColumnaController::class);
     Route::resource('niveles', NivelController::class);
     Route::resource('clientes', ClienteController::class);
-
     // MÓDULO DE ADMIN
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
     Route::post('/admin/users/{user}/roles', [UserController::class, 'updateRole'])->name('admin.users.roles')->middleware('permission:assign_roles');
@@ -109,6 +110,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/anticipos/guardar', [AnticipoController::class, 'storeQuincena'])->name('anticipos.guardar');
     Route::get('/anticipos/historial', [AnticipoController::class, 'historial'])->name('anticipos.historial');
     Route::get('/anticipos/detalle/{empleado}/{inicio}/{fin}', [AnticipoController::class, 'detalle'])->name('anticipos.detalle');
+
+    // MODULO DE COTIZACIONES
+    Route::get('/cotizaciones', [CotizacionController::class, 'index'])->name('cotizaciones.index');
+    Route::get('/cotizaciones/create', [CotizacionController::class, 'create'])->name('cotizaciones.create');
+    Route::post('/cotizaciones', [CotizacionController::class, 'store'])->name('cotizaciones.store');
+    Route::get('/cotizaciones/{cotizacion}', [CotizacionController::class, 'show'])->name('cotizaciones.show');
+    Route::get('/cotizaciones/{cotizacion}/edit', [CotizacionController::class, 'edit'])->name('cotizaciones.edit');
+    Route::put('/cotizaciones/{cotizacion}', [CotizacionController::class, 'update'])->name('cotizaciones.update');
+    Route::delete('/cotizaciones/{cotizacion}', [CotizacionController::class, 'destroy'])->name('cotizaciones.destroy');
+
+    // MÓDULO DE CONFIGURACIÓN DE EMPRESA
+    Route::get('/configuracion-empresa', [EmpresaConfigController::class, 'edit'])->name('empresa.edit');
+    Route::put('/configuracion-empresa', [EmpresaConfigController::class, 'update'])->name('empresa.update');
 
     // MENÚ DE PROSTOCK
     Route::get('/prostock', function () {

@@ -23,11 +23,6 @@ class Cliente extends Model
         'direccion',
     ];
 
-     public function cotizaciones(): HasMany
-    {
-        return $this->hasMany(Cotizacion::class);
-    }
-
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
@@ -39,6 +34,16 @@ class Cliente extends Model
         return $this->empresa
             ? $this->empresa . ' - ' . $this->nombre
             : $this->nombre;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELACIONES
+    |--------------------------------------------------------------------------
+    */
+    public function cotizaciones()
+    {
+        return $this->hasMany(Cotizacion::class);
     }
 }
 
