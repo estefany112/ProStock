@@ -15,8 +15,17 @@ class Cotizacion extends Model
         'subtotal',
         'iva',
         'total',
+        'tipo',
         'estado',
         'creada_por',
+        'lugar_entrega',
+        'tiempo_entrega',
+        'garantia',
+        'forma_pago',
+        'validez_oferta',
+        'clausula_despedida',
+        'nombre_firmante',    
+        'total_letras',
     ];
 
 
