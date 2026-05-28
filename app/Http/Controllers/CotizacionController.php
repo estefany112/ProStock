@@ -47,7 +47,11 @@ class CotizacionController extends Controller
     {
         $empresa = EmpresaConfig::find(1) ?? new EmpresaConfig();
         $clientes = Cliente::orderBy('nombre')->get();
-        return view('cotizaciones.create', compact('clientes', 'empresa'));
+
+        $itemsComerciales = collect([]); 
+        $detallesTecnicos = collect([]);
+
+        return view('cotizaciones.create', compact('clientes', 'empresa', 'itemsComerciales', 'detallesTecnicos'));
     }
 
     /**
