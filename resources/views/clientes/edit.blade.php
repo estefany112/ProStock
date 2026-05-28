@@ -142,6 +142,11 @@
                             Empresa Pública
                         </option>
 
+                        <option value="Estatal"
+                            {{ old('tipo_cliente', $cliente->tipo_cliente) == 'Estatal' ? 'selected' : '' }}>
+                            Estatal
+                        </option>
+
                     </select>
 
                 </div>
