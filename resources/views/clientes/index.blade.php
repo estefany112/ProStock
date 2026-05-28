@@ -199,13 +199,15 @@
 
                                 {{-- TIPO --}}
                                 <td class="px-6 py-6">
-
-                                    <span class="px-3 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold whitespace-nowrap">
-
+                                    <span class="px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap
+                                        {{ $cliente->tipo_cliente === 'Empresa Privada' 
+                                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' 
+                                            : ($cliente->tipo_cliente === 'Empresa Pública' 
+                                                ? 'bg-green-500/10 border-green-500/20 text-green-400' 
+                                                : 'bg-slate-500/10 border-slate-500/20 text-slate-400') 
+                                        }}">
                                         {{ $cliente->tipo_cliente }}
-
                                     </span>
-
                                 </td>
 
                                 {{-- NOMBRE --}}
