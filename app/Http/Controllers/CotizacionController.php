@@ -366,9 +366,13 @@ class CotizacionController extends Controller
             compact('cotizacion', 'empresa')
         )->setPaper('letter');
 
-        return $pdf->stream(
-            'Cotizacion-' . $cotizacion->folio . '.pdf'
-        );
+        $nombreArchivo = 'COTIZACIÓN_' . $cotizacion->folio . '.pdf';
+
+        // Usamos 'stream' pero con los encabezados forzados para el nombre
+        return $pdf->stream($nombreArchivo, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $nombreArchivo . '"'
+        ]);
     }
 
 }
