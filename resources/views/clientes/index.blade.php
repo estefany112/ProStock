@@ -198,17 +198,16 @@
                             <tr class="table-row-hover transition-all group">
 
                                 {{-- TIPO --}}
-                                <td class="px-6 py-6">
-                                    <span class="px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap
-                                        {{ $cliente->tipo_cliente === 'Empresa Privada' 
-                                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' 
-                                            : ($cliente->tipo_cliente === 'Empresa Pública' 
-                                                ? 'bg-green-500/10 border-green-500/20 text-green-400' 
-                                                : 'bg-slate-500/10 border-slate-500/20 text-slate-400') 
-                                        }}">
-                                        {{ $cliente->tipo_cliente }}
-                                    </span>
-                                </td>
+                               <td class="px-6 py-6">
+                                <span class="px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap
+                                    {{ $cliente->tipo_cliente === 'Empresa Privada' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : '' }}
+                                    {{ $cliente->tipo_cliente === 'Empresa Pública' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : '' }}
+                                    {{ $cliente->tipo_cliente === 'Estatal'         ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : '' }}
+                                    {{ $cliente->tipo_cliente === 'Particular'      ? 'bg-slate-500/10 border-slate-500/20 text-slate-400' : '' }}
+                                ">
+                                    {{ $cliente->tipo_cliente }}
+                                </span>
+                            </td>
 
                                 {{-- NOMBRE --}}
                                 <td class="px-6 py-6">

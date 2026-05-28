@@ -92,6 +92,9 @@
                         <option value="Empresa Pública" {{ old('tipo_cliente') == 'Empresa Pública' ? 'selected' : '' }}>
                             Empresa Pública
                         </option>
+                        <option value="Estatal" {{ old('tipo_cliente') == 'Estatal' ? 'selected' : '' }}>
+                            Estatal
+                        </option>
                     </select>
                 </div>
 
