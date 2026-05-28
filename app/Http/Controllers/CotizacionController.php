@@ -8,6 +8,7 @@ use App\Models\EmpresaConfig;
 use App\Models\ItemCotizacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionController extends Controller
 {
@@ -70,6 +71,7 @@ class CotizacionController extends Controller
             'clausula_despedida'=> 'nullable|string',
             'nombre_firmante'   => 'nullable|string',
             'total_letras'      => 'required|string',
+
         ]);
 
         DB::beginTransaction();
@@ -79,7 +81,7 @@ class CotizacionController extends Controller
             $cotizacion->folio = $this->generarFolio(); // Corregido el llamado sin parámetros
             $cotizacion->cliente_id = $request->cliente_id;
             $cotizacion->fecha_emision = $request->fecha_emision;
-            $cotizacion->estado = 'pendiente';
+            $cotizacion->estado = 'borrador';
             $cotizacion->creada_por = auth()->id() ?? 1;
             
             // Campos comerciales individuales añadidos
@@ -115,16 +117,18 @@ class CotizacionController extends Controller
             }
 
             // 2. Guardar Detalles de Servicios o Materiales Técnicos (Monto 0)
-            if ($request->has('detalles')) {
+            if (!empty($request->detalles)) {
                 foreach ($request->detalles as $detalle) {
+
                     if (!empty($detalle['descripcion'])) {
+
                         $cotizacion->items()->create([
                             'cantidad' => 1,
                             'unidad_medida' => 'N/A',
                             'descripcion' => $detalle['descripcion'],
                             'precio_unitario' => 0,
                             'total' => 0,
-                            'tipo' => $detalle['tipo'] // 'servicio' o 'material'
+                            'tipo' => $detalle['tipo'], 
                         ]);
                     }
                 }
@@ -138,8 +142,8 @@ class CotizacionController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('cotizaciones.index')
-                ->with('success', 'Cotización creada correctamente');
+                ->route('cotizaciones.show', $cotizacion)
+                ->with('success', 'Cotización registrada correctamente');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -176,6 +180,10 @@ class CotizacionController extends Controller
         $itemsComerciales = $cotizacion->items->where('tipo', 'comercial');
         $detallesTecnicos = $cotizacion->items->whereIn('tipo', ['servicio', 'material']);
 
+        if ($cotizacion->estaCongelada()) {
+            abort(403, 'La cotización ya está congelada.');
+        }
+
         return view('cotizaciones.edit', compact('cotizacion', 'clientes', 'empresa', 'itemsComerciales', 'detallesTecnicos'));
     }
 
@@ -184,6 +192,11 @@ class CotizacionController extends Controller
      */
     public function update(Request $request, Cotizacion $cotizacion)
     {
+      
+        if ($cotizacion->estaCongelada()) {
+            abort(403, 'La cotización está bloqueada.');
+        }
+
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'fecha_emision' => 'required|date',
@@ -193,6 +206,9 @@ class CotizacionController extends Controller
             'items.*.descripcion' => 'required|string',
             'items.*.precio_unitario' => 'required|numeric|min:0',
             'total_letras' => 'required|string',
+            'detalles' => 'nullable|array',
+            'detalles.*.tipo' => 'required|in:servicio,material',
+            'detalles.*.descripcion' => 'required|string',
         ]);
 
         DB::beginTransaction();
@@ -236,13 +252,14 @@ class CotizacionController extends Controller
             if ($request->has('detalles')) {
                 foreach ($request->detalles as $detalle) {
                     if (!empty($detalle['descripcion'])) {
+                        $tipoGuardar = ($detalle['tipo'] === 'material') ? 'material' : 'servicio';
                         $cotizacion->items()->create([
-                            'cantidad' => 1,
+                            'cantidad' => 0, // Técnica: Cantidad 0 para no alterar totales
                             'unidad_medida' => 'N/A',
                             'descripcion' => $detalle['descripcion'],
                             'precio_unitario' => 0,
                             'total' => 0,
-                            'tipo' => $detalle['tipo']
+                            'tipo' => $tipoGuardar
                         ]);
                     }
                 }
@@ -256,8 +273,8 @@ class CotizacionController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('cotizaciones.index')
-                ->with('success', 'Cotización actualizada de forma correcta.');
+                ->route('cotizaciones.show', $cotizacion)
+                ->with('success', 'Cotización actualizada correctamente.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -272,6 +289,10 @@ class CotizacionController extends Controller
      */
     public function destroy(Cotizacion $cotizacion)
     {
+        if ($cotizacion->estaCongelada()) {
+            abort(403, 'No puede eliminar una cotización congelada.');
+        }
+        
         try {
             $cotizacion->items()->delete();
             $cotizacion->delete();
@@ -312,4 +333,42 @@ class CotizacionController extends Controller
 
         return "{$userCode}.{$mes}{$correlativo}.{$anioCorto}";
     }
+
+    public function congelar(Cotizacion $cotizacion)
+    {
+        if ($cotizacion->estado === 'congelada') {
+
+            return back()->with('error', 'La cotización ya está congelada.');
+        }
+
+        $cotizacion->update([
+            'estado' => 'congelada',
+            'fecha_congelacion' => now(),
+            'congelada_por' => auth()->id(),
+        ]);
+
+        return redirect()
+            ->route('cotizaciones.show', $cotizacion)
+            ->with('success', 'Cotización congelada correctamente.');
+    }
+
+    public function pdf(Cotizacion $cotizacion)
+    {
+        $cotizacion->load([
+            'cliente',
+            'items'
+        ]);
+
+        $empresa = EmpresaConfig::first();
+
+        $pdf = Pdf::loadView(
+            'cotizaciones.pdf',
+            compact('cotizacion', 'empresa')
+        )->setPaper('letter');
+
+        return $pdf->stream(
+            'Cotizacion-' . $cotizacion->folio . '.pdf'
+        );
+    }
+
 }

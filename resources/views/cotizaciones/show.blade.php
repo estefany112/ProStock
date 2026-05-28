@@ -18,12 +18,29 @@
                 <a href="{{ route('cotizaciones.index') }}" class="bg-white/5 border border-white/10 px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all hover:bg-white/10 text-slate-300">
                     ← Volver
                 </a>
+                @if(!$cotizacion->estaCongelada())
                 <a href="{{ route('cotizaciones.edit', $cotizacion->id) }}" class="bg-indigo-600 px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all hover:bg-indigo-500 text-white">
                     Editar Ficha
                 </a>
-                <button onclick="window.print();" class="bg-fuchsia-600 px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all hover:bg-fuchsia-500 text-white">
-                    Imprimir Documento
-                </button>
+                @endif
+                <a href="{{ route('cotizaciones.pdf', $cotizacion) }}"
+                target="_blank"
+                class="bg-cyan-700 hover:bg-cyan-600 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider">
+                    Descargar PDF
+                </a>
+
+                @if($cotizacion->estado === 'borrador')
+
+                <form action="{{ route('cotizaciones.congelar', $cotizacion) }}" method="POST">
+                    @csrf
+
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold uppercase text-xs">
+                        Confirmar y Congelar Cotización
+                    </button>
+                </form>
+
+                @endif
             </div>
         </div>
 
@@ -111,20 +128,16 @@
             <h4 class="text-xs font-black tracking-widest text-slate-400 uppercase border-b border-white/5 pb-2 mb-4">3. DETALLE DEL SERVICIO / MATERIAL</h4>
             <div class="space-y-3">
                 @php $servCount = 0; @endphp
-                @foreach($detallesTecnicos as $det)
-                    @if($det->tipo === 'servicio')
-                        @php $servCount++; @endphp
-                        <div class="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-xs md:text-sm">
-                            <span class="font-black text-indigo-400 block mb-1 uppercase text-[10px] tracking-wider">SERVICIO {{ chr(96 + $servCount) }})</span>
-                            <p class="text-slate-200 whitespace-pre-wrap font-sans leading-relaxed">{{ $det->descripcion }}</p>
-                        </div>
-                    @elseif($det->tipo === 'material')
-                        <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-xs md:text-sm">
-                            <span class="font-black text-emerald-400 block mb-1 uppercase text-[10px] tracking-wider">MATERIAL</span>
-                            <p class="text-slate-200 whitespace-pre-wrap font-sans leading-relaxed">{{ $det->descripcion }}</p>
-                        </div>
-                    @endif
-                @endforeach
+                @forelse($detallesTecnicos as $det)
+                    <div class="p-4 rounded-xl border {{ $det->tipo == 'material' ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-indigo-500/5 border-indigo-500/10' }}">
+                        <span class="block uppercase text-[10px] font-black {{ $det->tipo == 'material' ? 'text-emerald-400' : 'text-indigo-400' }}">
+                            {{ ucfirst($det->tipo) }} <!-- Esto mostrará 'Material' o 'Servicio' automáticamente -->
+                        </span>
+                        <p class="text-slate-200">{{ $det->descripcion }}</p>
+                    </div>
+                @empty
+                    <p class="text-slate-500 text-xs">No se registraron servicios ni materiales.</p>
+                @endforelse
             </div>
         </div>
 
@@ -195,3 +208,4 @@
     </div>
 </div>
 @endsection
+

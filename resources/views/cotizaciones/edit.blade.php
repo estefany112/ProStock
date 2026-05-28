@@ -151,21 +151,32 @@
 </div>
 
 <script>
-    let itemIndex = 0;
-    let detalleIndex = 0;
+    let itemIndex = {{ $itemsComerciales->count() }};
+    let detalleIndex = {{ $detallesTecnicos->count() }};
     let contadorServicio = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
         // 1. Inyectar ítems comerciales guardados desde la BD
+        detalleIndex = 0;
+        contadorServicio = 0;
+
         @foreach($itemsComerciales as $it)
-            inyectarItem({{ $it->cantidad }}, '{{ $it->unidad_medida }}', '{{ addslashes($it->descripcion) }}', {{ $it->precio_unitario }});
+            inyectarItem(
+                {{ $it->cantidad }},
+                @json($it->unidad_medida),
+                @json($it->descripcion),
+                {{ $it->precio_unitario }}
+            );
         @endforeach
 
         if(itemIndex === 0) agregarItem();
 
         // 2. Inyectar especificaciones técnicas guardadas
         @foreach($detallesTecnicos as $dt)
-            inyectarDetalle('{{ $dt->tipo }}', '{{ addslashes($dt->descripcion) }}');
+            inyectarDetalle(
+                "{{ $dt->tipo }}",
+                `{!! addslashes($dt->descripcion) !!}`
+            );
         @endforeach
 
         calcularTotalesGlobales();
@@ -249,33 +260,22 @@
 
     function inyectarDetalle(tipo, desc) {
         const container = document.getElementById('detalles-container');
-        if (tipo === 'servicio') {
-            contadorServicio++;
-            const letra = obtenerLetra(contadorServicio);
-            const html = `
-                <div class="detalle-item bg-white/[0.03] border border-white/10 p-4 rounded-xl">
-                    <input type="hidden" name="detalles[${detalleIndex}][tipo]" value="servicio">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-indigo-400 font-bold text-xs uppercase">SERVICIO ${letra})</span>
-                        <button type="button" onclick="this.closest('.detalle-item').remove(); recalcularServicio();" class="text-red-400 text-xs font-bold">Eliminar</button>
-                    </div>
-                    <textarea name="detalles[${detalleIndex}][descripcion]" class="w-full bg-slate-950/40 border border-white/10 p-3 rounded-xl text-white text-sm" rows="2" required>${desc}</textarea>
-                </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            detalleIndex++;
-        } else {
-            const html = `
-                <div class="detalle-item bg-white/[0.03] border border-white/10 p-4 rounded-xl">
-                    <input type="hidden" name="detalles[${detalleIndex}][tipo]" value="material">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-emerald-400 font-bold text-xs uppercase">MATERIAL</span>
-                        <button type="button" onclick="this.closest('.detalle-item').remove()" class="text-red-400 text-xs font-bold">Eliminar</button>
-                    </div>
-                    <textarea name="detalles[${detalleIndex}][descripcion]" class="w-full bg-slate-950/40 border border-white/10 p-3 rounded-xl text-white text-sm" rows="3" required>${desc}</textarea>
-                </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            detalleIndex++;
-        }
+        
+        // Usamos un template literal para asegurar que el índice sea único y no se sobreescriba
+        const html = `
+            <div class="detalle-item bg-white/[0.03] border border-white/10 p-4 rounded-xl mb-4">
+                <input type="hidden" name="detalles[${detalleIndex}][tipo]" value="${tipo}">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-${tipo === 'servicio' ? 'indigo' : 'emerald'}-400 font-bold text-xs uppercase">
+                        ${tipo === 'servicio' ? 'SERVICIO' : 'MATERIAL'}
+                    </span>
+                    <button type="button" onclick="this.closest('.detalle-item').remove(); recalcularServicio();" class="text-red-400 text-xs font-bold">Eliminar</button>
+                </div>
+                <textarea name="detalles[${detalleIndex}][descripcion]" class="w-full bg-slate-950/40 border border-white/10 p-3 rounded-xl text-white text-sm" rows="2" required>${desc}</textarea>
+            </div>`;
+        
+        container.insertAdjacentHTML('beforeend', html);
+        detalleIndex++; // Asegúrate de que este contador siempre aumente
     }
 
     function obtenerLetra(index) {

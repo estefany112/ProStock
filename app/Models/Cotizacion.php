@@ -54,6 +54,12 @@ class Cotizacion extends Model
         return $this->belongsTo(User::class, 'creada_por');
     }
 
+    // Verificar si la cotización está congelada
+    public function estaCongelada()
+    {
+        return $this->estado === 'congelada';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | FUNCIONES

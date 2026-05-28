@@ -119,6 +119,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cotizaciones/{cotizacion}/edit', [CotizacionController::class, 'edit'])->name('cotizaciones.edit');
     Route::put('/cotizaciones/{cotizacion}', [CotizacionController::class, 'update'])->name('cotizaciones.update');
     Route::delete('/cotizaciones/{cotizacion}', [CotizacionController::class, 'destroy'])->name('cotizaciones.destroy');
+    Route::post('/cotizaciones/{cotizacion}/congelar',
+    [CotizacionController::class, 'congelar'])
+    ->name('cotizaciones.congelar');
+    Route::get('/cotizaciones/{cotizacion}/pdf',
+    [CotizacionController::class, 'pdf'])
+    ->name('cotizaciones.pdf');
 
     // MÓDULO DE CONFIGURACIÓN DE EMPRESA
     Route::get('/configuracion-empresa', [EmpresaConfigController::class, 'edit'])->name('empresa.edit');

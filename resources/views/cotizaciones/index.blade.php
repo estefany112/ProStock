@@ -88,7 +88,7 @@
                 <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                     <select name="estado" onchange="this.form.submit()" class="w-full sm:w-44 bg-slate-950/60 border border-white/5 p-3 rounded-xl text-slate-300 text-sm outline-none focus:border-fuchsia-500 transition-all">
                         <option value="">Todos los estados</option>
-                        <option value="pendiente" {{ request('estado') == 'pendiente' ? 'selected' : '' }}>Pendientes</option>
+                        <option value="borrador" {{ request('estado') == 'borrador' ? 'selected' : '' }}>Borradores</option>
                         <option value="aceptada" {{ request('estado') == 'aceptada' ? 'selected' : '' }}>Aceptadas</option>
                         <option value="rechazada" {{ request('estado') == 'rechazada' ? 'selected' : '' }}>Rechazadas</option>
                         <option value="procesada" {{ request('estado') == 'procesada' ? 'selected' : '' }}>Procesadas</option>
@@ -141,9 +141,9 @@
                                 {{-- ESTADO (Badge semántico dinámico basado en tu ENUM) --}}
                                 <td class="p-5 text-center">
                                     <span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider inline-block
-                                        @if($cotizacion->estado == 'aceptada') bg-emerald-500/10 border border-emerald-500/20 text-emerald-400
-                                        @elseif($cotizacion->estado == 'pendiente') bg-amber-500/10 border border-amber-500/20 text-amber-400
-                                        @elseif($cotizacion->estado == 'procesada') bg-cyan-500/10 border border-cyan-500/20 text-cyan-400
+                                        @if($cotizacion->estado == 'congelada') bg-emerald-500/10 border border-emerald-500/20 text-emerald-400
+                                        @elseif($cotizacion->estado == 'borrador') bg-amber-500/10 border border-amber-500/20 text-amber-400
+                                        @elseif($cotizacion->estado == 'anulada') bg-cyan-500/10 border border-cyan-500/20 text-cyan-400
                                         @else bg-rose-500/10 border border-rose-500/20 text-rose-400 @endif">
                                         {{ $cotizacion->estado }}
                                     </span>
@@ -160,12 +160,14 @@
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                         </a>
 
+                                        @if(!$cotizacion->estaCongelada())
                                         {{-- BOTÓN: EDIT --}}
                                         <a href="{{ route('cotizaciones.edit', $cotizacion) }}" 
                                            class="p-2 bg-white/5 border border-white/5 rounded-xl hover:bg-amber-500/20 hover:border-amber-500/30 text-slate-400 hover:text-amber-400 transition-all"
                                            title="Modificar Cotización">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                         </a>
+                                        @endif
 
                                         {{-- BOTÓN: DESTROY (Con confirmación preventiva nativa) --}}
                                         <form action="{{ route('cotizaciones.destroy', $cotizacion) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar la cotización {{ $cotizacion->folio }} permanentemente de la base de datos?');" class="inline-block">

@@ -15,6 +15,7 @@ class ItemCotizacion extends Model
         'descripcion',
         'precio_unitario',
         'total',
+        'tipo'
     ];
 
         /*

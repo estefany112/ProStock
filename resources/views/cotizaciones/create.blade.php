@@ -243,8 +243,8 @@
 </div>
 
 <script>
-    let itemIndex = 0;
-    let detalleIndex = 0;
+    let itemIndex = {{ count($itemsComerciales) }};
+    let detalleIndex = {{ count($detallesTecnicos) }};
     let contadorServicio = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
