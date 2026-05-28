@@ -89,9 +89,8 @@
                     <select name="estado" onchange="this.form.submit()" class="w-full sm:w-44 bg-slate-950/60 border border-white/5 p-3 rounded-xl text-slate-300 text-sm outline-none focus:border-fuchsia-500 transition-all">
                         <option value="">Todos los estados</option>
                         <option value="borrador" {{ request('estado') == 'borrador' ? 'selected' : '' }}>Borradores</option>
-                        <option value="aceptada" {{ request('estado') == 'aceptada' ? 'selected' : '' }}>Aceptadas</option>
-                        <option value="rechazada" {{ request('estado') == 'rechazada' ? 'selected' : '' }}>Rechazadas</option>
-                        <option value="procesada" {{ request('estado') == 'procesada' ? 'selected' : '' }}>Procesadas</option>
+                        <option value="congelada" {{ request('estado') == 'congelada' ? 'selected' : '' }}>Congeladas</option>
+                        <option value="rechazada" {{ request('estado') == 'anulada' ? 'selected' : '' }}>Anuladas</option>
                     </select>
                 </div>
             </form>
