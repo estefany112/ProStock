@@ -25,7 +25,7 @@
             </div>
 
             {{-- FORMULARIO --}}
-            <form action="{{ route('productos.update', $producto) }}" 
+            <form action="{{ route('productos.update', [$producto->id, 'page' => request('page'), 'search' => request('search')]) }}" 
                   method="POST" 
                   enctype="multipart/form-data" 
                   class="p-8 space-y-10 text-slate-700">
@@ -171,7 +171,8 @@
 
                 {{-- ACCIONES --}}
                 <div class="flex items-center justify-end gap-6 pt-6">
-                    <a href="{{ route('productos.index') }}" class="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors">
+                    <a href="{{ route('productos.index', request()->query()) }}"
+                    class="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors">
                         Cancelar
                     </a>
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-blue-900/20 transition-all active:scale-95">

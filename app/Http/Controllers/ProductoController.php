@@ -226,11 +226,7 @@ class ProductoController extends Controller
 
         $producto->update($data);
 
-        return redirect()
-            ->route('productos.index', [
-            'search' => $request->search,
-            'page' => $request->page
-        ])
+       return redirect()->route('productos.index', $request->query())
         ->with('success', 'Producto actualizado correctamente.');
     }
 
@@ -246,7 +242,7 @@ class ProductoController extends Controller
         // Eliminar imagen si existe
         if ($producto->image) {
             Storage::disk('public')->delete($producto->image);
-        }
+        } 
         $producto->delete();
 
         return redirect()->route('productos.index')
