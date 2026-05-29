@@ -70,7 +70,7 @@ private function generarPlanilla($planilla)
     ->where('id', '!=', 13)
     ->get();
     $ultimoCorrelativo = DB::table('planilla_detalles')->lockForUpdate()->max('correlativo') ?? 0;
-    $correlativo = $ultimoCorrelativo;
+    $correlativo = $ultimoCorrelativo+1;
 
     foreach($empleados as $empleado){
 
