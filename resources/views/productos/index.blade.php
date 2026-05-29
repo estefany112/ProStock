@@ -97,7 +97,7 @@
                     {{-- El componente original con estilos inyectados --}}
                     <div class="flex-1">
                         <x-search-bar 
-                            action="{{ route('productos.index') }}" 
+                            action="{{ route('productos.index', request()->query()) }}" 
                             placeholder="Escribe código, marca o descripción para filtrar..." 
                             class="bg-transparent border-none text-white placeholder-slate-500 focus:ring-0 w-full text-lg font-medium tracking-tight"
                         />
@@ -204,7 +204,7 @@
                                 @endif
                                 <td class="px-6 py-6 text-right">
                                     <div class="flex justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                                        <a href="{{ route('productos.show', $producto->id) }}" class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></a>
+                                        <a href="{{ route('productos.show', [$producto->id] + request()->query()) }}" class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></a>
                                         @if(auth()->user()->hasPermission('edit_products'))
                                             <a href="{{ route('productos.edit', [$producto->id] + request()->query()) }}" class="p-2 text-amber-400 hover:bg-amber-400/10 rounded-xl transition-all"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></a>
                                         @endif

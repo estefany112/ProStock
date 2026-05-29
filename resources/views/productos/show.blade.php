@@ -7,7 +7,7 @@
         
         {{-- BOTÓN VOLVER SUTIL --}}
         <div class="mb-6">
-            <a href="{{ route('productos.index') }}" class="inline-flex items-center text-slate-400 hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">
+            <a href="{{ route('productos.index', request()->query()) }}" class="inline-flex items-center text-slate-400 hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -105,7 +105,7 @@
                     {{-- BOTÓN DE ACCIÓN --}}
                     <div class="mt-auto flex items-center gap-4">
                         @if(auth()->user()->hasPermission('edit_products'))
-                            <a href="{{ route('productos.edit', $producto) }}"
+                            <a href="{{ route('productos.edit', [$producto->id] + request()->query()) }}"
                                class="flex-1 bg-slate-900 text-white text-center py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-200">
                                 Editar Información
                             </a>
