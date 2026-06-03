@@ -113,25 +113,48 @@ $materiales = $cotizacion->items->where('tipo','material');
             </tr>
         @endforeach
         <!-- Fila del TOTAL -->
-            <tr>
-                <td colspan="4" align="right" style="font-weight:bold; background:#0c4a6e; color:white; padding: 8px;">
-                    TOTAL IVA INCLUIDO.  
-                </td>
-                <td align="center" style="font-weight:bold; background:#0c4a6e; color:white; padding: 8px;">
-                    Q {{ number_format($cotizacion->total, 2) }}
-                </td>
-            </tr>
+        <tr>
+            <td colspan="4"
+                style="
+                    background:#0c4a6e;
+                    color:white;
+                    font-weight:bold;
+                    text-align:right;
+                    padding:12px;
+                    font-size:12px;
+                ">
+                TOTAL IVA INCLUIDO
+            </td>
 
+            <td
+                style="
+                    background:#0c4a6e;
+                    color:white;
+                    font-weight:bold;
+                    text-align:center;
+                    padding:12px;
+                    font-size:12px;
+                    white-space:nowrap;
+                ">
+                Q {{ number_format($cotizacion->total, 2) }}
+            </td>
+        </tr>
+      
             <!-- Fila de TOTAL EN LETRAS -->
             <tr>
-                <td style="border: 1px solid #e5e7eb;"></td>
-                <td colspan="1" style="padding: 8px; font-weight: bold; border: 1px solid #e5e7eb;">
-                    Total en letras
-                </td>
-                <td colspan="3" style="padding: 8px; font-weight: bold; border: 1px solid #e5e7eb;">
+                <td colspan="5"
+                    style="
+                        border:1px solid #d6d3d1;
+                        padding:12px;
+                        background:#f8fafc;
+                    ">
+                    <strong style="color:#0c4a6e;">
+                        TOTAL EN LETRAS:
+                    </strong>
                     {{ strtoupper($cotizacion->total_letras) }}
                 </td>
             </tr>
+            <br>
         </tbody>
     </table>
 
