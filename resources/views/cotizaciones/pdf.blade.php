@@ -98,7 +98,7 @@ $materiales = $cotizacion->items->where('tipo','material');
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Cant.</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Unidad de Medida</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Descripción</th>
-                <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">P/U</th>
+                <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Precio Unitario.    </th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Total</th>
             </tr>
         </thead>
@@ -109,13 +109,13 @@ $materiales = $cotizacion->items->where('tipo','material');
                 <td align="center">{{ $item->unidad_medida }}</td>
                 <td align="center">{{ $item->descripcion }}</td>
                 <td align="center">Q {{ number_format($item->precio_unitario, 2) }}</td>
-                <td align="center" style="font-weight:bold;">Q {{ number_format($item->total, 2) }}</td>
+                <td align="center" style="font-weight:bold;">Q{{ number_format($item->total, 2) }}</td>
             </tr>
         @endforeach
         <!-- Fila del TOTAL -->
             <tr>
                 <td colspan="4" align="right" style="font-weight:bold; background:#0c4a6e; color:white; padding: 8px;">
-                    TOTAL IVA INCLUIDO
+                    TOTAL IVA INCLUIDO.  
                 </td>
                 <td align="center" style="font-weight:bold; background:#0c4a6e; color:white; padding: 8px;">
                     Q {{ number_format($cotizacion->total, 2) }}
