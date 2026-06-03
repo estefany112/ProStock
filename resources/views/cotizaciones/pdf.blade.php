@@ -98,7 +98,7 @@ $materiales = $cotizacion->items->where('tipo','material');
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Cant.</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Unidad de Medida</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Descripción</th>
-                <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Precio Unitario.    </th>
+                <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Precio Unitario    </th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Total</th>
             </tr>
         </thead>
