@@ -35,6 +35,7 @@
                         <select id="cliente_select" name="cliente_id" class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-fuchsia-500" required>
                             @foreach($clientes as $cliente)
                                 <option value="{{ $cliente->id }}" {{ $cotizacion->cliente_id == $cliente->id ? 'selected' : '' }}
+                                        data-tipo="{{ $cliente->tipo_cliente }}"
                                         data-empresa="{{ $cliente->empresa }}" 
                                         data-nit="{{ $cliente->nit ?? 'C/F' }}" 
                                         data-direccion="{{ $cliente->direccion ?? 'Ciudad de Guatemala' }}">
@@ -46,6 +47,19 @@
                     <div>
                         <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">Fecha de Emisión</label>
                         <input type="date" name="fecha_emision" value="{{ $cotizacion->fecha_emision }}" class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white font-mono outline-none shadow-inner" required>
+                    </div>
+                    <div id="contenedor_nog" style="display:none;">
+                        <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                            NOG
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nog"
+                            id="nog"
+                            value="{{ old('nog', $cotizacion->nog) }}"
+                            class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white outline-none text-sm"
+                        >
                     </div>
                 </div>
             </div>
@@ -157,6 +171,8 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         // 1. Inyectar ítems comerciales guardados desde la BD
+        validarNOG();
+        document.getElementById('cliente_select').addEventListener('change', validarNOG);
         detalleIndex = 0;
         contadorServicio = 0;
 
@@ -336,5 +352,26 @@
         let letras = convertirNumero(entero);
         return `${letras} QUETZALES CON ${decimales}/100`;
     }
+
+    function validarNOG() {
+
+    const select = document.getElementById('cliente_select');
+    const tipo = select.options[select.selectedIndex].dataset.tipo;
+
+    const contenedor = document.getElementById('contenedor_nog');
+    const campoNog = document.getElementById('nog');
+
+    if (
+        tipo === 'Empresa Pública' ||
+        tipo === 'Estatal'
+    ) {
+        contenedor.style.display = 'block';
+        campoNog.required = true;
+    } else {
+        contenedor.style.display = 'none';
+        campoNog.required = false;
+    }
+}
+
 </script>
 @endsection

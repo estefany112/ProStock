@@ -43,6 +43,7 @@
                             <option value="">Selecciona un cliente de la base de datos...</option>
                             @foreach($clientes as $cliente)
                                 <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}
+                                        data-tipo="{{ $cliente->tipo_cliente }}"
                                         data-empresa="{{ $cliente->empresa }}" 
                                         data-nit="{{ $cliente->nit ?? 'C/F' }}" 
                                         data-direccion="{{ $cliente->direccion ?? 'Ciudad de Guatemala' }}">
@@ -50,6 +51,21 @@
                                 </option>
                             @endforeach
                         </select>
+
+                        <div id="contenedor_nog" class="hidden mt-4">
+                                    <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                                        NOG DEL EVENTO
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="nog"
+                                        name="nog"
+                                        value="{{ old('nog') }}"
+                                        placeholder="Ej. 28765432"
+                                        class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white"
+                                    >
+                                </div>
                     </div>
                     <div>
                         <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">Fecha de Emisión</label>
@@ -254,15 +270,51 @@
         // Manejador del cambio de cliente para actualizar los campos espejo inmediatamente
         const clienteSelect = document.getElementById('cliente_select');
         
-        function actualizarVistaCliente() {
+       function actualizarVistaCliente() {
+
             const opt = clienteSelect.options[clienteSelect.selectedIndex];
-            document.getElementById('cliente_nombre_view').value = opt && opt.value !== "" ? opt.getAttribute('data-empresa') : '';
-            document.getElementById('cliente_nit_view').value = opt && opt.value !== "" ? opt.getAttribute('data-nit') : '';
-            document.getElementById('cliente_direccion_view').value = opt && opt.value !== "" ? opt.getAttribute('data-direccion') : '';
+
+            document.getElementById('cliente_nombre_view').value =
+                opt && opt.value !== ""
+                    ? opt.getAttribute('data-empresa')
+                    : '';
+
+            document.getElementById('cliente_nit_view').value =
+                opt && opt.value !== ""
+                    ? opt.getAttribute('data-nit')
+                    : '';
+
+            document.getElementById('cliente_direccion_view').value =
+                opt && opt.value !== ""
+                    ? opt.getAttribute('data-direccion')
+                    : '';
+
+            const tipoCliente =
+                opt && opt.value !== ""
+                    ? opt.getAttribute('data-tipo')
+                    : '';
+
+            const contenedorNog =
+                document.getElementById('contenedor_nog');
+
+            const inputNog =
+                document.getElementById('nog');
+
+            if (
+                tipoCliente === 'Empresa Pública' ||
+                tipoCliente === 'Estatal'
+            ) {
+                contenedorNog.classList.remove('hidden');
+                inputNog.required = true;
+            } else {
+                contenedorNog.classList.add('hidden');
+                inputNog.required = false;
+                inputNog.value = '';
+            }
         }
 
         clienteSelect.addEventListener('change', actualizarVistaCliente);
-        actualizarVistaCliente(); // Sincroniza al cargar si quedó un old() seleccionado
+        actualizarVistaCliente(); // Sincroniza al cargar si quedó un old() seleccionado                                                        
     });
 
     function agregarItem() {

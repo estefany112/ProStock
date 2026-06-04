@@ -30,6 +30,19 @@
                 <div class="text-[9px] font-black text-stone-500 uppercase mb-1">Fecha de Emisión</div>
                 <div class="text-stone-900 font-bold text-lg">{{ \Carbon\Carbon::parse($cotizacion->fecha_emision)->format('d/m/Y') }}</div>
             </div>
+            @if(
+                $cotizacion->cliente &&
+                in_array($cotizacion->cliente->tipo_cliente, ['Empresa Pública', 'Estatal'])
+            )
+            <div class="p-8 border-t border-stone-200 col-span-2">
+                <div class="text-[9px] font-black text-stone-500 uppercase mb-1">
+                    NOG
+                </div>
+                <div class="text-stone-900 font-bold text-lg">
+                    {{ $cotizacion->nog }}
+                </div>
+            </div>
+            @endif
         </div>
 
         <table class="w-full text-left">

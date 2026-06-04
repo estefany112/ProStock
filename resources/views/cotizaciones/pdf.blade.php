@@ -91,6 +91,27 @@ $materiales = $cotizacion->items->where('tipo','material');
         </tr>
     </table>
 
+    @if(
+    in_array($cotizacion->cliente->tipo_cliente, ['Empresa Pública', 'Estatal'])
+    && !empty($cotizacion->nog)
+)
+
+    {{-- Con NOG --}}
+    <div style="margin-bottom:20px; text-align:center; font-size:12px;">
+        Estimados Señores, presentamos para su consideración la oferta correspondiente al evento identificado con número de
+
+        <span style="color:#dc2626; font-size:18px; font-weight:bold;">
+            NOG {{ $cotizacion->nog }}
+        </span>.
+    </div>
+@else
+
+    {{-- Sin NOG --}}
+    <div style="margin-bottom:20px; text-align:justify; font-size:12px;">
+        Estimados Señores, por este medio presentamos para su consideración y evaluación la presente oferta económica, elaborada conforme a los requerimientos solicitados.
+    </div>
+@endif
+
     <div class="section-title">Oferta Económica</div>
     <table class="data-table">
         <thead>

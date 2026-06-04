@@ -12,6 +12,7 @@ class Cotizacion extends Model
         'folio',
         'fecha_emision',
         'cliente_id',
+        'nog',
         'subtotal',
         'iva',
         'total',

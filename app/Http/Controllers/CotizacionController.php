@@ -59,7 +59,20 @@ class CotizacionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $cliente = Cliente::findOrFail($request->cliente_id);
+
+        $reglasNog = [];
+
+        if (
+            $cliente->tipo_cliente === 'Empresa Pública' ||
+            $cliente->tipo_cliente === 'Estatal'
+        ) {
+            $reglasNog['nog'] = 'required|string|max:50';
+        } else {
+            $reglasNog['nog'] = 'nullable|string|max:50';
+        }
+
+        $request->validate(array_merge([
             'cliente_id'        => 'required|exists:clientes,id',
             'fecha_emision'     => 'required|date',
             'items'             => 'required|array|min:1',
@@ -76,7 +89,7 @@ class CotizacionController extends Controller
             'nombre_firmante'   => 'nullable|string',
             'total_letras'      => 'required|string',
 
-        ]);
+        ], $reglasNog));
 
         DB::beginTransaction();
 
@@ -97,6 +110,7 @@ class CotizacionController extends Controller
             $cotizacion->clausula_despedida = $request->clausula_despedida;
             $cotizacion->nombre_firmante = $request->nombre_firmante;
             $cotizacion->total_letras = $request->total_letras;
+            $cotizacion->nog = $request->nog;
 
             $cotizacion->subtotal = 0;
             $cotizacion->total = 0;
@@ -201,7 +215,20 @@ class CotizacionController extends Controller
             abort(403, 'La cotización está bloqueada.');
         }
 
-        $request->validate([
+        $cliente = Cliente::findOrFail($request->cliente_id);
+
+        $reglasNog = [];
+
+        if (
+            $cliente->tipo_cliente === 'Empresa Pública' ||
+            $cliente->tipo_cliente === 'Estatal'
+        ) {
+            $reglasNog['nog'] = 'required|string|max:50';
+        } else {
+            $reglasNog['nog'] = 'nullable|string|max:50';
+        }
+
+        $request->validate(array_merge([
             'cliente_id' => 'required|exists:clientes,id',
             'fecha_emision' => 'required|date',
             'items' => 'required|array|min:1',
@@ -213,7 +240,7 @@ class CotizacionController extends Controller
             'detalles' => 'nullable|array',
             'detalles.*.tipo' => 'required|in:servicio,material',
             'detalles.*.descripcion' => 'required|string',
-        ]);
+        ], $reglasNog));
 
         DB::beginTransaction();
 
@@ -222,6 +249,7 @@ class CotizacionController extends Controller
             $cotizacion->update([
                 'fecha_emision' => $request->fecha_emision,
                 'cliente_id' => $request->cliente_id,
+                'nog' => $request->nog,
                 'lugar_entrega' => $request->lugar_entrega,
                 'tiempo_entrega' => $request->tiempo_entrega,
                 'garantia' => $request->garantia,
