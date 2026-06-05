@@ -59,7 +59,7 @@ $materiales = $cotizacion->items->where('tipo','material');
 
     {{-- Título sin línea azul --}}
     <div style="text-align: right; font-weight: bold; font-size: 18px; color: #0c4a6e; margin-bottom: 20px;">
-        COTIZACIÓN: {{ $cotizacion->folio }}
+        CTZ_{{ $cotizacion->folio }}
     </div>
 
     <table width="100%" style="margin-bottom: 20px;">

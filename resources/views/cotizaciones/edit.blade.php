@@ -9,7 +9,7 @@
                 <span class="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2 inline-block">
                     Modificación de Registro
                 </span>
-                <h1 class="text-3xl font-black text-white tracking-tighter">Editar Cotización {{ $cotizacion->folio }}</h1>
+                <h1 class="text-3xl font-black text-white tracking-tighter">Editar  CTZ_{{ $cotizacion->folio }}</h1>
             </div>
             <a href="{{ route('cotizaciones.index') }}" class="bg-white/5 text-slate-300 hover:bg-white/10 px-4 py-2 rounded-xl text-xs font-bold border border-white/10 transition-all">
                 ✕ Cancelar Cambios

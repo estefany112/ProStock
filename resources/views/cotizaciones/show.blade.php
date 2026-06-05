@@ -11,8 +11,7 @@
                     <div class="w-12 h-12 bg-sky-900 flex items-center justify-center mb-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h1 class="text-4xl font-black text-stone-900 tracking-tighter uppercase">Cotización</h1>
-                    <p class="text-sky-700 font-bold mt-1 text-[10px] tracking-[0.2em] uppercase underline decoration-sky-900 underline-offset-4">Folio Técnico: {{ $cotizacion->folio }}</p>
+                    <h1 class="text-4xl font-black text-stone-900 tracking-tighter uppercase">CTZ_{{ $cotizacion->folio }}</h1>
                 </div>
                 <div class="text-right border-l-2 border-stone-200 pl-6">
                     <div class="text-[9px] font-black text-stone-400 uppercase tracking-widest">Estado</div>

@@ -116,7 +116,7 @@
                                 
                                 {{-- FOLIO --}}
                                 <td class="p-5 font-mono text-fuchsia-400 font-bold text-sm tracking-wide">
-                                    {{ $cotizacion->folio }}
+                                    CTZ_{{ $cotizacion->folio }}
                                 </td>
 
                                 {{-- CLIENTE RELACIONADO --}}
