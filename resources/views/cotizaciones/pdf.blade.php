@@ -205,7 +205,7 @@ $materiales = $cotizacion->items->where('tipo','material');
         <tr><td><strong>5. Validez:</strong></td><td>{{ $cotizacion->validez_oferta }}</td></tr>
     </table>
 
-    <div style="margin-top: 50px; margin-bottom: 40px; font-size: 12px; line-height: 1.5; color: #334155; text-align: justify;">
+    <div style="margin-top: 30px; margin-bottom: 25px; font-size: 12px; line-height: 1.5; color: #334155; text-align: justify;">
         {!! nl2br(e($cotizacion->clausula_despedida)) !!}
     </div>
 
