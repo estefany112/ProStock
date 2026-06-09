@@ -57,10 +57,19 @@ $materiales = $cotizacion->items->where('tipo','material');
         </table>
     </header>
 
-    {{-- Título sin línea azul --}}
+   <div style="text-align: right; font-family: sans-serif; margin-bottom: 25px;">
+    <!-- Folio: Sencillo y directo -->
     <div style="text-align: right; font-weight: bold; font-size: 18px; color: #0c4a6e; margin-bottom: 20px;">
-        CTZ_{{ $cotizacion->folio }}
+
+    CTZ_{{ $cotizacion->folio }}
+
     </div>
+    
+    <!-- Fecha: Formato estándar profesional -->
+    <div style="font-size: 15px; color: #475569;">
+        Escuintla, {{ \Carbon\Carbon::parse($cotizacion->fecha)->format('d/m/Y') }}
+    </div>
+</div>
 
     <table width="100%" style="margin-bottom: 20px;">
         <tr>
@@ -195,6 +204,10 @@ $materiales = $cotizacion->items->where('tipo','material');
         <tr><td><strong>4. Pago:</strong></td><td>{{ $cotizacion->forma_pago }}</td></tr>
         <tr><td><strong>5. Validez:</strong></td><td>{{ $cotizacion->validez_oferta }}</td></tr>
     </table>
+
+    <div style="margin-top: 50px; margin-bottom: 40px; font-size: 12px; line-height: 1.5; color: #334155; text-align: justify;">
+        {!! nl2br(e($cotizacion->clausula_despedida)) !!}
+    </div>
 
     <table width="100%" style="border-collapse: collapse; margin-top: 40px;">
         <tr>
