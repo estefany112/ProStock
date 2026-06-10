@@ -33,6 +33,9 @@ $materiales = $cotizacion->items->where('tipo','material');
             font-size: 8px; 
             text-transform: uppercase; 
         }
+        .data-table thead {
+            display: table-row-group !important;
+        }
     </style>
 </head>
 <body>
