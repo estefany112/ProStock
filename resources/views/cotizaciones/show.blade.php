@@ -22,7 +22,7 @@
 
         <div class="grid grid-cols-2 bg-stone-100 border-b border-stone-200">
             <div class="p-8 border-r border-stone-200">
-                <div class="text-[9px] font-black text-stone-500 uppercase mb-1">Cliente Industrial</div>
+                <div class="text-[9px] font-black text-stone-500 uppercase mb-1">Cliente</div>
                 <div class="text-stone-900 font-bold text-lg">{{ $cotizacion->cliente->empresa }}</div>
             </div>
             <div class="p-8">
@@ -47,6 +47,7 @@
         <table class="w-full text-left">
             <thead class="bg-stone-800 text-white text-[9px] uppercase font-black">
                 <tr>
+                    <th class="px-8 py-4">Item.</th>
                     <th class="px-8 py-4">Cant.</th>
                     <th class="px-8 py-4">Descripción de equipo / servicio</th>
                     <th class="px-8 py-4 text-right">Unitario</th>
@@ -56,6 +57,9 @@
             <tbody class="divide-y divide-stone-200">
                 @foreach($itemsComerciales as $item)
                 <tr>
+                    <td class="px-8 py-5 text-xs font-mono text-stone-500 font-bold">
+                        {{ $loop->iteration }}
+                    </td>
                     <td class="px-8 py-5 text-xs font-mono text-stone-500">{{ $item->cantidad }}</td>
                     <td class="px-8 py-5 font-semibold text-stone-800 text-sm">{{ $item->descripcion }}</td>
                     <td class="px-8 py-5 text-right text-xs text-stone-500">Q {{ number_format($item->precio_unitario, 2) }}</td>

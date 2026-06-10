@@ -125,6 +125,7 @@ $materiales = $cotizacion->items->where('tipo','material');
     <table class="data-table">
         <thead>
             <tr style="background-color: #0c4a6e; color: white;">
+                <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Item.</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Cant.</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Unidad de Medida</th>
                 <th style="padding: 6px; font-size: 8px; text-transform: uppercase;">Descripción</th>
@@ -135,6 +136,8 @@ $materiales = $cotizacion->items->where('tipo','material');
     <tbody>
         @foreach($comerciales as $item)
             <tr>
+                <td align="center">{{ $loop->iteration }}
+                </td>
                 <td align="center">{{ $item->cantidad }}</td>
                 <td align="center">{{ $item->unidad_medida }}</td>
                 <td align="center">{{ $item->descripcion }}</td>
@@ -144,7 +147,7 @@ $materiales = $cotizacion->items->where('tipo','material');
         @endforeach
         <!-- Fila del TOTAL -->
         <tr>
-            <td colspan="4"
+            <td colspan="5"
                 style="
                     background:#0c4a6e;
                     color:white;
