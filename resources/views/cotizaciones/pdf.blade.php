@@ -15,11 +15,12 @@ $materiales = $cotizacion->items->where('tipo','material');
         header { position: fixed; top: -180px; left: 0; right: 0; height: 180px; }
         
         /* Línea azul eliminada del título de sección y ajustado color */
-        .section-title { font-size: 9px; font-weight: 900; text-transform: uppercase; color: #292524; padding-bottom: 3px; margin: 15px 0 8px 0; border-bottom: 1px solid #d6d3d1; 
-        margin: 25px 0 12px 0;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #d6d3d1;
-        display: block;
+        .section-title { 
+            font-size: 9px; 
+            font-weight: 900; text-transform: uppercase; color: #292524; 
+            margin: 25px 0 8px 0; border-bottom: 1px solid #d6d3d1; 
+            padding-bottom: 5px;
+            display: block;
         }
         
         .data-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
@@ -204,7 +205,7 @@ $materiales = $cotizacion->items->where('tipo','material');
     <div class="section-title">Alcance Técnico</div>
     <ul style="list-style: none; padding: 0;margin:0;">
         @foreach($servicios->merge($materiales) as $index => $item)
-            <li>
+            <li style="margin:0; padding:0; line-height:1.2;">
                 {{ chr(97 + $index) }}) {{ $item->descripcion }}
             </li>
         @endforeach
