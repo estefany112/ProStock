@@ -235,13 +235,13 @@ $materiales = $cotizacion->items->where('tipo','material');
         <tr><td><strong>5. Validez:</strong></td><td>{{ $cotizacion->validez_oferta }}</td></tr>
     </table>
 
-    <div style="margin-top: 30px; margin-bottom: 25px; font-size: 12px; line-height: 1.5; color: #334155; text-align: justify;">
+    <div style="margin-top: 20px; margin-bottom: 20px; font-size: 12px; line-height: 1; color: #334155; text-align: justify;">
         {!! nl2br(e($cotizacion->clausula_despedida)) !!}
     </div>
 
-    <table width="100%" style="border-collapse: collapse; margin-top: 40px;">
+    <table width="100%" style="border-collapse: collapse;">
         <tr>
-            <td style="width: 50%; vertical-align: bottom; text-align: center; padding-bottom: 20px;">
+            <td style="width: 50%; vertical-align: bottom; text-align: center;">
                 <div style="margin-bottom: 10px;">
                     @if(file_exists(public_path('images/firma_patrono.png')))
                         <img src="{{ public_path('images/firma_patrono.png') }}" style="max-height: 75px; width: auto; display: block; margin: 0 auto;">
@@ -252,7 +252,7 @@ $materiales = $cotizacion->items->where('tipo','material');
                     <div style="font-size: 9px; color: #475569;">Representante Autorizado</div>
                 </div>
             </td>
-            <td style="width: 50%; vertical-align: bottom; text-align: center; padding-bottom: 20px;">
+            <td style="width: 50%; vertical-align: bottom; text-align: center;">
                 <div style="margin-bottom: 10px;">
                     @if(file_exists(public_path('images/sello.png')))
                         <img src="{{ public_path('images/sello.png') }}" style="max-height: 115px; width: auto; display: block; margin: 0 auto;">
