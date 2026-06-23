@@ -18,7 +18,7 @@ $materiales = $cotizacion->items->where('tipo','material');
         .section-title { 
             font-size: 9px; 
             font-weight: 900; text-transform: uppercase; color: #292524; 
-            margin: 25px 0 8px 0; border-bottom: 1px solid #d6d3d1; 
+            margin: 12px 0 8px 0; border-bottom: 1px solid #d6d3d1; 
             padding-bottom: 5px;
             display: block;
         }
