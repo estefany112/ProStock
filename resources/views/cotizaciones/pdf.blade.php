@@ -16,7 +16,7 @@ $materiales = $cotizacion->items->where('tipo','material');
         
         /* Línea azul eliminada del título de sección y ajustado color */
         .section-title { 
-            font-size: 9px; 
+            font-size: 11px; 
             font-weight: 900; text-transform: uppercase; color: #292524; 
             margin: 12px 0 8px 0; border-bottom: 1px solid #d6d3d1; 
             padding-bottom: 5px;
@@ -133,6 +133,7 @@ $materiales = $cotizacion->items->where('tipo','material');
     </div>
 @endif
 
+    <div style="height:15px; line-height:15px;"></div>
     <div class="section-title">Oferta Económica</div>
     <table class="data-table">
         <thead>
@@ -207,6 +208,7 @@ $materiales = $cotizacion->items->where('tipo','material');
         </tbody>
     </table>
 
+    <div style="margin-top:15px;"></div>
     <div class="section-title">Alcance Técnico</div>
 
 <ul style="margin:0; padding:0; list-style:none; font-size:9px; text-align:justify; line-height:1.1;">
@@ -223,7 +225,7 @@ $materiales = $cotizacion->items->where('tipo','material');
     @endforeach
 </ul>
 
-<div style="page-break-inside: avoid;">
+<div style="margin-top:15px;"></div>
     <div class="section-title">Condiciones Comerciales</div>
     <table width="100%" class="box">
         <tr><td width="30%"><strong>1. Lugar:</strong></td><td>{{ $cotizacion->lugar_entrega }}</td></tr>
