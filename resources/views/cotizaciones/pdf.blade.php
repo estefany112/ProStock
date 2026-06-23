@@ -153,7 +153,9 @@ $materiales = $cotizacion->items->where('tipo','material');
                 <td align="center">{{ $item->cantidad }}</td>
                 <td align="center">{{ $item->unidad_medida }}</td>
                 <td align="center">{{ $item->descripcion }}</td>
-                <td align="center">Q {{ number_format($item->precio_unitario, 2) }}</td>
+                <td style="text-align:center; white-space:nowrap;">
+                    <span style="font-weight:normal;">Q {{ number_format($item->precio_unitario, 2) }}</span>
+                </td>
                 <td align="center" style="font-weight:bold;">Q{{ number_format($item->total, 2) }}</td>
             </tr>
         @endforeach
