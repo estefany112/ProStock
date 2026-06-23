@@ -8,11 +8,11 @@ $materiales = $cotizacion->items->where('tipo','material');
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { margin: 190px 1.5cm 140px 1.5cm; }
+        @page { margin: 200px 1.5cm 130px 1.5cm; }
         body { font-family: DejaVu Sans, sans-serif; color: #292524; font-size: 10px; line-height: 1.3; background-color: #fafaf9; }
         
         /* Línea azul eliminada del header */
-        header { position: fixed; top: -170px; left: 0; right: 0; height: 170px; }
+        header { position: fixed; top: -180px; left: 0; right: 0; height: 180px; }
         
         /* Línea azul eliminada del título de sección y ajustado color */
         .section-title { font-size: 9px; font-weight: 900; text-transform: uppercase; color: #292524; padding-bottom: 3px; margin: 15px 0 8px 0; border-bottom: 1px solid #d6d3d1; }
@@ -36,6 +36,9 @@ $materiales = $cotizacion->items->where('tipo','material');
         .data-table thead {
             display: table-row-group !important;
         }
+        tr, td {
+    page-break-inside: avoid;
+}
     </style>
 </head>
 <body>
@@ -190,14 +193,15 @@ $materiales = $cotizacion->items->where('tipo','material');
                     {{ strtoupper($cotizacion->total_letras) }}
                 </td>
             </tr>
-            <br>
         </tbody>
     </table>
 
     <div class="section-title">Alcance Técnico</div>
-    <ul style="list-style: none; padding: 0;">
-        @foreach($servicios->merge($materiales) as $item)
-            <li>⚙ {{ $item->descripcion }}</li>
+    <ul style="list-style: none; padding: 0;margin:0;">
+        @foreach($servicios->merge($materiales) as $index => $item)
+            <li>
+                {{ chr(97 + $index) }}) {{ $item->descripcion }}
+            </li>
         @endforeach
     </ul>
 
