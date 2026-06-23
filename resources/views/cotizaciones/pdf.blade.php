@@ -185,31 +185,41 @@ $materiales = $cotizacion->items->where('tipo','material');
             </td>
         </tr>
       
-            <!-- Fila de TOTAL EN LETRAS -->
-            <tr>
-                <td colspan="5"
-                    style="
-                        border:1px solid #d6d3d1;
-                        padding:12px;
-                        background:#f8fafc;
-                    ">
-                    <strong style="color:#0c4a6e;">
-                        TOTAL EN LETRAS:
-                    </strong>
-                    {{ strtoupper($cotizacion->total_letras) }}
-                </td>
-            </tr>
+        <!-- Fila de TOTAL EN LETRAS -->
+        <tr>
+            <td colspan="6"
+                style="
+                    background:#ffffff;
+                    color:#0c4a6e;
+                    font-weight:bold;
+                    text-align:left;
+                    padding:12px;
+                    font-size:12px;
+                    line-height:1.2 border:1px solid #d6d3d1;
+                    width:100%;
+                ">
+                TOTAL EN LETRAS:
+                {{ strtoupper($cotizacion->total_letras) }}
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <div class="section-title">Alcance Técnico</div>
-    <ul style="list-style: none; padding: 0;margin:0;">
-        @foreach($servicios->merge($materiales) as $index => $item)
-            <li style="margin:0; padding:0; line-height:1.2;">
-                {{ chr(97 + $index) }}) {{ $item->descripcion }}
-            </li>
-        @endforeach
-    </ul>
+
+<ul style="margin:0; padding:0; list-style:none; font-size:9px; text-align:justify; line-height:1.1;">
+    @foreach($servicios->merge($materiales) as $index => $item)
+        <li style="margin-bottom:6px; line-height:1.1;">
+            <span style="display:inline-block; width:18px; vertical-align:top; font-weight:bold; color: black">
+                {{ chr(97 + $index) }})
+            </span>
+
+            <span style="display:inline-block; vertical-align:top; width:90%;">
+                {{ $item->descripcion }}
+            </span>
+        </li>
+    @endforeach
+</ul>
 
 <div style="page-break-inside: avoid;">
     <div class="section-title">Condiciones Comerciales</div>
