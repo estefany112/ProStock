@@ -8,7 +8,7 @@ $materiales = $cotizacion->items->where('tipo','material');
 <head>
     <meta charset="UTF-8">
     <style>
-        @page { margin: 200px 1.5cm 90px 1.5cm; }
+        @page { margin: 200px 1.5cm 130px 1.5cm; }
         body { font-family: DejaVu Sans, sans-serif; color: #292524; font-size: 10px; line-height: 1.3; background-color: #fafaf9; }
         
         /* Línea azul eliminada del header */
