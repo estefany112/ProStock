@@ -8,4 +8,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+
+        hmr: {
+            host: 'unpraiseworthy-joni-laconically.ngrok-free.dev',
+            protocol: 'wss',
+        },
+
+        origin: 'https://unpraiseworthy-joni-laconically.ngrok-free.dev',
+    },
 });

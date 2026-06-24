@@ -162,6 +162,22 @@ Route::middleware(['auth'])->group(function () {
     // HORA
     Route::get('/hora', function () { return now()->format('d/m/Y H:i:s'); });
 
+    // RUTA LOGOUT 
+    Route::get('/logout-loading', function () {
+        return view('auth.logout');
+    })->name('logout.loading');
+
+    Route::get('/logout-perform', function () {
+
+        Auth::logout();
+
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect('/login');
+
+    })->name('logout.perform');
+
 });
 
 // VALIDACIÓN DE SESIÓN PARA FRONTEND 

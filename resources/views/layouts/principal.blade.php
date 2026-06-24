@@ -56,9 +56,10 @@
             </button>
             <div x-show="openUser" @click.away="openUser = false" x-transition class="absolute right-0 mt-3 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-2 z-50">
                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Editar perfil</a>
-                <form method="POST" action="{{ route('logout') }}">@csrf
-                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Cerrar sesión</button>
-                </form>
+                <a href="{{ route('logout.loading') }}"
+                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                    Cerrar sesión
+                </a>
             </div>
         </div>
     </header>
