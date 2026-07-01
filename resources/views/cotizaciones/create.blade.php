@@ -396,7 +396,16 @@
                     <textarea name="detalles[${detalleIndex}][descripcion]" class="w-full bg-slate-950/40 border border-white/10 p-3 rounded-xl text-white text-xs outline-none focus:border-fuchsia-500" rows="2" placeholder="Especificar alcance técnico detallado..." required></textarea>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
+
+            // Enfocar el último textarea agregado y hacer scroll hacia él
+            const lastTextarea = container.querySelector('.detalle-item:last-child textarea');
+
+            if (lastTextarea) {
+                lastTextarea.focus();
+                lastTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
             detalleIndex++;
+            
         } else {
             const html = `
                 <div class="detalle-item bg-white/[0.03] border border-white/10 p-4 rounded-xl">
