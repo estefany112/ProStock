@@ -470,40 +470,5 @@
         let letras = convertirNumero(entero);
         return `${letras} QUETZALES CON ${decimales}/100`;
     }
-  
- // Atajo de teclado: Ctrl + Enter para agregar un nuevo detalle de servicio
- document.addEventListener('keydown', function (e) {
-
-    // Evita conflictos con inputs IME (Mac chino/japonés, etc.)
-    if (e.isComposing || e.keyCode === 229) return;
-
-    const isEnter = e.key === 'Enter';
-
-    // Ctrl o Cmd (unificado y estable)
-    const isShortcut = e.ctrlKey || e.metaKey;
-
-    const active = document.activeElement;
-
-    if (!isEnter || !isShortcut) return;
-
-    if (!active || !active.closest('#detalles-container')) return;
-
-    e.preventDefault();
-
-    agregarDetail('servicio');
-
-    setTimeout(() => {
-        const last = document.querySelector('#detalles-container textarea:last-of-type');
-
-        if (last) {
-            last.focus();
-            last.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-    }, 50);
-});
-
 </script>
 @endsection
