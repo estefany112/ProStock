@@ -70,7 +70,7 @@ public function index(Request $request)
             'fecha_ingreso'=> 'required|date',
         ]);
 
-        Employee::create([
+        $employee = Employee::create([
             'name' => $request->name,
             'dpi' => $request->dpi,
             'position' => $request->position,
@@ -146,18 +146,21 @@ public function index(Request $request)
             ->with('success', 'Empleado actualizado correctamente');
     }
 
-    public function toggle(Employee $employee)
+    public function status(Request $request, Employee $employee)
     {
-        abort_unless(auth()->user()->hasPermission('employee.disable'), 403);
+        abort_unless(auth()->user()->hasPermission('employee.disable'),403);
 
-        $nuevoEstado = !$employee->active;
-
-        $employee->update([
-            'active' => $nuevoEstado,
-            'fecha_baja' => $nuevoEstado ? null : now()
+        $request->validate([
+            'status' => 'required|in:renuncia,despido'
         ]);
 
-        return back()->with('success', 'Estado del empleado actualizado');
+        $employee->update([
+            'active' => false,
+            'status' => $request->status,
+            'fecha_baja' => now()
+        ]);
+
+        return back()->with('success','Estado actualizado correctamente');
     }
 }
 

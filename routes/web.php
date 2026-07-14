@@ -25,6 +25,7 @@ use App\Models\Salida;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EmpresaConfigController;
+use App\Http\Controllers\EmployeeMovementController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -85,7 +86,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
     Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
-    Route::patch('/employees/{employee}/toggle', [EmployeeController::class, 'toggle'])->name('employees.toggle');
+    Route::patch('/employees/{employee}/status', [EmployeeController::class, 'status'])
+    ->name('employees.status');
+    Route::prefix('employees/{employee}')->name('employee.')->group(function () {
+    Route::get('movements',[EmployeeMovementController::class, 'index'])->name('movements.index');
+    Route::get('movements/create',[EmployeeMovementController::class, 'create'])->name('movements.create');
+    Route::post('movements',[EmployeeMovementController::class, 'store'])->name('movements.store');
+    });
     
     // MÓDULO PLANILLAS
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');

@@ -15,6 +15,7 @@ class Employee extends Model
         'fecha_baja',
         'active',
         'isr',
+        'status',
     ];
 
     public function planillas()
@@ -36,6 +37,11 @@ class Employee extends Model
     public function salaryHistories()
     {
         return $this->hasMany(SalaryHistory::class);
+    }
+
+    public function movements()
+    {
+        return $this->hasMany(EmployeeMovement::class);
     }
 
 }
