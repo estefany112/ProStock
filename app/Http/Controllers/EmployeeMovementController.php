@@ -54,13 +54,22 @@ class EmployeeMovementController extends Controller
         if (in_array($request->type, ['RENUNCIA', 'DESPIDO'])) {
 
             $employee->update([
-                'active' => false,
+                'active' => 0,
+                'status' => strtolower($request->type),
                 'fecha_baja' => $request->date,
             ]);
 
         }
 
+        if ($request->type == 'INGRESO') {
 
+            $employee->update([
+                'active' => 1,
+                'status' => 'activo',
+                'fecha_baja' => null,
+            ]);
+        }
+        
         return redirect()
             ->route('employee.movements.index', $employee)
             ->with('success', 'Movimiento registrado correctamente');

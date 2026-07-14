@@ -76,7 +76,9 @@ public function index(Request $request)
             'position' => $request->position,
             'salary_base' => $request->salary_base,
             'fecha_ingreso' => $request->fecha_ingreso,
-            'fecha_baja' => $request->fecha_baja
+            'fecha_baja' => null,
+            'active' => 1,
+            'status' => 'activo'
         ]);
 
         SalaryHistory::create([
@@ -96,7 +98,7 @@ public function index(Request $request)
         abort_unless(auth()->user()->hasPermission('employee.edit'), 403);
 
         // No permitir editar empleados dados de baja
-        if ($employee->status != 'activo') {
+        if ($employee->status != 'activo' || !$employee->active) {
             return redirect()
                 ->route('employees.index')
                 ->with('error', 'No se puede editar un empleado dado de baja.');
@@ -109,7 +111,7 @@ public function index(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('employee.edit'), 403);
 
-        if ($employee->status != 'activo') {
+        if ($employee->status != 'activo' || !$employee->active) {
             return redirect()
                 ->route('employees.index')
                 ->with('error', 'No se puede editar un empleado dado de baja.');
@@ -176,4 +178,3 @@ public function index(Request $request)
         return back()->with('success','Estado actualizado correctamente');
     }
 }
-

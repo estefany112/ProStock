@@ -71,7 +71,7 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center gap-2">
-                                @if($employee->status == 'activo')
+                               @if($employee->status == 'activo' && $employee->active== 1)
                                     <a href="{{ route('employees.edit', $employee->id) }}" class="text-indigo-600 hover:text-indigo-800 font-bold text-xs">Editar</a>
                                     <span class="text-slate-300">|</span>
                                 @endif
