@@ -95,6 +95,13 @@ public function index(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('employee.edit'), 403);
 
+        // No permitir editar empleados dados de baja
+        if ($employee->status != 'activo') {
+            return redirect()
+                ->route('employees.index')
+                ->with('error', 'No se puede editar un empleado dado de baja.');
+        }
+
         return view('employees.edit', compact('employee'));
     }
 
@@ -102,6 +109,12 @@ public function index(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('employee.edit'), 403);
 
+        if ($employee->status != 'activo') {
+            return redirect()
+                ->route('employees.index')
+                ->with('error', 'No se puede editar un empleado dado de baja.');
+        }
+        
         $request->validate([
             'name'         => 'required|string|max:255',
             'dpi'          => 'nullable|string|max:20',
