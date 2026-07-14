@@ -20,9 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (app()->environment('local')) {
-            URL::forceScheme('http');
-        }
+         if (request()->getHost() === 'unpraiseworthy-joni-laconically.ngrok-free.dev') {
+        URL::forceScheme('https');
+    }
 
          \Carbon\Carbon::setLocale('es');
     }
