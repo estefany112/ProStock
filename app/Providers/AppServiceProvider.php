@@ -23,5 +23,7 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('local')) {
             URL::forceScheme('http');
         }
+
+         \Carbon\Carbon::setLocale('es');
     }
 }

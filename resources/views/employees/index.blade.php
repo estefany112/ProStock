@@ -65,12 +65,22 @@
                     <td class="px-2 py-4 text-center">
                         <div class="flex flex-col items-center gap-1">
                             <a href="{{ route('employees.edit', $employee) }}" class="text-indigo-500 font-bold hover:underline text-xs">Editar</a>
-                            <form action="{{ route('employees.toggle', $employee) }}" method="POST" onsubmit="return confirmToggle(event)">
-                                @csrf @method('PATCH')
-                                <button class="font-bold {{ $employee->active ? 'text-rose-500' : 'text-emerald-500' }} hover:underline text-xs">
-                                    {{ $employee->active ? 'Des' : 'Act' }}
-                                </button>
-                            </form>
+                            <a href="{{ route('employee.movements.index',$employee) }}"
+                            class="btn btn-info btn-sm">
+                                Historial
+                            </a>
+                            @if($employee->active)
+                                <a href="{{ route('employees.status', $employee) }}"
+                                class="font-bold text-rose-500 hover:underline text-xs">
+                                    Finalizar
+                                </a>
+
+                            @else
+
+                                <span class="text-slate-400 text-xs font-bold">
+                                    {{ ucfirst($employee->status) }}
+                                </span>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -87,15 +97,25 @@
 </div>
 
 <script>
-    function confirmToggle(event) {
-        event.preventDefault();
-        Swal.fire({
-            title: '¿Confirmar acción?',
-            text: 'Se actualizará el estatus del colaborador.',
-            icon: 'question',
-            confirmButtonColor: '#4f46e5',
-            showCancelButton: true
-        }).then((result) => { if (result.isConfirmed) event.target.submit(); });
+    function finalizarEmpleado(id){
+
+    Swal.fire({
+        title:'Finalizar empleado',
+        text:'Seleccione motivo',
+        showDenyButton:true,
+        confirmButtonText:'Renuncia',
+        denyButtonText:'Despido'
+
+    }).then((result)=>{
+
+        let status = result.isConfirmed ? 'renuncia' : 'despido';
+
+        document.getElementById('form-'+id+'-status').value=status;
+
+        document.getElementById('form-'+id).submit();
+
+    });
+
     }
 </script>
 @endsection
