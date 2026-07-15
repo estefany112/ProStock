@@ -134,9 +134,7 @@ public function show($id)
     $fin    = \Carbon\Carbon::parse($planilla->fecha_fin);
 
     // Empleados activos
-    $empleados = Employee::activosEnRango($inicio, $fin)
-    ->where('id', '!=', 13)
-    ->get();
+    $empleados = $planilla->employees->where('id', '!=', 13);
 
     foreach ($empleados as $empleado) {
 
@@ -369,5 +367,69 @@ public function previewBoleta($planillaId, $empleadoId)
 
         return back()->with('success', 'Planilla recalculada sin perder correlativos');
     }
+
+    public function agregarfaltantes($id)
+{
+    $planilla = Planilla::with('employees')->findOrFail($id);
+
+    if ($planilla->estado === 'cerrada') {
+        return back()->with('error', 'La planilla está cerrada.');
+    }
+
+    $inicio = Carbon::parse($planilla->fecha_inicio);
+    $fin = Carbon::parse($planilla->fecha_fin);
+
+    // Último correlativo de esta planilla
+    $correlativo = ($planilla->employees()->max('correlativo') ?? 0) + 1;
+
+    // Empleados que deberían estar en la planilla
+    $empleados = Employee::activosEnRango($inicio, $fin)
+        ->where('id', '!=', 13)
+        ->get();
+
+    foreach ($empleados as $empleado) {
+
+        // Si ya existe, continuar
+        if ($planilla->employees()->where('employee_id', $empleado->id)->exists()) {
+            continue;
+        }
+
+        $salario = $empleado->salaryHistories()
+            ->where(function ($q) use ($fin) {
+                $q->whereNull('fecha_fin')
+                  ->orWhere('fecha_fin', '>=', $fin);
+            })
+            ->latest('id')
+            ->first();
+
+        $salarioQuincenal = $salario
+            ? $salario->salary / 2
+            : $empleado->salary / 2;
+
+        $bonificacion = 125;
+        $igss = $salarioQuincenal * 0.0483;
+
+        $horasExtras = HoraExtra::where('empleado_id', $empleado->id)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->sum('total');
+
+        $liquido = ($salarioQuincenal + $bonificacion + $horasExtras) - $igss;
+
+        $planilla->employees()->attach($empleado->id, [
+            'correlativo' => $correlativo,
+            'salary_base_quincenal' => $salarioQuincenal,
+            'bonificacion' => $bonificacion,
+            'horas_extras' => $horasExtras,
+            'igss' => $igss,
+            'isr' => 0,
+            'otros_descuentos' => 0,
+            'liquido_recibir' => $liquido,
+        ]);
+
+        $correlativo++;
+    }
+
+    return back()->with('success', 'Nuevos empleados agregados correctamente.');
+}
 
 }
