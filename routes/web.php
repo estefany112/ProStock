@@ -112,6 +112,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/horas-extras/guardar', [HoraExtraController::class, 'storeQuincena'])->name('horas-extras.guardar');
     Route::get('/horas-extras/historial', [HoraExtraController::class, 'historial'])->name('horas-extras.historial');
     Route::get('/horas-extras/detalle/{empleado}/{inicio}/{fin}', [HoraExtraController::class, 'detalle'])->name('horas-extras.detalle');
+    Route::get('/horas-extras/{id}/edit', [HoraExtraController::class, 'edit'])->name('horas-extras.edit');
+    Route::put('/horas-extras/{id}', [HoraExtraController::class, 'update'])->name('horas-extras.update');
 
     // ANTICIPOS EN PLANILLAS
     Route::get('/anticipos/quincena', [AnticipoController::class, 'formQuincena'])->name('anticipos.quincena');
