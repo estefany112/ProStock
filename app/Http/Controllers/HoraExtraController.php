@@ -146,4 +146,100 @@ return back()->with('success', 'Horas extras guardadas correctamente');
             }
         }
     }
+
+    public function edit($id)
+    {
+        $horaExtra = HoraExtra::with('empleado')->findOrFail($id);
+
+        // Verificar si la planilla del período ya está cerrada
+        $planillaCerrada = \App\Models\Planilla::where('estado', 'cerrada')
+            ->where('fecha_inicio', '<=', $horaExtra->fecha)
+            ->where('fecha_fin', '>=', $horaExtra->fecha)
+            ->exists();
+
+        if ($planillaCerrada) {
+            return back()->with('error', 'No se puede editar porque la planilla está cerrada.');
+        }
+
+        return view('horas_extras.edit', compact('horaExtra'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'fecha' => 'required|date',
+            'horas' => 'required|numeric|min:0',
+        ]);
+
+        $horaExtra = HoraExtra::findOrFail($id);
+
+        // Validar que no exista una planilla cerrada para la nueva fecha
+        $planillaCerrada = \App\Models\Planilla::where('estado', 'cerrada')
+            ->where('fecha_inicio', '<=', $request->fecha)
+            ->where('fecha_fin', '>=', $request->fecha)
+            ->exists();
+
+        if ($planillaCerrada) {
+            return back()->with('error', 'No se puede modificar porque la planilla está cerrada.');
+        }
+
+        $empleado = Employee::findOrFail($horaExtra->empleado_id);
+
+        // Recalcular el total
+        $horaBase = $empleado->salary_base / 30 / 8;
+        $total = $request->horas * ($horaBase * 1.5);
+
+        // Actualizar registro
+        $horaExtra->update([
+            'fecha' => $request->fecha,
+            'horas' => $request->horas,
+            'salario_base' => $empleado->salary_base,
+            'total' => $total,
+        ]);
+
+        // Buscar planilla abierta correspondiente
+        $planilla = \App\Models\Planilla::where('estado', 'abierta')
+            ->where('fecha_inicio', '<=', $request->fecha)
+            ->where('fecha_fin', '>=', $request->fecha)
+            ->first();
+
+        if ($planilla) {
+
+            $inicio = Carbon::parse($planilla->fecha_inicio);
+            $fin = Carbon::parse($planilla->fecha_fin);
+
+            $horasExtras = HoraExtra::where('empleado_id', $empleado->id)
+                ->whereBetween('fecha', [$inicio, $fin])
+                ->sum('total');
+
+            $detalle = $planilla->employees()
+                ->where('employee_id', $empleado->id)
+                ->first();
+
+            if ($detalle) {
+
+                $salario = $detalle->pivot->salary_base_quincenal;
+                $bonificacion = $detalle->pivot->bonificacion;
+                $igss = $detalle->pivot->igss;
+                $isr = $detalle->pivot->isr;
+                $otros = $detalle->pivot->otros_descuentos;
+
+                $liquido = ($salario + $bonificacion + $horasExtras)
+                    - ($igss + $isr + $otros);
+
+                $planilla->employees()->updateExistingPivot($empleado->id, [
+                    'horas_extras' => $horasExtras,
+                    'liquido_recibir' => $liquido
+                ]);
+            }
+        }
+
+        return redirect()
+            ->route('horas-extras.detalle', [
+                'empleado' => $empleado->id,
+                'inicio' => now()->startOfMonth()->toDateString(),
+                'fin' => now()->endOfMonth()->toDateString()
+            ])
+            ->with('success', 'Horas extras actualizadas correctamente.');
+    }
 }

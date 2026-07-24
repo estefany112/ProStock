@@ -18,6 +18,7 @@
                     <th class="py-3 px-4 text-left">Fecha</th>
                     <th class="py-3 px-4 text-left">Horas</th>
                     <th class="py-3 px-4 text-left">Total</th>
+                    <th class="py-3 px-4 text-center">Acciones</th>
                 </tr>
             </thead>
 
@@ -38,6 +39,13 @@
 
                     <td class="px-4 py-3 font-semibold text-green-600">
                         Q {{ number_format($r->total,2) }}
+                    </td>
+
+                    <td class="px-4 py-3 text-center">
+                        <a href="{{ route('horas-extras.edit', $r->id) }}"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                            Editar
+                        </a>
                     </td>
 
                 </tr>

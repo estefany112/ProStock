@@ -66,9 +66,10 @@
                         Q {{ number_format($d->total_pago,2) }}
                     </td>
 
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-3 flex items-center gap-2">
+                        <!-- Acción principal: Ver -->
                         <a href="{{ route('horas-extras.detalle', [$d->empleado_id, $inicio, $fin]) }}"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs shadow transition">
+                        class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium shadow-sm transition-all duration-200">
                             Ver detalle
                         </a>
                     </td>

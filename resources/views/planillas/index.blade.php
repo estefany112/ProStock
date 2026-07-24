@@ -108,8 +108,14 @@
                                             text-white px-3 py-1 rounded text-xs shadow">
                                             🔒 Cerrar
                                         </button>
-                                    </form>  
-                                 @endif  
+                                    </form> 
+                                 @endif
+                                  {{--<form action="{{ route('planillas.agregarFaltantes', $planilla->id) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-success">
+                                        Agregar empleados faltantes
+                                    </button>
+                                </form>--}}
                             </div>
                         </td>
                     </tr>
