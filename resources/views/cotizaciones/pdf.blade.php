@@ -79,7 +79,7 @@ $materiales = $cotizacion->items->where('tipo','material');
     
     <!-- Fecha: Formato estándar profesional -->
     <div style="font-size: 15px; color: #475569;">
-        Escuintla, {{ \Carbon\Carbon::parse($cotizacion->fecha)->format('d/m/Y') }}
+        Escuintla, {{ \Carbon\Carbon::parse($cotizacion->fecha_emision)->format('d/m/Y') }}
     </div>
 </div>
 
