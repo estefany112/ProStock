@@ -1,6 +1,52 @@
 @extends('layouts.principal')
 
 @section('content')
+
+<style>
+/* 1. Fondo general de la barra de herramientas */
+trix-toolbar {
+    background-color: #020617 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: none;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    padding: 0.5rem;
+}
+
+/* 2. Botones individuales de Trix */
+trix-toolbar .trix-button {
+    background-color: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 0.375rem !important;
+}
+
+/* 3. FORZAR ÍCONOS BLANCOS: Invertir y aclarar los gráficos internos de Trix */
+trix-toolbar .trix-button::before {
+    filter: brightness(0) invert(1) !important;
+    opacity: 0.9 !important;
+}
+
+/* 4. Efecto Hover al pasar el mouse */
+trix-toolbar .trix-button:hover {
+    background-color: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+trix-toolbar .trix-button:hover::before {
+    opacity: 1 !important;
+}
+
+/* 5. Estado Activo (cuando seleccionas Negrita, Cursiva, etc.) */
+trix-toolbar .trix-button.trix-active {
+    background-color: #3b82f6 !important; /* Azul de Tailwind */
+    border-color: #60a5fa !important;
+}
+
+trix-toolbar .trix-button.trix-active::before {
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+}
+</style>
 <div class="min-h-screen bg-mesh py-12 px-6 text-slate-100 font-sans">
     <div class="max-w-6xl mx-auto">
         
