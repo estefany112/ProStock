@@ -78,7 +78,9 @@
             <div class="p-8 border-r border-stone-200">
                 <h4 class="text-[9px] font-black text-stone-500 uppercase tracking-widest mb-4">Alcance Técnico</h4>
                 @foreach($detallesTecnicos as $det)
-                    <div class="text-xs text-stone-700 mb-2 flex gap-2"><span class="text-sky-600 font-black">⚙</span> {{ $det->descripcion }}</div>
+                    <div class="text-xs text-stone-700 mb-3 [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside">
+                        {!! $det->descripcion !!}
+                    </div>
                 @endforeach
             </div>
             

@@ -43,8 +43,18 @@ $materiales = $cotizacion->items->where('tipo','material');
             display: table-row-group !important;
         }
         tr, td {
-    page-break-inside: avoid;
-}
+            page-break-inside: avoid;
+        }
+
+        /* Clases para limpiar el formato HTML de Trix en el PDF */
+        .trix-content-pdf p, .trix-content-pdf div {
+            margin: 0;
+            display: inline;
+        }
+        .trix-content-pdf ul, .trix-content-pdf ol {
+            margin: 0;
+            padding-left: 15px;
+        }
     </style>
 </head>
 <body>
@@ -219,8 +229,8 @@ $materiales = $cotizacion->items->where('tipo','material');
                 {{ chr(97 + $index) }})
             </span>
 
-            <span style="display:inline-block; vertical-align:top; width:90%;">
-                {{ $item->descripcion }}
+            <span style="display:inline-block; vertical-align:top; width:90%;" class="trix-content-pdf">
+                {!! $item->descripcion !!}
             </span>
         </li>
     @endforeach

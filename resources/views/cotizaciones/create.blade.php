@@ -53,19 +53,18 @@
                         </select>
 
                         <div id="contenedor_nog" class="hidden mt-4">
-                                    <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
-                                        NOG DEL EVENTO
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        id="nog"
-                                        name="nog"
-                                        value="{{ old('nog') }}"
-                                        placeholder="Ej. 28765432"
-                                        class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white"
-                                    >
-                                </div>
+                            <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                                NOG DEL EVENTO
+                            </label>
+                            <input
+                                type="text"
+                                id="nog"
+                                name="nog"
+                                value="{{ old('nog') }}"
+                                placeholder="Ej. 28765432"
+                                class="w-full bg-slate-950/60 border border-white/10 p-3.5 rounded-xl text-white outline-none text-sm"
+                            >
+                        </div>
                     </div>
                     <div>
                         <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">Fecha de Emisión</label>
@@ -258,52 +257,35 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://unpkg.com/trix@2.1.15/dist/trix.css">
+<script src="https://unpkg.com/trix@2.1.15/dist/trix.umd.min.js"></script>
 <script>
     let itemIndex = {{ count($itemsComerciales) }};
     let detalleIndex = {{ count($detallesTecnicos) }};
     let contadorServicio = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar el formulario con un ítem vacío listo para rellenar
         agregarItem();
 
-        // Manejador del cambio de cliente para actualizar los campos espejo inmediatamente
         const clienteSelect = document.getElementById('cliente_select');
         
-       function actualizarVistaCliente() {
-
+        function actualizarVistaCliente() {
             const opt = clienteSelect.options[clienteSelect.selectedIndex];
 
             document.getElementById('cliente_nombre_view').value =
-                opt && opt.value !== ""
-                    ? opt.getAttribute('data-empresa')
-                    : '';
+                opt && opt.value !== "" ? opt.getAttribute('data-empresa') : '';
 
             document.getElementById('cliente_nit_view').value =
-                opt && opt.value !== ""
-                    ? opt.getAttribute('data-nit')
-                    : '';
+                opt && opt.value !== "" ? opt.getAttribute('data-nit') : '';
 
             document.getElementById('cliente_direccion_view').value =
-                opt && opt.value !== ""
-                    ? opt.getAttribute('data-direccion')
-                    : '';
+                opt && opt.value !== "" ? opt.getAttribute('data-direccion') : '';
 
-            const tipoCliente =
-                opt && opt.value !== ""
-                    ? opt.getAttribute('data-tipo')
-                    : '';
+            const tipoCliente = opt && opt.value !== "" ? opt.getAttribute('data-tipo') : '';
+            const contenedorNog = document.getElementById('contenedor_nog');
+            const inputNog = document.getElementById('nog');
 
-            const contenedorNog =
-                document.getElementById('contenedor_nog');
-
-            const inputNog =
-                document.getElementById('nog');
-
-            if (
-                tipoCliente === 'Empresa Pública' ||
-                tipoCliente === 'Estatal'
-            ) {
+            if (tipoCliente === 'Empresa Pública' || tipoCliente === 'Estatal') {
                 contenedorNog.classList.remove('hidden');
                 inputNog.required = true;
             } else {
@@ -314,7 +296,7 @@
         }
 
         clienteSelect.addEventListener('change', actualizarVistaCliente);
-        actualizarVistaCliente(); // Sincroniza al cargar si quedó un old() seleccionado                                                        
+        actualizarVistaCliente();                                                        
     });
 
     function agregarItem() {
@@ -393,19 +375,18 @@
                         <span class="text-indigo-400 font-bold text-xs uppercase tracking-wider">SERVICIO ${letra})</span>
                         <button type="button" onclick="this.closest('.detalle-item').remove(); recalcularServicio();" class="text-rose-400 hover:underline text-xs font-bold">Eliminar</button>
                     </div>
-                    <textarea name="detalles[${detalleIndex}][descripcion]" class="w-full bg-slate-950/40 border border-white/10 p-3 rounded-xl text-white text-xs outline-none focus:border-fuchsia-500" rows="2" placeholder="Especificar alcance técnico detallado..." required></textarea>
+                    <input
+                        id="detalle_${detalleIndex}"
+                        type="hidden"
+                        name="detalles[${detalleIndex}][descripcion]"
+                    >
+                    <trix-editor
+                        input="detalle_${detalleIndex}"
+                        class="bg-slate-950/40 border border-white/10 rounded-xl text-white"
+                    ></trix-editor>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
-
-            // Enfocar el último textarea agregado y hacer scroll hacia él
-            const lastTextarea = container.querySelector('.detalle-item:last-child textarea');
-
-            if (lastTextarea) {
-                lastTextarea.focus();
-                lastTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
             detalleIndex++;
-            
         } else {
             const html = `
                 <div class="detalle-item bg-white/[0.03] border border-white/10 p-4 rounded-xl">
@@ -429,10 +410,13 @@
     function recalcularServicio() {
         contadorServicio = 0;
         document.querySelectorAll('.detalle-item').forEach(el => {
-            const tipo = el.querySelector('input[name*="[tipo]"]').value;
-            if (tipo === 'servicio') {
+            const tipoInput = el.querySelector('input[name*="[tipo]"]');
+            if (tipoInput && tipoInput.value === 'servicio') {
                 contadorServicio++;
-                el.querySelector('span').innerText = `SERVICIO ${obtenerLetra(contadorServicio)})`;
+                const spanEl = el.querySelector('span');
+                if(spanEl) {
+                    spanEl.innerText = `SERVICIO ${obtenerLetra(contadorServicio)})`;
+                }
             }
         });
     }
