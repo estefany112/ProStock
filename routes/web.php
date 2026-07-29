@@ -26,6 +26,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EmpresaConfigController;
 use App\Http\Controllers\EmployeeMovementController;
+use App\Http\Controllers\ReporteProductoController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -64,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
     // MÓDULO DE PRODUCTOS
     Route::resource('productos', ProductoController::class)->middleware('permission:view_products');
+    Route::get('/reportes/productos', [ReporteProductoController::class, 'index'])->name('reportes.productos');
 
     // MÓDULO DE ENTRADAS
     Route::resource('entradas', EntradaController::class)->middleware('permission:view_entries');

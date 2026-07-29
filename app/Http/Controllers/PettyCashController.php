@@ -134,7 +134,7 @@ class PettyCashController extends Controller
         
         $movements = $cash->movements()->orderBy('created_at')->get();
 
-        $pdf = Pdf::loadView('reports.petty_cash_report', [
+        $pdf = Pdf::loadView('reportes.petty_cash_report', [
             'cash'=>$cash,
             'movements'=>$movements
         ]);

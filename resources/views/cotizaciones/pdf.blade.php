@@ -103,7 +103,7 @@ $materiales = $cotizacion->items->where('tipo','material');
                         <tr><td><strong>NIT:</strong></td><td>{{ $cotizacion->cliente->nit ?? 'C/F' }}</td></tr>
                         <tr><td><strong>Dirección:</strong></td><td>{{ $cotizacion->cliente->direccion ?? 'No especificada' }}</td></tr>
                         <tr><td><strong>Teléfono:</strong></td><td>{{ $cotizacion->cliente->telefono ?? 'N/A' }}</td></tr>
-                        <tr><td><strong>Correo:</strong></td><td>{{ $cotizacion->cliente->email ?? 'N/A' }}</td></tr>
+                        <tr><td><strong>Correo:</strong></td><td>{{ $cotizacion->cliente->correo ?? 'N/A' }}</td></tr>
                     </table>
                 </div>
             </td>
