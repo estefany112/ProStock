@@ -73,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
     // MÓDULO DE SALIDAS
     Route::resource('salidas', SalidaController::class)->middleware('permission:view_exits');
 
+    // MÓDULO DE REPORTES DE PRODUCTOS EXCELL
+    Route::get('/reportes/productos/excel', [ReporteProductoController::class,'excel'])->name('reportes.productos.excel');
+
     // MÓDULO DE CAJA CHICA
     Route::get('/caja', [PettyCashController::class, 'index'])->name('caja.index')->middleware('permission:caja.view');
     Route::post('/caja/open', [PettyCashController::class, 'open'])->middleware('permission:caja.open');

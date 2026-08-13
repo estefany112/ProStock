@@ -12,7 +12,8 @@
         ['ruta' => 'productos.index', 'label' => 'Productos', 'desc' => "Catálogo maestro con $totalProductos artículos.", 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', 'color' => 'from-emerald-400 to-teal-600'],
         ['ruta' => 'entradas.index', 'label' => 'Entradas', 'desc' => "Hoy se registraron $entradasHoy ingresos.", 'icon' => 'M19 14l-7 7m0 0l-7-7m7 7V3', 'color' => 'from-violet-500 to-purple-700'],
         ['ruta' => 'salidas.index', 'label' => 'Salidas', 'desc' => "Hoy se procesaron $salidasHoy despachos.", 'icon' => 'M5 10l7-7m0 0l7 7m-7-7v18', 'color' => 'from-orange-400 to-rose-600'],
-       ['ruta' => 'reportes.productos', 'label' => 'Reportería', 'desc' => "Hoy se procesaron $salidasHoy despachos.", 'icon' => 'M5 10l7-7m0 0l7 7m-7-7v18', 'color' => 'from-orange-400 to-rose-600'],
+        ['ruta' => 'reportes.productos','label' => 'Reportes', 'desc' => 'Consulta y descarga de reportes del inventario.', 'icon' => 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a2 2 0 011.414.586l3.414 3.414A2 2 0 0118 8.414V19a2 2 0 01-2 2z', 'color' => 'from-cyan-400 to-teal-600',
+        ],
     ];
 @endphp
 

@@ -171,10 +171,10 @@
                     <span class="font-bold tracking-tight italic">Entradas</span>
                 </a>
 
-                <a href="{{ route('prostock.index') }}" 
+                <a href="{{ route('reportes.productos') }}" 
                    class="flex-1 md:flex-none group px-8 py-4 bg-slate-800 text-white rounded-3xl hover:bg-slate-700 transition-all text-center shadow-xl">
                     <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Finalizar</span>
-                    <span class="font-black tracking-tight italic">Menú Inventario</span>
+                    <span class="font-black tracking-tight italic">Reportes de productos</span>
                 </a>
             </div>
         </div>

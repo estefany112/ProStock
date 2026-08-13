@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Exports\ReporteProductosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteProductoController extends Controller
 {
@@ -47,5 +49,16 @@ class ReporteProductoController extends Controller
             'productos',
             'tipo'
         ));
+    }
+
+    public function excel(Request $request)
+    {
+        $tipo = $request->tipo ?? 'sin_precio';
+
+
+        return Excel::download(
+            new ReporteProductosExport($tipo),
+            'reporte_productos_'.$tipo.'.xlsx'
+        );
     }
 }
