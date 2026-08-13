@@ -3,12 +3,22 @@
 @section('content')
 <div class="max-w-6xl mx-auto py-8">
 
-    <div class="flex justify-end items-center mb-6">
+    <div class="flex justify-between items-center mb-6">
+
         <a href="{{ route('planillas.index') }}"
             class="bg-gray-200 hover:bg-gray-300 text-gray-700
                 px-4 py-2 rounded-lg text-sm shadow-sm">
             ← Volver
         </a>
+
+        @if($siguiente)
+            <a href="{{ route('planillas.show', $siguiente->id) }}"
+                class="bg-blue-600 hover:bg-blue-700 text-white
+                    px-4 py-2 rounded-lg text-sm shadow-sm">
+                Siguiente →
+            </a>
+        @endif
+
     </div>
 
     <div class="bg-white p-6 rounded-xl shadow">

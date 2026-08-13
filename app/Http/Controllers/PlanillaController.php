@@ -179,7 +179,11 @@ public function show($id)
         ];
     }
 
-    return view('planillas.show', compact('planilla','empleados'));
+    $siguiente = Planilla::where('fecha_inicio', '>', $planilla->fecha_inicio)
+    ->orderBy('fecha_inicio', 'asc')
+    ->first();
+
+    return view('planillas.show', compact('planilla','empleados','siguiente'));
 }
 
 public function boleta($planillaId, $empleadoId)
