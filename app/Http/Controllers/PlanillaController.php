@@ -162,6 +162,10 @@ public function show($id)
         $liquido = ($salario + $bonificacion + $horasExtras)
                     - ($igss + $isr + $otros + $anticipos);
 
+        $usuarioPago = $detalle->pivot->usuario_pago_id
+        ? \App\Models\User::find($detalle->pivot->usuario_pago_id)
+        : null;
+
         // SOLO PARA VISTA
         $empleado->calc = (object)[
             'salario' => $salario,
@@ -170,7 +174,8 @@ public function show($id)
             'igss' => $igss,
             'isr' => $isr, 
             'anticipos' => $anticipos,
-            'liquido' => $liquido
+            'liquido' => $liquido,
+            'usuario_pago' => $usuarioPago,
         ];
     }
 
@@ -430,6 +435,31 @@ public function previewBoleta($planillaId, $empleadoId)
     }
 
     return back()->with('success', 'Nuevos empleados agregados correctamente.');
+}
+
+public function marcarPagado($planillaId, $empleadoId)
+{
+    $planilla = Planilla::findOrFail($planillaId);
+
+    // Buscar el detalle del empleado dentro de esta planilla
+    $detalle = $planilla->employees()
+        ->where('employee_id', $empleadoId)
+        ->firstOrFail();
+    
+
+    // Evitar marcarlo nuevamente como pagado
+    if ($detalle->pivot->estado_pago === 'pagado') {
+        return back()->with('error', 'Este empleado ya aparece como pagado.');
+    }
+
+    // Registrar el pago
+    $planilla->employees()->updateExistingPivot($empleadoId, [
+        'estado_pago' => 'pagado',
+        'fecha_pago' => now(),
+        'usuario_pago_id' => auth()->id(),
+    ]);
+
+    return back()->with('success', 'Pago registrado correctamente.');
 }
 
 }

@@ -24,7 +24,10 @@ class Planilla extends Model
                 'igss',
                 'isr',
                 'otros_descuentos',
-                'liquido_recibir'
+                'liquido_recibir',
+                'estado_pago',
+                'fecha_pago',
+                'usuario_pago_id'
             ]);
     }
 }
