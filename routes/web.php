@@ -142,6 +142,26 @@ Route::middleware(['auth'])->group(function () {
     [CotizacionController::class, 'pdf'])
     ->name('cotizaciones.pdf');
 
+   // MÓDULO DE VEHÍCULOS
+    Route::get('/vehiculos', [VehiculoController::class, 'index'])
+    ->middleware('permission:view_vehicles')
+    ->name('vehiculos.index');
+    Route::get('/vehiculos/create', [VehiculoController::class, 'create'])
+    ->middleware('permission:create_vehicles')
+    ->name('vehiculos.create');
+    Route::post('/vehiculos', [VehiculoController::class, 'store'])
+        ->middleware('permission:create_vehicles')
+        ->name('vehiculos.store');
+    Route::get('/vehiculos/{vehiculo}/edit', [VehiculoController::class, 'edit'])
+        ->middleware('permission:edit_vehicles')
+        ->name('vehiculos.edit');
+    Route::put('/vehiculos/{vehiculo}', [VehiculoController::class, 'update'])
+        ->middleware('permission:edit_vehicles')
+        ->name('vehiculos.update');
+    Route::delete('/vehiculos/{vehiculo}', [VehiculoController::class, 'destroy'])
+        ->middleware('permission:delete_vehicles')
+        ->name('vehiculos.destroy');
+
     // MÓDULO DE CONFIGURACIÓN DE EMPRESA
     Route::get('/configuracion-empresa', [EmpresaConfigController::class, 'edit'])->name('empresa.edit');
     Route::put('/configuracion-empresa', [EmpresaConfigController::class, 'update'])->name('empresa.update');
