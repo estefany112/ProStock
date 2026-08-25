@@ -39,6 +39,9 @@ class RolePermissionSeeder extends Seeder
             Permission::whereIn('name', [
                 'view_products','create_exits',
 
+                // VEHÍCULOS
+                'view_vehicles',
+
                 // SOLICITUDES
                 'solicitudes.create',
                 'solicitudes.view',

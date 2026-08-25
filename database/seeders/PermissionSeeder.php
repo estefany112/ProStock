@@ -55,6 +55,12 @@ class PermissionSeeder extends Seeder
         ['name'=>'solicitudes.approve','label'=>'Aprobar solicitudes'],
         ['name'=>'solicitudes.deliver','label'=>'Entregar solicitudes'],
 
+        // VEHÍCULOS
+        ['name'=>'view_vehicles','label'=>'Ver vehículos'],
+        ['name'=>'create_vehicles','label'=>'Crear vehículos'],
+        ['name'=>'edit_vehicles','label'=>'Editar vehículos'],
+        ['name'=>'delete_vehicles','label'=>'Eliminar vehículos'],
+
     ];
 
     foreach ($permissions as $permission) {
