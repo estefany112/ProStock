@@ -27,12 +27,13 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EmpresaConfigController;
 use App\Http\Controllers\EmployeeMovementController;
 use App\Http\Controllers\ReporteProductoController;
+use App\Http\Controllers\VehiculoController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
 
 // DASHBOARD - SOLO PARA PERSONA AUTENTICADAS
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'system.access'])->name('dashboard');
 
 // RUTA PUBLICA - CREAR SOLICITUD
 Route::get('/solicitudes/create', [SolicitudController::class, 'create'])->name('solicitudes.create');
@@ -40,7 +41,7 @@ Route::get('/solicitudes/create', [SolicitudController::class, 'create'])->name(
 Route::post('/solicitudes', [SolicitudController::class, 'store'])->name('solicitudes.store');
 
 // RUTAS PROTEGIDAS
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'system.access'])->group(function () {
 
     // PERFIL DE USUARIO
     Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
