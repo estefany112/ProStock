@@ -99,6 +99,8 @@ Route::middleware(['auth', 'system.access'])->group(function () {
     Route::get('movements/create',[EmployeeMovementController::class, 'create'])->name('movements.create');
     Route::post('movements',[EmployeeMovementController::class, 'store'])->name('movements.store');
     });
+    Route::get('/employees/inactive', [EmployeeController::class, 'inactive'])
+    ->name('employees.inactive');
     
     // MÓDULO PLANILLAS
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');

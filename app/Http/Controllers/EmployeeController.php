@@ -13,7 +13,7 @@ public function index(Request $request)
     abort_unless(auth()->user()->hasPermission('employee.view'), 403);
 
     // Query base
-    $query = Employee::query();
+    $query = Employee::where('active', true);
 
     // BUSCADOR
     if ($request->filled('search')) {
@@ -48,7 +48,15 @@ public function index(Request $request)
         ->paginate(15)
         ->appends($request->query());
 
-    return view('employees.index', compact('employees'));
+   // Métricas
+    $totalEmpleadosActivos = Employee::where('active', true)->count();
+    $totalEmpleadosInactivos = Employee::where('active', false)->count();
+
+    return view('employees.index', compact(
+        'employees',
+        'totalEmpleadosActivos',
+        'totalEmpleadosInactivos'
+    ));
 }
 
     public function create()
@@ -176,5 +184,32 @@ public function index(Request $request)
         ]);
 
         return back()->with('success','Estado actualizado correctamente');
+    }
+
+    public function inactive(Request $request)
+    {
+        abort_unless(auth()->user()->hasPermission('employee.view'), 403);
+
+        $query = Employee::where('active', false);
+
+        if ($request->filled('search')) {
+
+            $search = trim($request->search);
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('dpi', 'like', "%{$search}%")
+                ->orWhere('position', 'like', "%{$search}%")
+                ->orWhere('salary_base', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        $employees = $query
+            ->orderBy('fecha_baja', 'desc')
+            ->paginate(15)
+            ->appends($request->query());
+
+        return view('employees.inactive', compact('employees'));
     }
 }
