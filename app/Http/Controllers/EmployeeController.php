@@ -45,7 +45,7 @@ public function index(Request $request)
     // Orden por fecha de creación (desde el ultimo al más reciente)
     $employees = $query
         ->orderBy('created_at', 'asc')
-        ->paginate(15)
+        ->paginate(10)
         ->appends($request->query());
 
    // Métricas
