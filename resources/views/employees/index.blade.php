@@ -381,14 +381,35 @@
     </div>
 
 
-    {{-- FOOTER --}}
-    @if(method_exists($employees, 'links'))
+   {{-- PAGINACIÓN --}}
+@if($employees->hasPages())
+    <div class="px-5 sm:px-6 py-4 border-t border-slate-800 bg-slate-950/40">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
 
-        <div class="px-5 sm:px-6 py-4 border-t border-slate-800 bg-slate-950/40 text-slate-400">
+            {{-- INFORMACIÓN --}}
+            <div class="text-xs text-slate-500">
+                Mostrando
+                <span class="font-semibold text-slate-300">
+                    {{ $employees->firstItem() }}
+                </span>
+                -
+                <span class="font-semibold text-slate-300">
+                    {{ $employees->lastItem() }}
+                </span>
+                de
+                <span class="font-semibold text-slate-300">
+                    {{ $employees->total() }}
+                </span>
+                empleados
+            </div>
 
-            {{ $employees->links() }}
+            {{-- NAVEGACIÓN --}}
+            <div>
+                {{ $employees->onEachSide(1)->links() }}
+            </div>
 
         </div>
+    </div>
 
     @endif
 
