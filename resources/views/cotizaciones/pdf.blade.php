@@ -2,6 +2,7 @@
 $comerciales = $cotizacion->items->where('tipo','comercial');
 $servicios = $cotizacion->items->where('tipo','servicio');
 $materiales = $cotizacion->items->where('tipo','material');
+$unSoloItemComercial = $comerciales->count() === 1;
 @endphp
 <!DOCTYPE html>
 <html lang="es">
@@ -219,6 +220,9 @@ $materiales = $cotizacion->items->where('tipo','material');
         </tbody>
     </table>
 
+    @if($unSoloItemComercial)
+        <div style="page-break-before:always"></div>
+    @endif
     <div style="margin-top:15px;"></div>
     <div class="section-title">Alcance Técnico</div>
 
