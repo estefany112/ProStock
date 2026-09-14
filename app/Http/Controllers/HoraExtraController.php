@@ -12,7 +12,10 @@ class HoraExtraController extends Controller
 {
     public function formQuincena()
     {
-        $empleados = Employee::all();
+        $empleados = Employee::where('status', 'activo')
+        ->where('active', 1)
+        ->orderBy('name')
+        ->get();
         return view('horas_extras.quincena', compact('empleados'));
     }
 
@@ -23,7 +26,10 @@ class HoraExtraController extends Controller
         'horas.*' => 'nullable|numeric|min:0'
     ]);
 
-    $empleado = Employee::findOrFail($request->empleado_id);
+    $empleado = Employee::where('id', $request->empleado_id)
+        ->where('status', 'activo')
+        ->where('active', 1)
+        ->firstOrFail();
 
     foreach ($request->fechas as $index => $fecha) {
 
