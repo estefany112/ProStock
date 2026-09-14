@@ -11,7 +11,10 @@ class AnticipoController extends Controller
 {
     public function formQuincena()
     {
-        $empleados = Employee::all();
+        $empleados = Employee::where('status', 'activo')
+            ->where('active', 1)
+            ->orderBy('name')
+            ->get();
 
         return view('anticipos.quincena', compact('empleados'));
     }
