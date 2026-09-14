@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PettyCashReportMail;
+use App\Models\EmpresaConfig;
 
 class PettyCashController extends Controller
 {
@@ -134,9 +135,12 @@ class PettyCashController extends Controller
         
         $movements = $cash->movements()->orderBy('created_at')->get();
 
+        $empresa = EmpresaConfig::first();
+
         $pdf = Pdf::loadView('reportes.petty_cash_report', [
             'cash'=>$cash,
-            'movements'=>$movements
+            'movements'=>$movements,
+            'empresa'=>$empresa
         ]);
 
         $inicio = $cash->period_start->format('Y-m-d');

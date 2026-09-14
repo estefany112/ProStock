@@ -16,10 +16,9 @@ MANTENIMIENTO ELÉCTRICO
 
 <!-- Información de contacto -->
 <td width="30%" style="font-size:11px; text-align:left;">
-{{ old('direccion', $empresa->direccion) }}
-<strong>Teléfonos:</strong> 31032136 / 55653332<br>
-<strong>Correo:</strong> servicioselectricosvelasquez@gmail.com<br>
-<strong>Web:</strong>
+{{ $empresa->direccion }}
+<strong>Teléfonos:</strong> {{ $empresa->telefono }}<br>
+<strong>Correo:</strong> {{ $empresa->correo }}<br>
 </td>
 
 </tr>
