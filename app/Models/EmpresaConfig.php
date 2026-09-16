@@ -17,4 +17,9 @@ class EmpresaConfig extends Model
         'correo',
         'cuenta_bancaria',
     ];
+
+    public function cuentasBancarias()
+    {
+        return $this->hasMany(CuentaBancaria::class, 'empresa_config_id');
+    }
 }

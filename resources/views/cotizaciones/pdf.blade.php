@@ -243,10 +243,10 @@ $unSoloItemComercial = $comerciales->count() === 1;
 <div style="margin-top:15px;"></div>
     <div class="section-title">Condiciones Comerciales</div>
     <table width="100%" class="box">
-        <tr><td width="30%"><strong>1. Lugar:</strong></td><td>{{ $cotizacion->lugar_entrega }}</td></tr>
-        <tr><td><strong>2. Tiempo:</strong></td><td>{{ $cotizacion->tiempo_entrega }}</td></tr>
+        <tr><td width="30%"><strong>1. Lugar de entrega:</strong></td><td>{{ $cotizacion->lugar_entrega }}</td></tr>
+        <tr><td><strong>2. Tiempo de entrega:</strong></td><td>{{ $cotizacion->tiempo_entrega }}</td></tr>
         <tr><td><strong>3. Garantía:</strong></td><td>{{ $cotizacion->garantia }}</td></tr>
-        <tr><td><strong>4. Pago:</strong></td><td>{{ $cotizacion->forma_pago }}</td></tr>
+        <tr><td><strong>4. Forma de Pago:</strong></td><td>{{ $cotizacion->forma_pago }}</td></tr>
         <tr><td><strong>5. Validez:</strong></td><td>{{ $cotizacion->validez_oferta }}</td></tr>
     </table>
 
