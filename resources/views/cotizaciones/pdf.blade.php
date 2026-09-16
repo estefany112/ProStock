@@ -117,7 +117,7 @@ $unSoloItemComercial = $comerciales->count() === 1;
                         <tr><td><strong>Dirección:</strong></td><td>{{ $empresa->direccion }}</td></tr>
                         <tr><td><strong>Teléfono:</strong></td><td>{{ $empresa->telefono }}</td></tr>
                         <tr><td><strong>Cuenta:</strong></td><td>{{ $empresa->cuenta_bancaria }}</td></tr>
-                        <tr><td><strong>Regimen Tributario:</strong></td><td>{{  $empresa->regimen_isr ?? 'N/A' }}</td></tr>
+                        <tr><td><strong>Régimen Tributario:</strong></td><td>{{  $empresa->regimen_isr ?? 'N/A' }}</td></tr>
                     </table>
                 </div>
             </td>
