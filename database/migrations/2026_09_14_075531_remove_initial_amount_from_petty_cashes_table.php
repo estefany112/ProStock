@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('petty_cashes', function (Blueprint $table) {
-             $table->dropColumn('initial_amount');
-        });
+        if (Schema::hasColumn('petty_cashes', 'initial_amount')) {
+            Schema::table('petty_cashes', function (Blueprint $table) {
+                $table->dropColumn('initial_amount');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('petty_cashes', function (Blueprint $table) {
-             $table->dropColumn('initial_amount');
-        });
+        if (!Schema::hasColumn('petty_cashes', 'initial_amount')) {
+            Schema::table('petty_cashes', function (Blueprint $table) {
+                $table->decimal('initial_amount', 10, 2)->default(0);
+            });
+        }
     }
 };
