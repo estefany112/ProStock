@@ -17,7 +17,7 @@ class DashboardController extends Controller
             'totalProductos'  => Producto::count(),
             'stockTotal'      => Producto::sum('stock_actual'),
             'stockBajo'       => Producto::where('stock_actual', '<=', 5)->count(),
-            'totalEmpleados' => Employee::count(),
+            'totalEmpleadosActivos' => Employee::where('status', 'activo')->where('active', 1)->count(),
             'totalUsuarios' => User::count(),
         ]);
     }
