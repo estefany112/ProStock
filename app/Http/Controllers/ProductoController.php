@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 class ProductoController extends Controller
@@ -43,12 +44,18 @@ class ProductoController extends Controller
 
     $productos = $query
         ->orderBy('descripcion')
-        ->paginate(15) // Puedes subirlo a 15 o 20 ahora que es más rápido
+        ->paginate(15) 
         ->withQueryString();
 
-    return view('productos.index', compact('productos'));
-}
+    $valorInventario = Producto::sum(
+        DB::raw('stock_actual * precio_unitario')
+    );
 
+    return view('productos.index', compact(
+        'productos',
+        'valorInventario'
+    ));
+}
     /**
      * Show the form for creating a new resource.
      */

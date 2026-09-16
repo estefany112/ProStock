@@ -74,4 +74,9 @@ class Producto extends Model
         });
     }
 
+    public function getValorInventarioAttribute(): float
+    {
+        return ($this->stock_actual ?? 0) * ($this->precio_unitario ?? 0);
+    }
+
 }
