@@ -703,7 +703,7 @@
 <tr>
 
     <td style="
-        height:5mm;
+        height:12mm;
         padding:0;
         vertical-align:middle;
         border-bottom:1px dashed #fff;

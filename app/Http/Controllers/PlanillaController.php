@@ -209,7 +209,7 @@ public function boleta($planillaId, $empleadoId)
             'planilla',
             'empleado',
             'horasCantidad',
-            'horasExtrasTotal'
+            'horasExtrasTotal', 
         )
     )->setPaper('letter', 'portrait');
 
