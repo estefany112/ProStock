@@ -203,7 +203,15 @@ public function boleta($planillaId, $empleadoId)
     ->whereBetween('fecha', [$inicio, $fin])
     ->sum('horas');
 
-    $pdf = Pdf::loadView('planillas.boleta', compact('planilla', 'empleado', 'horasCantidad', 'horasExtrasTotal'));
+    $pdf = Pdf::loadView(
+        'planillas.boleta',
+        compact(
+            'planilla',
+            'empleado',
+            'horasCantidad',
+            'horasExtrasTotal'
+        )
+    )->setPaper('letter', 'portrait');
 
 
     // Detectar tipo de período
