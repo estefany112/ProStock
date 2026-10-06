@@ -28,6 +28,7 @@ use App\Http\Controllers\EmpresaConfigController;
 use App\Http\Controllers\EmployeeMovementController;
 use App\Http\Controllers\ReporteProductoController;
 use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\VehicleTripController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -39,6 +40,28 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::get('/solicitudes/create', [SolicitudController::class, 'create'])->name('solicitudes.create');
 
 Route::post('/solicitudes', [SolicitudController::class, 'store'])->name('solicitudes.store');
+
+// RUTA PUBLICA - VER VIAJES DE VEHÍCULOS OPERATIVOS
+Route::get('/operativo/vehiculos/viajes', [VehicleTripController::class, 'operationalIndex'])
+    ->name('vehicle-trips.operational.index');
+
+// RUTA PUBLICA - CREAR SALIDA DE VEHÍCULO OPERATIVO
+Route::get('/operativo/vehiculos/salidas/create', [VehicleTripController::class, 'createOperationalDeparture'])
+    ->name('vehicle-trips.operational.departure.create');
+
+// RUTA PUBLICA - REGISTRAR SALIDA DE VEHÍCULO OPERATIVO
+Route::post('/operativo/vehiculos/salidas', [VehicleTripController::class, 'storeDeparture'])
+    ->name('vehicle-trips.operational.departure.store');
+
+// RUTA PUBLICA - CREAR RETORNO DE VEHÍCULO OPERATIVO
+Route::get('/operativo/vehiculos/viajes/{trip}/retorno',
+[VehicleTripController::class, 'createOperationalReturn']
+    )->name('vehicle-trips.operational.return.create');
+
+// RUTA PUBLICA - REGISTRAR RETORNO DE VEHÍCULO OPERATIVO
+Route::put('/operativo/vehiculos/viajes/{trip}/retorno',
+[VehicleTripController::class, 'storeOperationalReturn']
+    )->name('vehicle-trips.operational.return.store');
 
 // RUTAS PROTEGIDAS
 Route::middleware(['auth', 'system.access'])->group(function () {
@@ -164,31 +187,55 @@ Route::middleware(['auth', 'system.access'])->group(function () {
     Route::delete('/vehiculos/{vehiculo}', [VehiculoController::class, 'destroy'])
         ->middleware('permission:delete_vehicles')
         ->name('vehiculos.destroy');
+    // CONTROL GENERAL DE VIAJES
+    Route::get('/vehiculos/viajes', [VehicleTripController::class, 'index'])
+        ->middleware('permission:view_vehicles')
+        ->name('vehicle-trips.index');
+    // FORMULARIO DE SALIDA DE VEHÍCULO
+    Route::get('/vehiculos/salidas/create', [VehicleTripController::class, 'createDeparture'])
+        ->middleware('permission:create_vehicles')
+        ->name('vehicle-trips.departure.create');
 
-    // MÓDULO DE CONFIGURACIÓN DE EMPRESA
-    Route::get('/configuracion-empresa', [EmpresaConfigController::class, 'edit'])->name('empresa.edit');
-    Route::put('/configuracion-empresa', [EmpresaConfigController::class, 'update'])->name('empresa.update');
+    // REGISTRAR SALIDA DE VEHÍCULO
+    Route::post('/vehiculos/salidas', [VehicleTripController::class, 'storeDeparture'])
+        ->middleware('permission:create_vehicles')
+        ->name('vehicle-trips.departure.store');
+    // FORMULARIO DE RETORNO DE VEHÍCULO
+    Route::get('/vehiculos/viajes/{trip}/retorno', [VehicleTripController::class, 'createReturn'])
+        ->middleware('permission:create_vehicles')
+        ->name('vehicle-trips.return.create');
 
-    // MENÚ DE PROSTOCK
-    Route::get('/prostock', function () {
-        // Consultas reales a la base de datos
-        $totalProductos = Producto::count();
-        $totalCategorias = Categoria::count();
-        $entradasHoy = Entrada::whereDate('created_at', today())->count();
-        $salidasHoy = Salida::whereDate('created_at', today())->count();
-        
-        return view('prostock.index', compact(
-            'totalProductos', 
-            'totalCategorias', 
-            'entradasHoy', 
-            'salidasHoy'
-        ));
-    })->name('prostock.index');
+    // REGISTRAR RETORNO DE VEHÍCULO
+    Route::put('/vehiculos/viajes/{trip}/retorno', [VehicleTripController::class, 'storeReturn'])
+        ->middleware('permission:create_vehicles')
+        ->name('vehicle-trips.return.store');
+    Route::get('/vehiculos/viajes/{trip}',  [VehicleTripController::class, 'show'])
+        ->name('vehicle-trips.show');
 
-    // CONTADORES DEL DASHBOARD
-    Route::get('/test', function () { return view('dashboard.index', [ 'totalCategorias' => 0, 'totalProductos' => 0, 'stockTotal' => 0, 'stockBajo' => 0, ]);
+        // MÓDULO DE CONFIGURACIÓN DE EMPRESA
+        Route::get('/configuracion-empresa', [EmpresaConfigController::class, 'edit'])->name('empresa.edit');
+        Route::put('/configuracion-empresa', [EmpresaConfigController::class, 'update'])->name('empresa.update');
 
-});
+        // MENÚ DE PROSTOCK
+        Route::get('/prostock', function () {
+            // Consultas reales a la base de datos
+            $totalProductos = Producto::count();
+            $totalCategorias = Categoria::count();
+            $entradasHoy = Entrada::whereDate('created_at', today())->count();
+            $salidasHoy = Salida::whereDate('created_at', today())->count();
+            
+            return view('prostock.index', compact(
+                'totalProductos', 
+                'totalCategorias', 
+                'entradasHoy', 
+                'salidasHoy'
+            ));
+        })->name('prostock.index');
+
+        // CONTADORES DEL DASHBOARD
+        Route::get('/test', function () { return view('dashboard.index', [ 'totalCategorias' => 0, 'totalProductos' => 0, 'stockTotal' => 0, 'stockBajo' => 0, ]);
+
+    });
 
     // MÓDULO DE SOLICITUDES
     Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index')->middleware('permission:solicitudes.view');

@@ -568,7 +568,7 @@ class CotizacionController extends Controller
         $pdf = Pdf::loadView(
             'cotizaciones.pdf',
             compact('cotizacion', 'empresa')
-        )->setPaper('letter');
+        )->setPaper('letter', 'portrait');
 
         $nombreArchivo =
             'CTZ_' .

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vehiculo extends Model
 {
@@ -14,4 +15,15 @@ class Vehiculo extends Model
         'numero_interno',
         'tipo',
     ];
+
+    /**
+     * Viajes realizados por este vehículo.
+     */
+    public function trips(): HasMany
+    {
+        return $this->hasMany(
+            VehicleTrip::class,
+            'vehicle_id'
+        );
+    }
 }

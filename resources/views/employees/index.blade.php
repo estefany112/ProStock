@@ -140,6 +140,10 @@
                 <tr>
 
                     <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                        Código personal
+                    </th>
+
+                    <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                         Empleado
                     </th>
 
@@ -170,6 +174,21 @@
                 @forelse ($employees as $employee)
 
                     <tr class="group hover:bg-slate-800/40 transition-colors duration-200">
+
+                        {{-- CÓDIGO PERSONAL --}}
+                        <td class="px-6 py-4">
+
+                            @if($employee->codigo_personal)
+                                <div class="text-sm font-medium text-slate-300">
+                                    {{ $employee->codigo_personal }}
+                                </div>
+                            @else
+                                <div class="text-sm font-medium text-slate-500">
+                                    Sin código
+                                </div>
+                            @endif
+
+                        </td>
 
                         {{-- EMPLEADO --}}
                         <td class="px-6 py-4">
