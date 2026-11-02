@@ -19,13 +19,7 @@
             <div class="flex items-center gap-3">
                 {{-- LOGOTIPO UBICADO AQUÍ --}}
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-md shadow-emerald-900/30 overflow-hidden border border-emerald-500/20">
-                    @if(strtoupper(config('app.name')) === 'PROSTOCK')
-                        <img src="{{ asset('assets/img/fondo.jpg') }}" alt="Logo ProStock" class="w-full h-full object-cover">
-                    @else
-                        <span class="text-white font-black text-lg">
-                            {{ substr(config('app.name', 'ProStock'), 0, 1) }}
-                        </span>
-                    @endif
+                    <img src="{{ asset('assets/img/icono.png') }}" alt="Logo ProStock" class="w-full h-full object-cover">
                 </div>
 
                 <div>
