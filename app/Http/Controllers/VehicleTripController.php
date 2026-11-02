@@ -75,9 +75,10 @@ class VehicleTripController extends Controller
         // 1. VEHÍCULOS QUE NO TIENEN UNA SALIDA ACTIVA
         // =====================================================
 
-        $vehicles = Vehiculo::whereDoesntHave('trips', function ($query) {
-            $query->where('status', 'EN_USO');
-        })
+        $vehicles = Vehiculo::where('numero_interno', 'like', 'V-%')
+            ->whereDoesntHave('trips', function ($query) {
+                $query->where('status', 'EN_USO');
+            })
             ->orderBy('numero_interno')
             ->get();
 
@@ -732,7 +733,8 @@ class VehicleTripController extends Controller
 
     public function createOperationalDeparture()
     {
-        $vehicles = Vehiculo::whereDoesntHave('trips', function ($query) {
+         $vehicles = Vehiculo::where('numero_interno', 'like', 'V-%')
+            ->whereDoesntHave('trips', function ($query) {
                 $query->where('status', 'EN_USO');
             })
             ->orderBy('numero_interno')
