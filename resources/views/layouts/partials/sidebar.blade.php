@@ -202,6 +202,7 @@
                     open: {{ request()->routeIs('solicitudes.*')
                         || request()->routeIs('prostock.*')
                         || request()->routeIs('vehiculos.*')
+                        || request()->routeIs('vehicle-trips.*')
                         ? 'true'
                         : 'false' }}
                 }"
@@ -304,20 +305,103 @@
                     </a>
 
 
-                    <a
-                        href="{{ route('vehiculos.index') }}"
-                        class="block
-                               px-4
-                               py-2
-                               text-sm
-                               rounded-lg
-                               border-l-2
-                               {{ request()->routeIs('vehiculos.*')
+                    
+                {{-- ================================================= --}}
+                {{-- SUBMENÚ DE VEHÍCULOS --}}
+                {{-- ================================================= --}}
+
+                <div
+                    x-data="{
+                        openVehiculos: {{ request()->routeIs('vehiculos.*')
+                            || request()->routeIs('vehicle-trips.*')
+                            ? 'true'
+                            : 'false' }}
+                    }"
+                    class="space-y-1"
+                >
+
+                    <button
+                        type="button"
+                        @click="openVehiculos = !openVehiculos"
+                        class="w-full
+                            flex
+                            items-center
+                            justify-between
+                            px-4
+                            py-2
+                            text-sm
+                            rounded-lg
+                            text-slate-400
+                            hover:text-blue-400
+                            hover:bg-slate-900
+                            transition"
+                    >
+
+                        <span class="font-medium">
+                            Vehículos
+                        </span>
+
+                        <svg
+                            class="w-4 h-4 transition-transform duration-300"
+                            :class="openVehiculos ? 'rotate-180' : ''"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+
+                    </button>
+
+                    <div
+                        x-cloak
+                        x-show="openVehiculos"
+                        x-collapse
+                        class="pl-4 space-y-1"
+                    >
+
+                        {{-- ADMINISTRAR VEHÍCULOS --}}
+                        <a
+                            href="{{ route('vehiculos.index') }}"
+                            class="block px-4 py-2 text-sm rounded-lg border-l-2
+                                {{ request()->routeIs('vehiculos.*')
                                     ? 'border-blue-500 text-white bg-slate-900'
                                     : 'border-slate-800 text-slate-500 hover:text-slate-300' }}"
-                    >
-                        Vehículos
-                    </a>
+                        >
+                            Administrar vehículos
+                        </a>
+
+                        {{-- REGISTRAR SALIDA / CHECKLIST --}}
+                        <a
+                            href="{{ route('vehicle-trips.departure.create') }}"
+                            class="block px-4 py-2 text-sm rounded-lg border-l-2
+                                {{ request()->routeIs('vehicle-trips.departure.*')
+                                    ? 'border-blue-500 text-white bg-slate-900'
+                                    : 'border-slate-800 text-slate-500 hover:text-slate-300' }}"
+                        >
+                            Registrar salida / Checklist
+                        </a>
+
+                        {{-- CONTROL DE VIAJES --}}
+                        <a
+                            href="{{ route('vehicle-trips.index') }}"
+                            class="block px-4 py-2 text-sm rounded-lg border-l-2
+                                {{ request()->routeIs('vehicle-trips.index')
+                                    || request()->routeIs('vehicle-trips.show')
+                                    ? 'border-blue-500 text-white bg-slate-900'
+                                    : 'border-slate-800 text-slate-500 hover:text-slate-300' }}"
+                        >
+                            Control de viajes
+                        </a>
+
+                    </div>
+
+                </div>  
 
                 </div>
 

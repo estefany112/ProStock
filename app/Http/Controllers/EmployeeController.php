@@ -13,7 +13,8 @@ public function index(Request $request)
     abort_unless(auth()->user()->hasPermission('employee.view'), 403);
 
     // Query base
-    $query = Employee::where('active', true);
+    $query = Employee::with('licenses')
+        ->where('active', true);
 
     // BUSCADOR
     if ($request->filled('search')) {

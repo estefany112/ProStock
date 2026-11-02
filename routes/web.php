@@ -29,6 +29,7 @@ use App\Http\Controllers\EmployeeMovementController;
 use App\Http\Controllers\ReporteProductoController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\VehicleTripController;
+use App\Http\Controllers\EmployeeLicenseController;
 
 // PÁGINA PRINCIPAL
 Route::get('/', function () { return view('welcome'); });
@@ -124,6 +125,23 @@ Route::middleware(['auth', 'system.access'])->group(function () {
     });
     Route::get('/employees/inactive', [EmployeeController::class, 'inactive'])
     ->name('employees.inactive');
+    // MÓDULO DE LICENCIAS DE EMPLEADOS
+    Route::prefix('employees/{employee}/license')
+    ->name('employees.license.')
+    ->group(function () {
+
+        // Formulario para registrar o administrar la licencia
+        Route::get('/', [EmployeeLicenseController::class, 'edit'])
+            ->name('edit');
+
+        // Guardar una nueva licencia
+        Route::post('/', [EmployeeLicenseController::class, 'store'])
+            ->name('store');
+
+        // Actualizar una licencia existente
+        Route::put('/{license}', [EmployeeLicenseController::class, 'update'])
+            ->name('update');
+    });
     
     // MÓDULO PLANILLAS
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');

@@ -159,6 +159,10 @@
                         Estado
                     </th>
 
+                    <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center">
+                        Licencia
+                    </th>
+
                     <th class="px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400 text-right">
                         Acciones
                     </th>
@@ -293,6 +297,63 @@
 
                         </td>
 
+                        {{-- LICENCIA --}}
+                        <td class="px-6 py-4 text-center">
+
+                            @php
+                                $license = $employee->licenses
+                                    ->sortByDesc('expires_at')
+                                    ->first();
+                            @endphp
+
+                            @if(!$license)
+
+                                <span class="inline-flex items-center gap-2
+                                            px-3 py-1.5 rounded-full
+                                            bg-slate-800 border border-slate-700
+                                            text-slate-400">
+
+                                    <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+
+                                    <span class="text-xs font-semibold">
+                                        Sin licencia
+                                    </span>
+
+                                </span>
+
+                            @elseif(\Carbon\Carbon::parse($license->expires_at)->isPast())
+
+                                <span class="inline-flex items-center gap-2
+                                            px-3 py-1.5 rounded-full
+                                            bg-red-950/60 border border-red-800/60
+                                            text-red-400">
+
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+
+                                    <span class="text-xs font-semibold">
+                                        Vencida
+                                    </span>
+
+                                </span>
+
+                            @else
+
+                                <span class="inline-flex items-center gap-2
+                                            px-3 py-1.5 rounded-full
+                                            bg-emerald-950/60 border border-emerald-800/60
+                                            text-emerald-400">
+
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+
+                                    <span class="text-xs font-semibold">
+                                        {{ $license->license_type }} · Vigente
+                                    </span>
+
+                                </span>
+
+                            @endif
+
+                        </td>
 
                         {{-- ACCIONES --}}
                         <td class="px-6 py-4">
@@ -323,6 +384,35 @@
 
                                 @endif
 
+                                {{-- LICENCIA DE CONDUCIR --}}
+                                <a href="{{ route('employees.license.edit', $employee) }}"
+                                title="Gestionar licencia de conducir"
+                                class="inline-flex items-center justify-center
+                                        w-9 h-9 rounded-lg
+                                        text-slate-400
+                                        hover:text-amber-400
+                                        hover:bg-slate-800
+                                        transition-all duration-200">
+
+                                    <svg class="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="1.8"
+                                            d="M9 12h6
+                                                M9 16h3
+                                                M7 4h10
+                                                a2 2 0 012 2v12
+                                                a2 2 0 01-2 2H7
+                                                a2 2 0 01-2-2V6
+                                                a2 2 0 012-2z"/>
+
+                                    </svg>
+
+                                </a>
 
                                 {{-- HISTORIAL --}}
                                 <a href="{{ route('employee.movements.index', $employee) }}"
@@ -355,7 +445,7 @@
                     {{-- SIN RESULTADOS --}}
                     <tr>
 
-                        <td colspan="5" class="px-6 py-16 text-center">
+                        <td colspan="6" class="px-6 py-16 text-center">
 
                             <div class="flex flex-col items-center justify-center">
 
