@@ -135,6 +135,7 @@
                     <input type="datetime-local"
                            name="departure_at"
                            value="{{ old('departure_at', now()->format('Y-m-d\TH:i')) }}"
+                           readonly
                            class="w-full bg-slate-900/50 border border-slate-600 rounded-xl p-4 text-white
                                   focus:outline-none focus:ring-2 focus:ring-emerald-500/50
                                   focus:border-emerald-500 transition-all duration-300"
