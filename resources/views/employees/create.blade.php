@@ -81,6 +81,41 @@
                         class="w-full border rounded-lg px-3 py-2">
                 </div>
 
+                {{-- PERMISOS PARA MÓDULO DE VEHÍCULOS --}}
+                <div class="border rounded-lg p-4 bg-gray-50 space-y-3">
+
+                    <h3 class="font-semibold text-gray-800">
+                        Permisos para el módulo de vehículos
+                    </h3>
+
+                    <label class="flex items-center gap-3">
+                        <input
+                            type="checkbox"
+                            name="puede_registrar_vehiculo"
+                            value="1"
+                            class="rounded border-gray-300 text-green-600"
+                            {{ old('puede_registrar_vehiculo', true) ? 'checked' : '' }}
+                        >
+                        <span class="text-sm text-gray-700">
+                            Puede registrar salidas y checklists
+                        </span>
+                    </label>
+
+                    <label class="flex items-center gap-3">
+                        <input
+                            type="checkbox"
+                            name="puede_ser_acompanante"
+                            value="1"
+                            class="rounded border-gray-300 text-green-600"
+                            {{ old('puede_ser_acompanante', true) ? 'checked' : '' }}
+                        >
+                        <span class="text-sm text-gray-700">
+                            Puede participar como acompañante
+                        </span>
+                    </label>
+
+                </div>
+
                 <div class="pt-4">
                     <button
                         class="bg-green-600 text-white px-4 py-2 rounded-lg shadow

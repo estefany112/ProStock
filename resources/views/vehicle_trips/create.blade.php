@@ -185,7 +185,7 @@
 
                     <option value="">Seleccionar empleado</option>
 
-                    @foreach($employees as $employee)
+                    @foreach($employeesForRegistration as $employee)
                         <option value="{{ $employee->id }}"
                             {{ old('registered_by_employee_id') == $employee->id ? 'selected' : '' }}>
 
@@ -296,7 +296,7 @@
 
                 <div class="bg-slate-900/40 border border-slate-700 rounded-2xl p-5">
 
-                    @forelse($employees as $employee)
+                    @forelse($passengers as $employee)
 
                         <label class="flex items-center gap-3 py-3 border-b border-slate-700/50 last:border-0 cursor-pointer">
 

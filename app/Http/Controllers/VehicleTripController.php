@@ -97,13 +97,23 @@ class VehicleTripController extends Controller
             ->orderBy('name')
             ->get();
 
-        // =====================================================
-        // 3. EMPLEADOS DISPONIBLES COMO ACOMPAÑANTES
-        // =====================================================
+            // =====================================================
+            // 3. EMPLEADOS AUTORIZADOS PARA REGISTRAR
+            // =====================================================
 
-        $employees = Employee::where('active', true)
-            ->orderBy('name')
-            ->get();
+            $employeesForRegistration = Employee::where('active', true)
+                ->where('puede_registrar_vehiculo', true)
+                ->orderBy('name')
+                ->get();
+
+            // =====================================================
+            // 4. EMPLEADOS DISPONIBLES COMO ACOMPAÑANTES
+            // =====================================================
+
+            $passengers = Employee::where('active', true)
+                ->where('puede_ser_acompanante', true)
+                ->orderBy('name')
+                ->get();
 
         $checklistItems = VehicleChecklistCatalog::where('active', true)
             ->orderBy('sort_order')
@@ -112,7 +122,8 @@ class VehicleTripController extends Controller
         return view('vehicle_trips.create', compact(
             'vehicles',
             'drivers',
-            'employees',
+            'employeesForRegistration',
+            'passengers',
             'checklistItems'
         ));
     }
@@ -262,6 +273,25 @@ class VehicleTripController extends Controller
         $validated = $request->validate($rules);
 
         // =====================================================
+        // VALIDAR EMPLEADO QUE REGISTRA LA SALIDA
+        // =====================================================
+
+        $canRegister = Employee::where(
+            'id',
+            $validated['registered_by_employee_id']
+        )
+            ->where('active', true)
+            ->where('puede_registrar_vehiculo', true)
+            ->exists();
+
+        if (!$canRegister) {
+            throw ValidationException::withMessages([
+                'registered_by_employee_id' =>
+                    'El empleado seleccionado no está autorizado para registrar salidas y checklists.',
+            ]);
+        }
+
+        // =====================================================
         // 5. VALIDAR FOTOS Y OBSERVACIONES CUANDO HAY PROBLEMA
         // =====================================================
 
@@ -367,6 +397,24 @@ class VehicleTripController extends Controller
 
         $passengers = $validated['passengers'] ?? [];
 
+        // =====================================================
+        // VALIDAR EMPLEADOS AUTORIZADOS COMO ACOMPAÑANTES
+        // =====================================================
+
+        if (!empty($passengers)) {
+
+            $validPassengersCount = Employee::whereIn('id', $passengers)
+                ->where('active', true)
+                ->where('puede_ser_acompanante', true)
+                ->count();
+
+            if ($validPassengersCount !== count($passengers)) {
+                throw ValidationException::withMessages([
+                    'passengers' =>
+                        'Uno o más empleados seleccionados no están habilitados como acompañantes.',
+                ]);
+            }
+        }
         if (
             in_array(
                 $validated['driver_id'],
@@ -747,7 +795,13 @@ class VehicleTripController extends Controller
             ->orderBy('name')
             ->get();
 
-        $employees = Employee::where('active', true)
+        $employeesForRegistration = Employee::where('active', true)
+            ->where('puede_registrar_vehiculo', true)
+            ->orderBy('name')
+            ->get();
+
+        $passengers = Employee::where('active', true)
+            ->where('puede_ser_acompanante', true)
             ->orderBy('name')
             ->get();
 
@@ -758,7 +812,8 @@ class VehicleTripController extends Controller
         return view('vehicle_trips.create', [
             'vehicles' => $vehicles,
             'drivers' => $drivers,
-            'employees' => $employees,
+            'employeesForRegistration' => $employeesForRegistration,
+            'passengers' => $passengers,
             'checklistItems' => $checklistItems,
             'operational' => true,
         ]);

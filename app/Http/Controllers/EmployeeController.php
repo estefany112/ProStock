@@ -87,7 +87,9 @@ public function index(Request $request)
             'fecha_ingreso' => $request->fecha_ingreso,
             'fecha_baja' => null,
             'active' => 1,
-            'status' => 'activo'
+            'status' => 'activo',
+            'puede_registrar_vehiculo' => $request->boolean('puede_registrar_vehiculo'),
+            'puede_ser_acompanante' => $request->boolean('puede_ser_acompanante'),
         ]);
 
         SalaryHistory::create([
@@ -162,7 +164,9 @@ public function index(Request $request)
             'salary_base' => $request->salary_base,
             'active' => $request->active,
             'fecha_ingreso' => $request->fecha_ingreso,
-            'fecha_baja' => $request->fecha_baja
+            'fecha_baja' => $request->fecha_baja,
+            'puede_registrar_vehiculo' => $request->boolean('puede_registrar_vehiculo'),
+            'puede_ser_acompanante' => $request->boolean('puede_ser_acompanante'),
         ]);
 
         return redirect()

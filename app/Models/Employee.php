@@ -19,6 +19,8 @@ class Employee extends Model
         'active',
         'isr',
         'status',
+        'puede_registrar_vehiculo',
+        'puede_ser_acompanante',
     ];
 
     /**
