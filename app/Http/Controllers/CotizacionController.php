@@ -505,13 +505,30 @@ class CotizacionController extends Controller
             )
         );
 
-        $mes = date('m');
+       $mes = now()->format('m');
 
-        $ultima = Cotizacion::latest('id')->first();
+        // Bloquear el contador durante la transacción
+        $contador = DB::table('cotizacion_correlativos')
+            ->where('id', 1)
+            ->lockForUpdate()
+            ->first();
 
-        $numero = $ultima
-            ? $ultima->id + 1
-            : 1;
+        if (!$contador) {
+            throw new \RuntimeException(
+                'No existe el contador general de cotizaciones.'
+            );
+        }
+
+        // Obtener el siguiente correlativo
+        $numero = $contador->ultimo_numero + 1;
+
+        // Actualizar el contador
+        DB::table('cotizacion_correlativos')
+            ->where('id', 1)
+            ->update([
+                'ultimo_numero' => $numero,
+                'updated_at' => now(),
+            ]);
 
         $correlativo = str_pad(
             $numero,
@@ -520,7 +537,7 @@ class CotizacionController extends Controller
             STR_PAD_LEFT
         );
 
-        $anioCorto = date('y');
+        $anioCorto = now()->format('y');
 
         return "{$userCode}.{$mes}{$correlativo}.{$anioCorto}";
     }
