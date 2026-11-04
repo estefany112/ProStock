@@ -469,6 +469,7 @@
                                         <input type="file"
                                                name="checklist[{{ $item->id }}][photos][]"
                                                accept="image/jpeg,image/png,image/webp"
+                                               capture="environment"
                                                @if($item->photo_requirement === 'REQUIRED') required @endif
                                                class="checklist-photo block w-full text-sm text-slate-400 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:bg-emerald-600 file:text-white file:font-semibold hover:file:bg-emerald-500 cursor-pointer">
                                     </div>
