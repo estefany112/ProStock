@@ -23,7 +23,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 2,
+                'sort_order' => 1,
             ],
             [
                 'category' => 'Combustible y fluidos',
@@ -32,7 +32,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'REQUIRED',
                 'is_critical' => true,
-                'sort_order' => 3,
+                'sort_order' => 2,
             ],
             [
                 'category' => 'Combustible y fluidos',
@@ -41,7 +41,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 4,
+                'sort_order' => 3,
             ],
             [
                 'category' => 'Combustible y fluidos',
@@ -50,7 +50,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'REQUIRED',
                 'is_critical' => true,
-                'sort_order' => 5,
+                'sort_order' => 4,
             ],
             [
                 'category' => 'Combustible y fluidos',
@@ -59,7 +59,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 6,
+                'sort_order' => 5,
             ],
 
             /*
@@ -75,7 +75,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 7,
+                'sort_order' => 6,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -84,7 +84,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 8,
+                'sort_order' => 7,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -93,7 +93,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 9,
+                'sort_order' => 8,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -102,7 +102,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 10,
+                'sort_order' => 9,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -111,7 +111,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 11,
+                'sort_order' => 10,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -120,7 +120,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 12,
+                'sort_order' => 11,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -129,7 +129,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 13,
+                'sort_order' => 12,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -138,7 +138,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 14,
+                'sort_order' => 13,
             ],
 
             /*
@@ -154,7 +154,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 15,
+                'sort_order' => 14,
             ],
             [
                 'category' => 'Luces y tablero',
@@ -163,7 +163,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'REQUIRED',
                 'is_critical' => true,
-                'sort_order' => 16,
+                'sort_order' => 15,
             ],
             [
                 'category' => 'Luces y tablero',
@@ -172,7 +172,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 17,
+                'sort_order' => 16,
             ],
 
             /*
@@ -188,7 +188,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 18,
+                'sort_order' => 17,
             ],
             [
                 'category' => 'Sistemas y componentes',
@@ -197,7 +197,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 19,
+                'sort_order' => 18,
             ],
             [
                 'category' => 'Sistemas y componentes',
@@ -206,7 +206,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 20,
+                'sort_order' => 19,
             ],
 
             /*
@@ -222,7 +222,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 21,
+                'sort_order' => 20,
             ],
             [
                 'category' => 'Exterior',
@@ -231,7 +231,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 22,
+                'sort_order' => 21,
             ],
             [
                 'category' => 'Exterior',
@@ -240,7 +240,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 23,
+                'sort_order' => 22,
             ],
 
             /*
@@ -256,7 +256,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 24,
+                'sort_order' => 23,
             ],
             [
                 'category' => 'Motor y prueba',
@@ -265,7 +265,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 25,
+                'sort_order' => 24,
             ],
             [
                 'category' => 'Accesorios',
@@ -274,7 +274,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'OPTIONAL',
                 'is_critical' => false,
-                'sort_order' => 26,
+                'sort_order' => 25,
             ],
         ];
 
