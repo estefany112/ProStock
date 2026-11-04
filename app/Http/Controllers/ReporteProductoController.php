@@ -12,7 +12,7 @@ class ReporteProductoController extends Controller
     public function index(Request $request)
     {
         // Tipo de reporte seleccionado
-        $tipo = $request->tipo ?? 'sin_precio';
+        $tipo = $request->tipo ?? 'todos';
 
 
         $productos = Producto::query();
@@ -20,11 +20,15 @@ class ReporteProductoController extends Controller
 
         switch ($tipo) {
 
+            case 'todos':
+            // No se aplican filtros: muestra todos los productos.
+            break;
+
             case 'sin_precio':
 
                 $productos->where(function($q){
                     $q->whereNull('precio_unitario')
-                      ->orWhere('precio_unitario', 0);
+                      ->orWhere('precio_unitario', '<=', 0);
                 });
 
             break;
@@ -32,18 +36,20 @@ class ReporteProductoController extends Controller
 
             case 'sin_imagen':
 
-                $productos->whereNull('image')
-                         ->orWhere('image', '');
+                $productos->where(function ($q) {
+                    $q->whereNull('image')
+                    ->orWhere('image', '');
+                });
 
             break;
 
         }
 
-
-        $productos = $productos->with('categoria')
-                               ->orderBy('descripcion')
-                               ->paginate(20);
-
+        $productos = $productos
+            ->with(['categoria', 'fila', 'columna', 'nivel'])
+            ->orderBy('descripcion')
+            ->paginate(20)
+            ->withQueryString();
 
         return view('reportes.productos.index', compact(
             'productos',
@@ -53,7 +59,7 @@ class ReporteProductoController extends Controller
 
     public function excel(Request $request)
     {
-        $tipo = $request->tipo ?? 'sin_precio';
+        $tipo = $request->tipo ?? 'todos';
 
 
         return Excel::download(

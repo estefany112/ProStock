@@ -89,6 +89,9 @@
                             id="tipo"
                             onchange="this.form.submit()"
                             class="border border-white/10 bg-slate-950/60 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+                        <option value="todos" {{ $tipo == 'todos' ? 'selected' : '' }} class="bg-slate-900">
+                            Todos los productos
+                        </option>   
                         <option value="sin_precio" {{ $tipo == 'sin_precio' ? 'selected' : '' }} class="bg-slate-900">
                             Productos sin precio asignado
                         </option>
@@ -108,65 +111,90 @@
         {{-- TABLA ESTILO CRISTAL --}}
         <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl animate-reveal mb-12" style="animation-delay: 0.2s">
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[1000px]">
+                
+                <table class="w-full text-left border-collapse min-w-[1300px]">
                     <thead>
                         <tr class="bg-white/[0.02] border-b border-white/10">
                             <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Código</th>
-                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Descripción del Producto</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Descripción</th>
                             <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Categoría</th>
-                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Stock</th>
-                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Precio Unitario</th>
-                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">Estado de Imagen</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Marca</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Unidad de medida</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Stock actual</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Precio unitario</th>
+                            <th class="px-6 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">Ubicación</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-white/5">
                         @forelse($productos as $producto)
                             <tr class="table-row-hover transition-all group">
+
+                                {{-- Código --}}
                                 <td class="px-6 py-6 font-mono font-semibold text-indigo-400 text-sm">
                                     {{ $producto->codigo }}
                                 </td>
+
+                                {{-- Descripción --}}
                                 <td class="px-6 py-6 font-medium text-slate-200 group-hover:text-white transition-colors text-base">
                                     {{ $producto->descripcion }}
                                 </td>
+
+                                {{-- Categoría --}}
                                 <td class="px-6 py-6">
                                     <span class="text-slate-400 font-medium bg-white/5 px-3 py-1 rounded-lg border border-white/5 text-xs">
                                         {{ $producto->categoria->nombre ?? 'N/A' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-6 text-right font-mono text-slate-300 font-bold">
-                                    {{ number_format($producto->stock_actual) }}
+
+                                {{-- Marca --}}
+                                <td class="px-6 py-6 text-slate-300 text-sm">
+                                    {{ $producto->marca ?: 'N/A' }}
                                 </td>
+
+                                {{-- Unidad de medida --}}
+                                <td class="px-6 py-6 text-slate-300 text-sm">
+                                    {{ $producto->unidad_medida ?: 'N/A' }}
+                                </td>
+
+                                {{-- Stock actual --}}
+                                <td class="px-6 py-6 text-right font-mono text-slate-300 font-bold">
+                                    {{ number_format($producto->stock_actual ?? 0, 2) }}
+                                </td>
+
+                                {{-- Precio unitario --}}
                                 <td class="px-6 py-6 text-right font-mono font-bold">
                                     @if($producto->precio_unitario > 0)
-                                        <span class="text-slate-200">Q {{ number_format($producto->precio_unitario, 2) }}</span>
+                                        <span class="text-slate-200">
+                                            Q {{ number_format($producto->precio_unitario, 2) }}
+                                        </span>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
-                                            Sin Precio
+                                            Sin precio
                                         </span>
                                     @endif
                                 </td>
+
+                                {{-- Ubicación --}}
                                 <td class="px-6 py-6 text-center">
-                                    @if($producto->image)
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                            Disponible
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
-                                            Pendiente
-                                        </span>
-                                    @endif
+                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                                        {{ $producto->ubicacion ?: 'Sin ubicación' }}
+                                    </span>
                                 </td>
+
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-8 py-20 text-center">
-                                    <p class="text-slate-500 font-medium italic">No se encontraron registros que coincidan con los parámetros de la consulta actual.</p>
+                                <td colspan="8" class="px-8 py-20 text-center">
+                                    <p class="text-slate-500 font-medium italic">
+                                        No se encontraron productos que coincidan con los parámetros de la consulta actual.
+                                    </p>
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+
             </div>
 
             @if($productos->hasPages())

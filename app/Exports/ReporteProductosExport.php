@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithColumnWidths
 {
@@ -23,13 +24,16 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
 
     public function query()
     {
-        $query = Producto::query()->with('categoria')->orderBy('descripcion');
+        $query = Producto::query()
+            ->with('categoria')
+            ->orderBy('descripcion');
 
         switch ($this->tipo) {
+
             case 'sin_precio':
                 $query->where(function ($q) {
                     $q->whereNull('precio_unitario')
-                      ->orWhere('precio_unitario', 0);
+                      ->orWhere('precio_unitario', '<=', 0);
                 });
                 break;
 
@@ -38,6 +42,11 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
                     $q->whereNull('image')
                       ->orWhere('image', '');
                 });
+                break;
+
+            case 'todos':
+            default:
+                // Incluye todos los productos, incluso los que tienen stock en cero.
                 break;
         }
 
@@ -50,9 +59,13 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
             $producto->codigo,
             $producto->descripcion,
             $producto->categoria->nombre ?? 'N/A',
-            (int) $producto->stock_actual,
-            $producto->precio_unitario ?? 'SIN PRECIO',
-            $producto->image ? 'SI' : 'NO',
+            $producto->marca ?? 'N/A',
+            $producto->unidad_medida ?? 'N/A',
+            $producto->stock_actual ?? 0,
+            $producto->precio_unitario > 0
+                ? $producto->precio_unitario
+                : 'SIN PRECIO',
+            $producto->ubicacion ?? 'SIN UBICACIÓN',
         ];
     }
 
@@ -60,11 +73,13 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
     {
         return [
             'Código',
-            'Producto',
+            'Descripción',
             'Categoría',
-            'Stock',
-            'Precio',
-            'Imagen',
+            'Marca',
+            'Unidad de medida',
+            'Stock actual',
+            'Precio unitario',
+            'Ubicación',
         ];
     }
 
@@ -72,11 +87,13 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
     {
         return [
             'A' => 15,
-            'B' => 35,
-            'C' => 20,
-            'D' => 12,
-            'E' => 15,
-            'F' => 12,
+            'B' => 40,
+            'C' => 22,
+            'D' => 20,
+            'E' => 20,
+            'F' => 15,
+            'G' => 18,
+            'H' => 22,
         ];
     }
 
@@ -85,15 +102,15 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
         $ultimaFila = $sheet->getHighestRow();
 
         return [
-            // 1. Estilo para la Cabecera
+            // Cabecera
             1 => [
                 'font' => [
-                    'bold' => true, 
+                    'bold' => true,
                     'color' => ['argb' => 'FFFFFF'],
-                    'size' => 11
+                    'size' => 11,
                 ],
                 'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
                     'startColor' => ['argb' => '2563EB'],
                 ],
                 'alignment' => [
@@ -102,8 +119,8 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
                 ],
             ],
 
-            // 2. Bordes para toda la tabla
-            'A1:F' . $ultimaFila => [
+            // Bordes de toda la tabla
+            'A1:H' . $ultimaFila => [
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
@@ -115,11 +132,30 @@ class ReporteProductosExport implements FromQuery, WithHeadings, WithMapping, Wi
                 ],
             ],
 
-            // 3. Alineación corregida usando los valores correctos
-            'A' => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]],
-            'D' => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT]],
-            'E' => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT]],
-            'F' => ['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]],
+            // Alineación de columnas
+            'A' => [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+            ],
+
+            'F' => [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_RIGHT,
+                ],
+            ],
+
+            'G' => [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_RIGHT,
+                ],
+            ],
+
+            'H' => [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+            ],
         ];
     }
 }
