@@ -243,26 +243,30 @@ class VehicleTripController extends Controller
             // Fotografías
             // ---------------------------------------------
 
-            $rules["checklist.{$itemId}.photos"] = [
-                'nullable',
-                'array',
-                'max:5',
-            ];
+            // Bocina no requiere fotografías.
+            if ($catalogItem->name !== 'Bocina') {
 
-            $rules["checklist.{$itemId}.photos.*"] = [
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:15360',
-            ];
-
-            // Foto siempre obligatoria.
-            if ($catalogItem->photo_requirement === 'REQUIRED') {
                 $rules["checklist.{$itemId}.photos"] = [
-                    'required',
+                    'nullable',
                     'array',
-                    'min:1',
                     'max:5',
                 ];
+
+                $rules["checklist.{$itemId}.photos.*"] = [
+                    'image',
+                    'mimes:jpg,jpeg,png,webp',
+                    'max:15360',
+                ];
+
+                // Foto siempre obligatoria.
+                if ($catalogItem->photo_requirement === 'REQUIRED') {
+                    $rules["checklist.{$itemId}.photos"] = [
+                        'required',
+                        'array',
+                        'min:1',
+                        'max:5',
+                    ];
+                }
             }
         }
 
@@ -311,7 +315,8 @@ class VehicleTripController extends Controller
             * MAL_FUNCIONAMIENTO o FALLA, exigimos fotografía.
             */
             if (
-                $catalogItem->photo_requirement === 'ON_ISSUE'
+                $catalogItem->name !== 'Bocina'
+                && $catalogItem->photo_requirement === 'ON_ISSUE'
                 && in_array(
                     $response,
                     ['MAL_FUNCIONAMIENTO', 'FALLA'],

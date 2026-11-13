@@ -18,7 +18,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
             */
             [
                 'category' => 'Combustible y fluidos',
-                'name' => 'Fugas de fluidos',
+                'name' => 'Chequeo de fluidos',
                 'description' => 'Chequear presencia de fugas de aceite de motor, aceite de caja, combustible y refrigerante.',
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
@@ -67,34 +67,6 @@ class VehicleChecklistCatalogSeeder extends Seeder
             | CABINA Y SEGURIDAD
             |--------------------------------------------------------------------------
             */
-
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Asientos, ajuste y control',
-                'description' => 'Revisar el estado, ajuste y funcionamiento de los asientos.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => false,
-                'sort_order' => 6,
-            ],
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Cinturones de seguridad',
-                'description' => 'Revisar todos los cinturones de seguridad.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 7,
-            ],
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Freno de mano',
-                'description' => 'Probar el freno de mano con pequeña aceleración.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 8,
-            ],
             [
                 'category' => 'Cabina y seguridad',
                 'name' => 'Freno de pedal',
@@ -102,16 +74,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 9,
-            ],
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Embrague y caja de cambios',
-                'description' => 'Revisar el funcionamiento del embrague y caja de cambios.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 10,
+                'sort_order' => 6,
             ],
             [
                 'category' => 'Cabina y seguridad',
@@ -120,27 +83,9 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 11,
+                'sort_order' => 7,
             ],
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Puertas y seguros',
-                'description' => 'Revisar puertas y seguros de puertas.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 12,
-            ],
-            [
-                'category' => 'Cabina y seguridad',
-                'name' => 'Dirección',
-                'description' => 'Probar suavemente el funcionamiento de la dirección.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 13,
-            ],
-
+            
             /*
             |--------------------------------------------------------------------------
             | LUCES Y TABLERO
@@ -154,7 +99,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 14,
+                'sort_order' => 8,
             ],
             [
                 'category' => 'Luces y tablero',
@@ -163,7 +108,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'REQUIRED',
                 'is_critical' => true,
-                'sort_order' => 15,
+                'sort_order' => 9,
             ],
             [
                 'category' => 'Luces y tablero',
@@ -172,7 +117,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 16,
+                'sort_order' => 10,
             ],
 
             /*
@@ -188,17 +133,9 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 17,
+                'sort_order' => 11,
             ],
-            [
-                'category' => 'Sistemas y componentes',
-                'name' => 'Batería',
-                'description' => 'Verificar condición de la batería, indicador de carga, cables y bornes.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 18,
-            ],
+        
             [
                 'category' => 'Sistemas y componentes',
                 'name' => 'Neumáticos',
@@ -206,7 +143,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 19,
+                'sort_order' => 12,
             ],
 
             /*
@@ -217,21 +154,12 @@ class VehicleChecklistCatalogSeeder extends Seeder
 
             [
                 'category' => 'Exterior',
-                'name' => 'Carrocería',
-                'description' => 'Inspeccionar abolladuras, rayones u otros defectos de la carrocería.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => false,
-                'sort_order' => 20,
-            ],
-            [
-                'category' => 'Exterior',
                 'name' => 'Parabrisas',
                 'description' => 'Limpiar y revisar parabrisas. Reportar fracturas, roturas o impactos.',
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 21,
+                'sort_order' => 13,
             ],
             [
                 'category' => 'Exterior',
@@ -240,7 +168,7 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => false,
-                'sort_order' => 22,
+                'sort_order' => 14,
             ],
 
             /*
@@ -251,30 +179,21 @@ class VehicleChecklistCatalogSeeder extends Seeder
 
             [
                 'category' => 'Motor y prueba',
-                'name' => 'Sonidos anormales del motor',
-                'description' => 'Después de encender el motor, escuchar con atención para detectar sonidos anormales de mecanismos y correas.',
-                'response_type' => 'STATUS',
-                'photo_requirement' => 'ON_ISSUE',
-                'is_critical' => true,
-                'sort_order' => 23,
-            ],
-            [
-                'category' => 'Motor y prueba',
                 'name' => 'Prueba de frenos a baja velocidad',
                 'description' => 'Cuando arranque el vehículo, aplicar los frenos a baja velocidad.',
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'ON_ISSUE',
                 'is_critical' => true,
-                'sort_order' => 24,
+                'sort_order' => 15,
             ],
             [
                 'category' => 'Accesorios',
-                'name' => 'Cargador para cigarrera',
-                'description' => 'Verificar funcionamiento y cuidado del cargador para cigarrera.',
+                'name' => 'Inversor de voltaje',
+                'description' => 'Verificar funcionamiento y cuidado del inversor de voltaje.',
                 'response_type' => 'STATUS',
                 'photo_requirement' => 'OPTIONAL',
                 'is_critical' => false,
-                'sort_order' => 25,
+                'sort_order' => 16,
             ],
         ];
 
@@ -288,5 +207,11 @@ class VehicleChecklistCatalogSeeder extends Seeder
                 ])
             );
         }
+
+        // Desactivar elementos que ya no están incluidos en el catálogo
+        $nombres = array_column($items, 'name');
+
+        VehicleChecklistCatalog::whereNotIn('name', $nombres)
+            ->update(['active' => false]);
     }
 }

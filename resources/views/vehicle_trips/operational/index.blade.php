@@ -46,7 +46,7 @@
 
             </svg>
 
-            Registrar salida
+            Registrar salida diaria
 
         </a>
 
