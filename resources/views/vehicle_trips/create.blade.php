@@ -95,15 +95,11 @@
            {{-- FORMULARIO --}}
 
            <form action="{{ ($operational ?? false)
-
                    ? route('vehicle-trips.operational.departure.store')
-
                    : route('vehicle-trips.departure.store') }}"
-
                method="POST"
-
                enctype="multipart/form-data"
-
+               data-image-compression="vehicle-departure"
                class="p-8 space-y-8">
 
                @csrf
@@ -787,17 +783,69 @@
 
                \============================================================ --}}
 
-               <div class="flex items-center justify-end gap-4 pt-4 border-t border-slate-700/50">
+               <div class="pt-4 border-t border-slate-700/50">
 
-                   <button type="submit"
+                {{-- INDICADOR DE OPTIMIZACIÓN --}}
+                <div id="departure-submit-status"
+                    class="hidden mb-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
 
-                           class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-emerald-900/30 transition-all hover:-translate-y-0.5 active:scale-95">
+                    <div class="flex items-center gap-3">
 
-                       Registrar Salida
+                        <svg class="animate-spin h-5 w-5 text-emerald-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24">
 
-                   </button>
+                            <circle class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4">
+                            </circle>
 
-               </div>
+                            <path class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                            </path>
+
+                        </svg>
+
+                        <div>
+
+                            <p id="departure-submit-message"
+                            class="text-emerald-400 font-semibold text-sm">
+
+                                Preparando fotografías...
+
+                            </p>
+
+                            <p class="text-slate-400 text-xs mt-1">
+
+                                Por favor, no cierres esta página.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- BOTÓN --}}
+                <div class="flex justify-end">
+
+                        <button type="submit"
+                                id="departure-submit-button"
+                                class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-emerald-900/30 transition-all hover:-translate-y-0.5 active:scale-95">
+
+                            Registrar Salida
+
+                        </button>
+
+                    </div>
+
+                </div>
 
            </form>
 
